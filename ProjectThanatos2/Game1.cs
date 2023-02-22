@@ -13,7 +13,10 @@ namespace ProjectThanatos2
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
+
+            _graphics.PreferredBackBufferWidth = 640;
+            _graphics.PreferredBackBufferHeight = 480;
         }
 
         protected override void Initialize()
@@ -42,7 +45,7 @@ namespace ProjectThanatos2
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.LightPink);
 
             // TODO: Add your drawing code here
 
