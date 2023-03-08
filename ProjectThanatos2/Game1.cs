@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ProjectThanatos2.Content.Source;
 
 namespace ProjectThanatos2
 {
@@ -8,6 +9,13 @@ namespace ProjectThanatos2
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        // some helpful static properties
+        public static Game1 Instance { get; private set; }
+        public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
+        public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
+        public static GameTime GameTime { get; private set; }
+        public static ParticleManager<ParticleState> ParticleManager { get; private set; }
 
         public Game1()
         {
