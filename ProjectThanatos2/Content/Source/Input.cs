@@ -24,23 +24,30 @@ namespace ProjectThanatos2.Content.Source
 
             Vector2 direction = new Vector2();
 
-            direction.Y *= -1;  // invert the y-axis
+            direction.Y *= -1;  // Invert y-axis
 
-            if (keyboardState.IsKeyDown(Keys.A))
+            if (keyboardState.IsKeyDown(Keys.Left))
                 direction.X -= 1;
-            if (keyboardState.IsKeyDown(Keys.D))
+            if (keyboardState.IsKeyDown(Keys.Right))
                 direction.X += 1;
-            if (keyboardState.IsKeyDown(Keys.W))
+            if (keyboardState.IsKeyDown(Keys.Up))
                 direction.Y -= 1;
-            if (keyboardState.IsKeyDown(Keys.S))
+            if (keyboardState.IsKeyDown(Keys.Down))
                 direction.Y += 1;
 
-            // Clamp the length of the vector to a maximum of 1.
+            // Clamps length of vector to max 1
             if (direction.LengthSquared() > 1)
                 direction.Normalize();
 
             return direction;
         }
+
+        // Checks if Bomb Button pressed
+        public static bool WasBombButtonPressed()
+        {
+            return WasKeyPressed(Keys.Space);
+        }
+
         // Checks if a key was just pressed down
         public static bool WasKeyPressed(Keys key)
         {

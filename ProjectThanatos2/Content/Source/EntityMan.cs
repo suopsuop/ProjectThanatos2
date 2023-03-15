@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProjectThanatos2.Content.Source
 {
-    static class EntityManager
+    static class EntityMan
     {
         static List<Entity> entities= new List<Entity>();
         static List<Entity> addedEntities = new List<Entity>();
@@ -55,6 +56,10 @@ namespace ProjectThanatos2.Content.Source
         {
             // Nothing, Yet
         }
-
+        public static void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (var entity in entities)
+                entity.Draw(spriteBatch);
+        }
     }
 }

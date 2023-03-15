@@ -5,13 +5,13 @@ using ProjectThanatos2.Content.Source;
 
 namespace ProjectThanatos2
 {
-    public class Game1 : Game
+    public class ProjectThanatos : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
         // some helpful static properties
-        public static Game1 Instance { get; private set; }
+        public static ProjectThanatos Instance { get; private set; }
         public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
         public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
         public static GameTime GameTime { get; private set; }
@@ -19,7 +19,10 @@ namespace ProjectThanatos2
 
         bool isPaused = false;
 
-        public Game1()
+        SpriteBatch spriteBatch;
+
+
+        public ProjectThanatos()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -49,11 +52,6 @@ namespace ProjectThanatos2
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-
-            }
-                Exit();
 
             // TODO: Add your update logic here
             GameTime= gameTime;
@@ -67,6 +65,7 @@ namespace ProjectThanatos2
             if(!isPaused) 
             { 
                 // ! Update Game Here
+                EntityMan.Update();
             }
 
             base.Update(gameTime);
@@ -77,6 +76,7 @@ namespace ProjectThanatos2
             GraphicsDevice.Clear(Color.LightPink);
 
             // TODO: Add your drawing code here
+            EntityMan.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }

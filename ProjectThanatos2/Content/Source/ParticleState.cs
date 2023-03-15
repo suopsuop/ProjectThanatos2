@@ -63,8 +63,8 @@ namespace ProjectThanatos2.Content.Source
             particle.Orientation = vel.ToAngle();
 
             var pos = particle.Position;
-            int width = (int)ProjectThanatos2.Game1.ScreenSize.X;
-            int height = (int)ProjectThanatos2.Game1.ScreenSize.Y;
+            int width = (int)ProjectThanatos2.ProjectThanatos.ScreenSize.X;
+            int height = (int)ProjectThanatos2.ProjectThanatos.ScreenSize.Y;
 
             // collide with the edges of the screen
             if (pos.X < 0)
