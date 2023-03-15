@@ -17,6 +17,8 @@ namespace ProjectThanatos2
         public static GameTime GameTime { get; private set; }
         public static ParticleManager<ParticleState> ParticleManager { get; private set; }
 
+        bool isPaused = false;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -32,21 +34,40 @@ namespace ProjectThanatos2
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            Sprites.loadContent(Content);
+
+            
             // TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+
+            }
                 Exit();
 
             // TODO: Add your update logic here
+            GameTime= gameTime;
+            Input.Update();
+
+            if(Input.WasKeyPressed(Keys.Escape))
+            {
+                isPaused = !isPaused;
+            }
+
+            if(!isPaused) 
+            { 
+                // ! Update Game Here
+            }
 
             base.Update(gameTime);
         }
@@ -58,6 +79,11 @@ namespace ProjectThanatos2
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+        }
+
+        private void drawText()
+        {
+
         }
     }
 }

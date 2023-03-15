@@ -161,4 +161,5 @@ namespace ProjectThanatos2.Content.Source
                 set { list[(start + i) % list.Length] = value; }
             }
         }
+    }
 }
