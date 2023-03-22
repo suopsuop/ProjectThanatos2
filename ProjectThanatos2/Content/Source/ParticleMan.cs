@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectThanatos2.Content.Source
+namespace ProjectThanatos.Content.Source
 {
-    public class ParticleManager<T>
+    public class ParticleMan<T>
     {
         // This delegate will be called for each particle.
         private Action<Particle> updateParticle;
@@ -19,7 +19,7 @@ namespace ProjectThanatos2.Content.Source
         /// </summary>
         /// <param name="capacity">The maximum number of particles. An array of this size will be pre-allocated.</param>
         /// <param name="updateParticle">A delegate that lets you specify custom behaviour for your particles. Called once per particle, per frame.</param>
-        public ParticleManager(int capacity, Action<Particle> updateParticle)
+        public ParticleMan(int capacity, Action<Particle> updateParticle)
         {
             this.updateParticle = updateParticle;
             particleList = new CircularParticleArray(capacity);

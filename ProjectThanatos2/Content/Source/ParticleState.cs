@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectThanatos2.Content.Source
+namespace ProjectThanatos.Content.Source
 {
     public enum ParticleType { None, Enemy, Bullet, IgnoreGravity }
 
@@ -38,7 +38,7 @@ namespace ProjectThanatos2.Content.Source
             return state;
         }
 
-        public static void UpdateParticle(ParticleManager<ParticleState>.Particle particle)
+        public static void UpdateParticle(ParticleMan<ParticleState>.Particle particle)
         {
             var vel = particle.State.Velocity;
             float speed = vel.Length();
@@ -63,8 +63,8 @@ namespace ProjectThanatos2.Content.Source
             particle.Orientation = vel.ToAngle();
 
             var pos = particle.Position;
-            int width = (int)ProjectThanatos2.ProjectThanatos.ScreenSize.X;
-            int height = (int)ProjectThanatos2.ProjectThanatos.ScreenSize.Y;
+            int width = (int)global::ProjectThanatos.ProjectThanatos.ScreenSize.X;
+            int height = (int)global::ProjectThanatos.ProjectThanatos.ScreenSize.Y;
 
             // collide with the edges of the screen
             if (pos.X < 0)

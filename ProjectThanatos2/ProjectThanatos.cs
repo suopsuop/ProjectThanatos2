@@ -1,21 +1,32 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using ProjectThanatos2.Content.Source;
+using ProjectThanatos.Content.Source;
 
-namespace ProjectThanatos2
+namespace ProjectThanatos
 {
     public class ProjectThanatos : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        // some helpful static properties
-        public static ProjectThanatos Instance { get; private set; }
-        public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
+        public static ProjectThanatos Instance 
+        {
+            get
+            {
+                    ProjectThanatos Test = new ProjectThanatos();
+                    return Test;
+            }
+            
+            private set
+            {
+                return;
+            }
+        }
+        public static Viewport Viewport = Instance.GraphicsDevice.Viewport;
         public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
         public static GameTime GameTime { get; private set; }
-        public static ParticleManager<ParticleState> ParticleManager { get; private set; }
+        public static ParticleMan<ParticleState> ParticleManager { get; private set; }
 
         bool isPaused = false;
 
@@ -24,6 +35,7 @@ namespace ProjectThanatos2
 
         public ProjectThanatos()
         {
+            
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = false;
@@ -37,6 +49,7 @@ namespace ProjectThanatos2
             // TODO: Add your initialization logic here
 
             base.Initialize();
+            EntityMan.Add(Player.Instance);
 
         }
 
@@ -46,7 +59,6 @@ namespace ProjectThanatos2
 
             Sprites.loadContent(Content);
 
-            
             // TODO: use this.Content to load your game content here
         }
 
@@ -54,7 +66,7 @@ namespace ProjectThanatos2
         {
 
             // TODO: Add your update logic here
-            GameTime= gameTime;
+            ProjectThanatos.GameTime= gameTime;
             Input.Update();
 
             if(Input.WasKeyPressed(Keys.Escape))

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectThanatos2.Content.Source
+namespace ProjectThanatos.Content.Source
 {
     public class RiceLib
     {
