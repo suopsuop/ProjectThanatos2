@@ -37,7 +37,10 @@ namespace ProjectThanatos.Content.Source
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
+            if(spriteBatch != null)
+            {
             spriteBatch.Draw(sprite, position, null, color, orientation, spriteSize / 2f, 1f, 0, 0);
+            }
         }
     }
 }

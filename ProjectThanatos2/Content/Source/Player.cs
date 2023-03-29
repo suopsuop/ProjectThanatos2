@@ -53,7 +53,7 @@ namespace ProjectThanatos.Content.Source
 
             velocity += moveSpeed * Input.GetMovementDirection();
             position += velocity;
-            position = Vector2.Clamp(position, spriteSize/2, ProjectThanatos.ScreenSize - spriteSize/2); // Stops the player exiting bounds
+            position = Vector2.Clamp(position, spriteSize / 2, ProjectThanatos.ScreenSize - spriteSize/2); // Stops the player exiting bounds
 
             if (velocity.LengthSquared() > 0)
             {

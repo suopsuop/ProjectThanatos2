@@ -10,20 +10,8 @@ namespace ProjectThanatos
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        public static ProjectThanatos Instance 
-        {
-            get
-            {
-                    ProjectThanatos Test = new ProjectThanatos();
-                    return Test;
-            }
-            
-            private set
-            {
-                return;
-            }
-        }
-        public static Viewport Viewport = Instance.GraphicsDevice.Viewport;
+        public static ProjectThanatos Instance { get; private set; }
+        public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
         public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
         public static GameTime GameTime { get; private set; }
         public static ParticleMan<ParticleState> ParticleManager { get; private set; }
