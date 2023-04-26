@@ -45,7 +45,7 @@ namespace ProjectThanatos.Content.Source
         // Checks if Bomb Button pressed
         public static bool WasBombButtonPressed()
         {
-            return WasKeyPressed(Keys.Space);
+            return WasKeyPressed(Keys.X);
         }
 
         // Checks if a key was just pressed down

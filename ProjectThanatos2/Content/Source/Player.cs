@@ -49,11 +49,13 @@ namespace ProjectThanatos.Content.Source
         public override void Update()
         {
             if (isPlayerDead)
+            {
                 return;
-
+            }
+            
             velocity += moveSpeed * Input.GetMovementDirection();
             position += velocity;
-            position = Vector2.Clamp(position, spriteSize / 2, ProjectThanatos.ScreenSize - spriteSize/2); // Stops the player exiting bounds
+            //position = Vector2.Clamp(position, spriteSize / 2, ProjectThanatos.ScreenSize - spriteSize/2); // Stops the player exiting bounds
 
             if (velocity.LengthSquared() > 0)
             {
@@ -61,6 +63,7 @@ namespace ProjectThanatos.Content.Source
             }
 
             velocity = Vector2.Zero;
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)

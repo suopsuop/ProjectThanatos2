@@ -14,7 +14,6 @@ namespace ProjectThanatos
         public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
         public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
         public static GameTime GameTime { get; private set; }
-        public static ParticleMan<ParticleState> ParticleManager { get; private set; }
 
         bool isPaused = false;
 
@@ -37,6 +36,7 @@ namespace ProjectThanatos
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
             EntityMan.Add(Player.Instance);
 
         }
@@ -60,7 +60,7 @@ namespace ProjectThanatos
             if(Input.WasKeyPressed(Keys.Escape))
             {
                 isPaused = !isPaused;
-            }
+            }   
 
             if(!isPaused) 
             { 
@@ -73,7 +73,15 @@ namespace ProjectThanatos
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.LightPink);
+            if (isPaused)
+            {
+                GraphicsDevice.Clear(Color.Aquamarine);
+            }
+            else
+            {
+                GraphicsDevice.Clear(Color.LightPink);
+
+            }
 
             // TODO: Add your drawing code here
             EntityMan.Draw(spriteBatch);
