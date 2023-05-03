@@ -48,6 +48,11 @@ namespace ProjectThanatos.Content.Source
             return WasKeyPressed(Keys.X);
         }
 
+        public static bool IsShootKeyDown()
+        {
+            return WasKeyPressed(Keys.Z);
+        }
+
         // Checks if a key was just pressed down
         public static bool WasKeyPressed(Keys key)
         {

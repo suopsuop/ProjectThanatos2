@@ -88,7 +88,6 @@ namespace ProjectThanatos
 
             // TODO: Add your drawing code here
             EntityMan.Draw(_spriteBatch);
-
             base.Draw(gameTime);
         }
 
