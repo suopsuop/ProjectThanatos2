@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,8 @@ namespace ProjectThanatos.Content.Source
             if(!isUpdating)
             {
                 addEntity(entity);
+
+                Debug.WriteLine("Adding entity {0}", entity.ToString());
             }
             else
             {

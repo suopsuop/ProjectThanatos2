@@ -12,13 +12,11 @@ namespace ProjectThanatos
 
         public static ProjectThanatos Instance { get; private set; }
         public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
-        public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
+        public static Vector2 ScreenSize;
+
         public static GameTime GameTime { get; private set; }
 
         bool isPaused = false;
-
-        SpriteBatch spriteBatch;
-
 
         public ProjectThanatos()
         {
@@ -37,7 +35,12 @@ namespace ProjectThanatos
 
             base.Initialize();
 
+            ScreenSize.X = _graphics.PreferredBackBufferWidth;
+            ScreenSize.Y = _graphics.PreferredBackBufferHeight;
+
+
             EntityMan.Add(Player.Instance);
+
 
         }
 
@@ -54,7 +57,7 @@ namespace ProjectThanatos
         {
 
             // TODO: Add your update logic here
-            ProjectThanatos.GameTime= gameTime;
+            GameTime= gameTime;
             Input.Update();
 
             if(Input.WasKeyPressed(Keys.Escape))
@@ -84,7 +87,7 @@ namespace ProjectThanatos
             }
 
             // TODO: Add your drawing code here
-            EntityMan.Draw(spriteBatch);
+            EntityMan.Draw(_spriteBatch);
 
             base.Draw(gameTime);
         }

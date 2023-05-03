@@ -39,7 +39,9 @@ namespace ProjectThanatos.Content.Source
         {
             if(spriteBatch != null)
             {
+                spriteBatch.Begin();
             spriteBatch.Draw(sprite, position, null, color, orientation, spriteSize / 2f, 1f, 0, 0);
+                spriteBatch.End();
             }
         }
     }
