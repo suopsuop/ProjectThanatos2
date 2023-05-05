@@ -14,7 +14,7 @@ namespace ProjectThanatos2.Content.Source
 
         public override void Update()
         {
-            
+            position += velocity;
         }
     }
 }

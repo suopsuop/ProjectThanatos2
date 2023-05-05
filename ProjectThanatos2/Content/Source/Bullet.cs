@@ -1,4 +1,5 @@
-﻿using ProjectThanatos.Content.Source;
+﻿using Microsoft.Xna.Framework.Graphics;
+using ProjectThanatos.Content.Source;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace ProjectThanatos2.Content.Source
         private static Bullet instance;
 
         private int bulletSpeed;
+
+        private bool isOffScreen = false;
 
         public BulletType bulletType;
 
@@ -46,6 +49,17 @@ namespace ProjectThanatos2.Content.Source
         public override void Update()
         {
             
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (!isOffScreen)
+                base.Draw(spriteBatch);
+        }
+
+        public override void Kill()
+        {
+
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectThanatos2.Content.Source;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,6 +64,11 @@ namespace ProjectThanatos.Content.Source
             //}
 
             velocity = Vector2.Zero;
+
+            if(Input.IsShootKeyDown())
+            {
+                EntityMan.Add(new PlayerBullet(Bullet.BulletType.pellet));
+            }
 
         }
 

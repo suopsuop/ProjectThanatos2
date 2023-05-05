@@ -44,5 +44,10 @@ namespace ProjectThanatos.Content.Source
                 spriteBatch.End();
             }
         }
+
+        public virtual void Kill()
+        {
+
+        }
     }
 }
