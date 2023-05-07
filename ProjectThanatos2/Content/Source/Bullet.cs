@@ -21,9 +21,9 @@ namespace ProjectThanatos2.Content.Source
 
         private static Bullet instance;
 
-        private int bulletSpeed;
+        protected int bulletSpeed;
 
-        private bool isOffScreen = false;
+        protected bool isOffScreen = false;
 
         public BulletType bulletType;
 
@@ -43,6 +43,7 @@ namespace ProjectThanatos2.Content.Source
                     bulletSpeed = 32;
                     break;
             }
+
         }
         
 
@@ -53,13 +54,12 @@ namespace ProjectThanatos2.Content.Source
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!isOffScreen)
-                base.Draw(spriteBatch);
+            base.Draw(spriteBatch);
         }
 
         public override void Kill()
         {
-
+            
         }
     }
 }

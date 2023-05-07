@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ProjectThanatos2.Content.Source;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -78,7 +79,7 @@ namespace ProjectThanatos.Content.Source
                 base.Draw(spriteBatch);
         }
 
-        public void Kill()
+        public override void Kill()
         {
             
         }

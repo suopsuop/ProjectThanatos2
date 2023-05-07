@@ -12,6 +12,8 @@ namespace ProjectThanatos.Content.Source
     {
         private static KeyboardState keyboardState, lastKeyboardState;
 
+        private static bool isShooting = false;
+
         public static void Update()
         {
             lastKeyboardState = keyboardState;
@@ -50,7 +52,19 @@ namespace ProjectThanatos.Content.Source
 
         public static bool IsShootKeyDown()
         {
-            return WasKeyPressed(Keys.Z);
+            if(keyboardState.IsKeyDown(Keys.Z))
+                
+            {
+                isShooting = true;
+            }
+            else
+            {
+                isShooting = false;
+            }
+
+            return isShooting;
+
+
         }
 
         // Checks if a key was just pressed down
