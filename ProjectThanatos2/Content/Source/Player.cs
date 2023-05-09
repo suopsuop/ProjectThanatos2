@@ -17,6 +17,10 @@ namespace ProjectThanatos.Content.Source
         private const int moveSpeed = 8;
         private const int steadyMoveSpeed = 5;
 
+        public bool isFocused = false;
+
+        Delay bulletTimer = new Delay();
+
         public static Player Instance 
         { 
             get 
@@ -68,8 +72,17 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.IsShootKeyDown())
             {
-                EntityMan.Add(new PlayerBullet(Bullet.BulletType.pellet));
+                bulletTimer.Wait(20,() =>
+                {
+                    shootBullet(); // shit doesn't work atm the moment rn
+                });
             }
+
+        }
+
+        public void shootBullet()
+        {
+            EntityMan.Add(new PlayerBullet(Bullet.BulletType.pellet));
 
         }
 

@@ -14,7 +14,8 @@ namespace ProjectThanatos
         public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
         public static Vector2 ScreenSize;
 
-        public static GameTime GameTime { get; private set; }
+        //public static GameTime GameTime { get; private set; }
+        public static GameTime GameTime = new GameTime();
 
         bool isPaused = false;
 

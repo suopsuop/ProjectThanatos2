@@ -8,21 +8,25 @@ using System.Threading.Tasks;
 
 namespace ProjectThanatos2.Content.Source
 {
-    internal class Timer
+    internal class Delay
     {
         public double timerTime = 0;
         public double delayTime = 0;
 
         GameTime gameTime = ProjectThanatos.ProjectThanatos.GameTime;
 
-        public Timer(double delayTime)
+        public Delay()
         {
-            this.delayTime = delayTime;
+            //this.delayTime = delayTime;
         }
 
         public void Wait(double delayTime, Action action)
         {
-
+                if (timerTime <= gameTime.TotalGameTime.TotalMilliseconds)
+                {
+                    timerTime = gameTime.TotalGameTime.TotalMilliseconds + delayTime;
+                    action.Invoke();
+                }
         }
     }
 }
