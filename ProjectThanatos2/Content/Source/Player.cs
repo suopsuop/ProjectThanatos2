@@ -19,7 +19,7 @@ namespace ProjectThanatos.Content.Source
 
         public bool isFocused = false;
 
-        Delay bulletTimer = new Delay();
+        Timer bulletTimer = new Timer();
 
         public static Player Instance 
         { 
@@ -72,10 +72,7 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.IsShootKeyDown())
             {
-                bulletTimer.Wait(20,() =>
-                {
-                    shootBullet(); // shit doesn't work atm the moment rn
-                });
+                Timer.Create(50, () => shootBullet());
             }
 
         }

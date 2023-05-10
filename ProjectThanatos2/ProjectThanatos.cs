@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ProjectThanatos.Content.Source;
+using ProjectThanatos2.Content.Source;
 
 namespace ProjectThanatos
 {
@@ -11,6 +12,7 @@ namespace ProjectThanatos
         private SpriteBatch _spriteBatch;
 
         public static ProjectThanatos Instance { get; private set; }
+
         public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
         public static Vector2 ScreenSize;
 
@@ -38,7 +40,6 @@ namespace ProjectThanatos
 
             ScreenSize.X = _graphics.PreferredBackBufferWidth;
             ScreenSize.Y = _graphics.PreferredBackBufferHeight;
-
 
             EntityMan.Add(Player.Instance);
 
