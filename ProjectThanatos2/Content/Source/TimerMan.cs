@@ -8,26 +8,36 @@ using System.Threading.Tasks;
 
 namespace ProjectThanatos2.Content.Source
 {
-    internal class TimerMan 
+    static class TimerMan 
     {
-        GameTime gameTime = ProjectThanatos.ProjectThanatos.GameTime;
-
+        static GameTime gameTime = ProjectThanatos.ProjectThanatos.GameTime;
 
         static List<Timer> toRemove = new List<Timer>();
         static List<Timer> timers = new List<Timer>();
 
+        static int ID = 0;
+
         //public static TimerMan TimerManInstance { get; private set; }
-        
+
+        static TimerMan() { }
+
         public static void Add(Timer timer)
         {
             timers.Add(timer);
         }
         public static void Remove(Timer timer)
         {
-            toRemove.Remove(timer);
+            toRemove.Add(timer);
         }
 
-        public void Update()
+        public static void Create(float interval, Action trigger)
+        {
+            ID += 1;
+            Timer timer = new Timer(ID, interval, trigger) {};
+            Add(timer);
+        }
+
+        public static void Update()
         {
             foreach (Timer timer in toRemove)
             {

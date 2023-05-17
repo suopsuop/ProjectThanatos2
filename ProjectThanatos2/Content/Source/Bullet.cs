@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ProjectThanatos;
 using ProjectThanatos.Content.Source;
 using System;
 using System.Collections.Generic;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectThanatos2.Content.Source
+namespace ProjectThanatos.Content.Source
 {
     class Bullet : Entity
     {
@@ -23,11 +25,9 @@ namespace ProjectThanatos2.Content.Source
 
         protected int bulletSpeed;
 
-        protected bool isOffScreen = false;
-
         public BulletType bulletType;
 
-        public Bullet(BulletType bulletType) 
+        public Bullet(BulletType bulletType) :base()
         {
             switch(bulletType)
             {
@@ -44,12 +44,13 @@ namespace ProjectThanatos2.Content.Source
                     break;
             }
 
+            
         }
         
 
         public override void Update()
         {
-            
+            if (isOutOfBounds()) Kill();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -59,7 +60,18 @@ namespace ProjectThanatos2.Content.Source
 
         public override void Kill()
         {
-            
+            base.Kill();
+        }
+
+        public bool isOutOfBounds()
+        {
+            bool outOfBounds = false;
+
+            if (!ProjectThanatos.Viewport.Bounds.Contains(position))
+            {
+                outOfBounds = true;
+            }
+            return outOfBounds;
         }
     }
 }

@@ -64,7 +64,6 @@ namespace ProjectThanatos.Content.Source
 
             return isShooting;
 
-
         }
 
         // Checks if a key was just pressed down

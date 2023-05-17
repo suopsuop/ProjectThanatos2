@@ -22,8 +22,6 @@ namespace ProjectThanatos.Content.Source
             if(!isUpdating)
             {
                 addEntity(entity);
-
-                Debug.WriteLine("Adding entity {0}", entity.ToString());
             }
             else
             {
@@ -52,7 +50,7 @@ namespace ProjectThanatos.Content.Source
 
             addedEntities.Clear();
 
-            entities = entities.Where(x => !x.isExpired).ToList();
+            entities = entities.Where(x => !x.isExpired).ToList(); // Only adds entities that still wish to exist
         }
 
         static void handleCollisions()

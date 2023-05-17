@@ -19,7 +19,8 @@ namespace ProjectThanatos.Content.Source
 
         public bool isFocused = false;
 
-        Timer bulletTimer = new Timer();
+        static GameTime gameTime = ProjectThanatos.GameTime;
+
 
         public static Player Instance 
         { 
@@ -72,7 +73,16 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.IsShootKeyDown())
             {
-                Timer.Create(50, () => shootBullet());
+                //TimerMan.Create(500, () => shootBullet());
+                shootBullet();
+            }
+
+            if(Input.WasBombButtonPressed())
+            {
+                for (int i = 0; i < 1000; i++;)
+                {
+
+                }
             }
 
         }
@@ -80,7 +90,6 @@ namespace ProjectThanatos.Content.Source
         public void shootBullet()
         {
             EntityMan.Add(new PlayerBullet(Bullet.BulletType.pellet));
-
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -91,7 +100,7 @@ namespace ProjectThanatos.Content.Source
 
         public override void Kill()
         {
-            
+
         }
     }
 }

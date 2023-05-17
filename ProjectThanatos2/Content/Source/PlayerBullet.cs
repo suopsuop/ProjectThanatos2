@@ -39,6 +39,8 @@ namespace ProjectThanatos2.Content.Source
 
         public override void Update()
         {
+            base.Update();
+
             position += 1 * new Vector2(0,-bulletSpeed);
 
 
@@ -52,7 +54,6 @@ namespace ProjectThanatos2.Content.Source
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!isOffScreen)
                 base.Draw(spriteBatch);
         }
     }

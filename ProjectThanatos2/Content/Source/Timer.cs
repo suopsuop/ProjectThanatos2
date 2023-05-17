@@ -13,13 +13,18 @@ namespace ProjectThanatos2.Content.Source
     {
         public Action trigger;
         public double interval;
-        double elapsed;
+        double elapsed = 0;
+        public readonly int ID;
+
+
 
         GameTime gameTime = ProjectThanatos.ProjectThanatos.GameTime;
 
-        public Timer()
+        public Timer(int ID, float interval, Action trigger)
         {
-            //this.delayTime = delayTime;
+            this.ID = ID;
+            this.interval = interval;
+            this.trigger = trigger;
         }
 
         //public void Wait(double delayTime, Action action)
@@ -36,20 +41,14 @@ namespace ProjectThanatos2.Content.Source
             elapsed += gameTime.ElapsedGameTime.TotalMilliseconds;
             if (elapsed >= interval)
             {
-                trigger.Invoke();
                 Destroy();
+                trigger.Invoke();
             }
         }
 
         public void Destroy()
         {
             TimerMan.Remove(this);
-        }
-
-        public static void Create(float interval, Action trigger)
-        {
-            Timer timer = new Timer() { interval = interval, trigger = trigger };
-            TimerMan.Add(timer);
         }
     }
 }

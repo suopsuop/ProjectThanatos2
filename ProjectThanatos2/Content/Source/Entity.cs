@@ -8,17 +8,19 @@ using System.Threading.Tasks;
 
 namespace ProjectThanatos.Content.Source
 {
-    abstract class Entity
+    abstract public class Entity
     {
         protected Texture2D sprite;
         protected Color color = Color.White; // Changes tint of sprite, also allows for transparency.
 
-        public Vector2 position;
-        public Vector2 velocity;
+        public Vector2 position { get; set; }
+        public Vector2 velocity { get; set; }
 
 
         public float orientation; // Rotation.
-        public float radius; // Circular collision detection.
+
+        public float radius { get; set; } // Circular collision detection!
+        public Rectangle collisionBox { get; set; } //Rectangular Collision!
 
         public bool isExpired; // True when entity should be deleted.
 
@@ -47,7 +49,7 @@ namespace ProjectThanatos.Content.Source
 
         public virtual void Kill()
         {
-
+            isExpired = true;
         }
     }
 }

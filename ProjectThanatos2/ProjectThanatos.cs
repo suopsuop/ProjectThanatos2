@@ -19,6 +19,8 @@ namespace ProjectThanatos
         //public static GameTime GameTime { get; private set; }
         public static GameTime GameTime = new GameTime();
 
+        //public TimerMan TimerMan { get; private set; }
+
         bool isPaused = false;
 
         public ProjectThanatos()
@@ -37,6 +39,7 @@ namespace ProjectThanatos
             // TODO: Add your initialization logic here
 
             base.Initialize();
+            Instance = this;
 
             ScreenSize.X = _graphics.PreferredBackBufferWidth;
             ScreenSize.Y = _graphics.PreferredBackBufferHeight;
@@ -71,6 +74,7 @@ namespace ProjectThanatos
             { 
                 // ! Update Game Here
                 EntityMan.Update();
+                TimerMan.Update();
             }
 
             base.Update(gameTime);
