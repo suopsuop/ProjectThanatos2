@@ -44,12 +44,11 @@ namespace ProjectThanatos2.Content.Source
             position += 1 * new Vector2(0,-bulletSpeed);
 
 
-            //ProjectThanatos.ProjectThanatos.GameTime.ElapsedGameTime.TotalMilliseconds;
 
-            //if (velocity.LengthSquared() > 0)
-            //{
-            //    orientation = velocity.ToAngle();
-            //} Requires Extensions.cs
+            if (velocity.LengthSquared() > 0)
+            {
+                orientation = velocity.ToAngle();
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)

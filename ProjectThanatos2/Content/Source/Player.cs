@@ -79,9 +79,9 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.WasBombButtonPressed())
             {
-                for (int i = 0; i < 1000; i++;)
+                for (int i = 0; i < 1000; i++)
                 {
-
+                    useBomb();
                 }
             }
 
@@ -89,7 +89,11 @@ namespace ProjectThanatos.Content.Source
 
         public void shootBullet()
         {
-            EntityMan.Add(new PlayerBullet(Bullet.BulletType.pellet));
+        }
+
+        public void useBomb()
+        {
+            EntityMan.Add(new EnemyBullet(Bullet.BulletType.pellet));
         }
 
         public override void Draw(SpriteBatch spriteBatch)
