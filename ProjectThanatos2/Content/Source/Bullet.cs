@@ -12,38 +12,18 @@ namespace ProjectThanatos.Content.Source
 {
     class Bullet : Entity
     {
-
-        public enum BulletType
-        {
-            pellet,
-            laser,
-            knife
-        }
-
+         
 
         private static Bullet instance;
 
-        protected int bulletSpeed;
+        delegate void BulletCurve(Bullet bullet);
 
-        public BulletType bulletType;
+        BulletCurve bulletCurve;
 
-        public Bullet(BulletType bulletType) :base()
+
+        public Bullet(Vector2 position) :base()
         {
-            switch(bulletType)
-            {
-                case BulletType.pellet:
-                    bulletSpeed = 8;
-                    break;
-
-                    case BulletType.laser:
-                    bulletSpeed = 16;
-                    break;
-
-                    case BulletType.knife:
-                    bulletSpeed = 32;
-                    break;
-            }
-
+            
             
         }
         

@@ -19,15 +19,12 @@ namespace ProjectThanatos2.Content.Source
             switch (bulletType)
             {
                 case BulletType.pellet:
-                    bulletSpeed = 8;
                     break;
 
                 case BulletType.laser:
-                    bulletSpeed = 16;
                     break;
 
                 case BulletType.knife:
-                    bulletSpeed = 32;
                     break;
             }
 
