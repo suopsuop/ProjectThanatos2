@@ -12,38 +12,26 @@ namespace ProjectThanatos2.Content.Source
 {
     class EnemyBullet : Bullet
     {
+        Player playerInstance;
+        Vector2 playerPos;
+        
 
-        public EnemyBullet(BulletType bulletType) : base(bulletType)
+        public EnemyBullet(Vector2 position, double speed, Vector2 velocity, BulletCurve bulletCurve, int lifeTime, Player player, Vector2 playerPos) : base(position,speed,velocity,bulletCurve,lifeTime)
         {
-
-            switch (bulletType)
-            {
-                case BulletType.pellet:
-                    break;
-
-                case BulletType.laser:
-                    break;
-
-                case BulletType.knife:
-                    break;
-            }
-
+            
             sprite = Sprites.projectileSpriteSheet;
-            position = Player.Instance.position; // ! CHANGE ME
-
+            this.position = Player.Instance.position; // ! CHANGE ME
+            this.playerInstance = player;
+            this.playerPos = playerPos;
         }
-
-        public int damage;
-
-        private const double PI = Math.PI;
 
         public override void Update()
         {
             base.Update();
 
-            velocity.Normalize();
+            velocity.Normalize(); // normalises velocity before letting the Curves do their thing
 
-            position += 1 * velocity;
+            this.bulletCurve(this); // The delegate to change the bullet's pos
 
             if (velocity.LengthSquared() > 0) //Rotating texture to fit direction
             {
@@ -52,9 +40,9 @@ namespace ProjectThanatos2.Content.Source
 
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
         {
-            base.Draw(spriteBatch);
+            base.Draw(spriteBatch, new Rectangle(64,64,16,16));
         }
 
     }

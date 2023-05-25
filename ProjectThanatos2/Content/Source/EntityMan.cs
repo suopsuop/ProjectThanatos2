@@ -56,6 +56,9 @@ namespace ProjectThanatos.Content.Source
         static void handleCollisions()
         {
             // Nothing, Yet
+
+
+            // Split bullets collision each update to multiple movement checks (e.g., if it moves 10 units in a frame, check it at 5 as well)
         }
         public static void Draw(SpriteBatch spriteBatch)
         {

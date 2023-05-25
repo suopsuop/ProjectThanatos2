@@ -12,25 +12,14 @@ namespace ProjectThanatos2.Content.Source
 {
     class PlayerBullet : Bullet
     {
-        public PlayerBullet(BulletType bulletType) : base(bulletType) 
+        public PlayerBullet(Vector2 position, double speed, Vector2 velocity, BulletCurve bulletCurve, int lifeTime) : base(position, speed, velocity, bulletCurve, lifeTime)
         {
 
-            switch (bulletType)
-            {
-                case BulletType.pellet:
-                    break;
-
-                case BulletType.laser:
-                    break;
-
-                case BulletType.knife:
-                    break;
-            }
-
             sprite = Sprites.projectileSpriteSheet;
-            position = Player.Instance.position;
+            position = Player.Instance.position; // ! CHANGE ME
 
         }
+
 
         public int damage;
 
@@ -38,7 +27,7 @@ namespace ProjectThanatos2.Content.Source
         {
             base.Update();
 
-            position += 1 * new Vector2(0,-bulletSpeed);
+            //position += 1 * new Vector2(0,-bulletSpeed);
 
 
 
@@ -48,7 +37,7 @@ namespace ProjectThanatos2.Content.Source
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
         {
                 base.Draw(spriteBatch);
         }

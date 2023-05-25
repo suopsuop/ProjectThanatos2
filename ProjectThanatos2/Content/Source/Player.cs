@@ -30,7 +30,7 @@ namespace ProjectThanatos.Content.Source
                     instance = new Player();
 
                 return instance; 
-            } 
+            }
         }
 
 
@@ -50,7 +50,7 @@ namespace ProjectThanatos.Content.Source
         {
             sprite = Sprites.playerSpriteSheet;
             position = Vector2.Zero;
-            // ADD COLLISION HERE
+            collisionBox = new Rectangle((int)this.position.X, (int)this.position.Y, 5, 5);
         }
 
         public override void Update()
@@ -79,24 +79,27 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.WasBombButtonPressed())
             {
-                for (int i = 0; i < 1000; i++)
-                {
-                    useBomb();
-                }
+                shootBullet();
             }
 
         }
 
         public void shootBullet()
         {
+
+            EntityMan.Add(new EnemyBullet(position, 4, new Vector2(0,-1), Curves.GetCurve(Curves.CurveType.SINE_CURVE), 8000, instance, instance.position));
+
+            //EntityMan.Add(new EnemyBullet(this.position, 3, velocity, new Bullet.BulletCurve((bullet) =>
+            //{ }), 3000, instance, instance.position));
+
         }
 
         public void useBomb()
         {
-            EntityMan.Add(new EnemyBullet(Bullet.BulletType.pellet));
+
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
         {
             if (!isPlayerDead)
                 base.Draw(spriteBatch);
@@ -106,5 +109,6 @@ namespace ProjectThanatos.Content.Source
         {
 
         }
+
     }
 }
