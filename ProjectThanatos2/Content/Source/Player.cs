@@ -64,11 +64,6 @@ namespace ProjectThanatos.Content.Source
             position += velocity;
             position = Vector2.Clamp(position, spriteSize / 2, ProjectThanatos.ScreenSize - spriteSize/2); // Stops the player exiting bounds
 
-            //if (velocity.LengthSquared() > 0)
-            //{
-            //    orientation = velocity.ToAngle();
-            //}
-
             velocity = Vector2.Zero;
 
             if(Input.IsShootKeyDown())
@@ -79,7 +74,7 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.WasBombButtonPressed())
             {
-                shootBullet();
+                shootBullet(); //CHANGE ME!!!
             }
 
         }
@@ -87,10 +82,8 @@ namespace ProjectThanatos.Content.Source
         public void shootBullet()
         {
 
-            EntityMan.Add(new EnemyBullet(position, 4, new Vector2(0,-1), Curves.GetCurve(Curves.CurveType.SINE_CURVE), 8000, instance, instance.position));
-
-            //EntityMan.Add(new EnemyBullet(this.position, 3, velocity, new Bullet.BulletCurve((bullet) =>
-            //{ }), 3000, instance, instance.position));
+            //EntityMan.Add(new EnemyBullet(position, 4, new Vector2(0, -1), Curves.GetCurve(Curves.CurveType.LINE), 4000, instance, instance.position));
+            EntityMan.Add(new EnemyBullet(position, 4, new Vector2(0, -1), Curves.GetCurve(Curves.CurveType.SINE_CURVE), 4000, instance, instance.position));
 
         }
 

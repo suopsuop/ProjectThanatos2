@@ -37,6 +37,8 @@ namespace ProjectThanatos.Content.Source
 
         public int framesAlive = 0;
 
+        public int invisFrames = 3;
+
         public Bullet(Vector2 position, double speed, Vector2 velocity, BulletCurve bulletCurve, int lifeTime, float localRotation = 0) : base()
         {
 
@@ -58,12 +60,21 @@ namespace ProjectThanatos.Content.Source
         public override void Update()
         {
             framesAlive += 1;
-            if (isOutOfBounds()) Kill(); // CHANGE ME!!
+            if (isOutOfBounds()) Kill(); // CHANGE MsE!!
+
+            if(invisFrames>0)
+            { invisFrames -= 1; }
+
+            //if (velocity.LengthSquared() > 0) //Rotating texture to fit direction (DOESN'T WORK!!)
+            //{
+            //    orientation = velocity.ToAngle() - 45f;
+            //}
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
         {
-            base.Draw(spriteBatch, spritePos, scale);
+            if (invisFrames ==0)
+                base.Draw(spriteBatch, spritePos, scale);
         }
 
         public override void Kill()
@@ -73,13 +84,12 @@ namespace ProjectThanatos.Content.Source
 
         public bool isOutOfBounds()
         {
-            bool outOfBounds = false;
+            return ProjectThanatos.Viewport.Bounds.Contains(position);
+        }
 
-            if (!ProjectThanatos.Viewport.Bounds.Contains(position))
-            {
-                outOfBounds = true;
-            }
-            return outOfBounds;
+        public void Rotate()
+        {
+
         }
     }
 }

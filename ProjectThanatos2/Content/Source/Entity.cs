@@ -26,6 +26,8 @@ namespace ProjectThanatos.Content.Source
 
         public bool isExpired; // Flag for if entity should be deleted, handled in EntityMan
 
+        public int zDepth = 0;
+
         // Gets sprite size
 
         public Vector2 spriteSize
@@ -51,10 +53,10 @@ namespace ProjectThanatos.Content.Source
                 }
                 else // Draws spritebatch with given rectangle, if there is one
                 {
-                    spriteOrigin = new Vector2(spritePos.Value.X + (spritePos.Value.Width / 2f), spritePos.Value.Y + (spritePos.Value.Height / 2f));
-                    // /\ I DO NOT WORK!!!
+                    //spriteOrigin = new Vector2(spritePos.Value.X + (spritePos.Value.Width / 2f), spritePos.Value.Y + (spritePos.Value.Height / 2f));
+                    spriteOrigin = new Vector2();
 
-                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp); // These settings cut the sprites out cleaner
+                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp); // These settings cut the sprites out cleaner, apparently?
                     spriteBatch.Draw(sprite, position, spritePos, color, orientation, spriteOrigin, scale, 0, 0);
                     spriteBatch.End();
                 }

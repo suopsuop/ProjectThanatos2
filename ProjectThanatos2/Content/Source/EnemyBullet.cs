@@ -16,7 +16,7 @@ namespace ProjectThanatos2.Content.Source
         Vector2 playerPos;
         
 
-        public EnemyBullet(Vector2 position, double speed, Vector2 velocity, BulletCurve bulletCurve, int lifeTime, Player player, Vector2 playerPos) : base(position,speed,velocity,bulletCurve,lifeTime)
+        public EnemyBullet(Vector2 position, double speed, Vector2 velocity, BulletCurve bulletCurve, int lifeTime, Player player, Vector2 playerPos, float localRotation = 0f) : base(position,speed,velocity,bulletCurve,lifeTime,localRotation)
         {
             
             sprite = Sprites.projectileSpriteSheet;
@@ -33,11 +33,7 @@ namespace ProjectThanatos2.Content.Source
 
             this.bulletCurve(this); // The delegate to change the bullet's pos
 
-            if (velocity.LengthSquared() > 0) //Rotating texture to fit direction
-            {
-                orientation = velocity.ToAngle();
-            }
-
+            base.Rotate(); // you're gonna shit bricks when you find out what this does
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
