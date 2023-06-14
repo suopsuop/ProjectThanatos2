@@ -27,24 +27,32 @@ namespace ProjectThanatos.Content.Source
 
         private static Bullet instance;
 
-        public delegate void BulletCurve(Bullet bullet);
+        //public delegate void BulletCurve(Bullet bullet);
 
-        public BulletCurve bulletCurve;
+        //public BulletCurve bulletCurve;
+
         double lifeTime;
-        public double speed;
+        public float speed;
         public readonly Vector2 initialPosition;
-        public float localRotation;
-
+        public float direction;
+        public Vector2 vecDirection;
+        public float acceleration;
+        public float curve;
         public int framesAlive = 0;
-
         public int invisFrames = 3;
 
-        public Bullet(Vector2 position, double speed, Vector2 velocity, BulletCurve bulletCurve, int lifeTime, float localRotation = 0) : base()
+        public Bullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, float direction = 0f) : base()
         {
 
-            this.position = position;
-            this.velocity = velocity;
-            this.bulletCurve = bulletCurve;
+            this.position = spawnPosition;
+            this.speed = speed;
+            this.acceleration = acceleration;
+            this.lifeTime = lifeTime;
+            this.direction = direction;
+
+            //this.velocity = velocity;
+
+            //this.bulletCurve = bulletCurve;
             this.speed = speed;
             if(lifeTime >= 0) // Creates a timer to kill the bullet after its lifetime
             {
@@ -52,7 +60,7 @@ namespace ProjectThanatos.Content.Source
             }
             this.initialPosition = position;
 
-            this.localRotation = localRotation;
+            //this.localRotation = localRotation;
 
         }
         
@@ -60,10 +68,17 @@ namespace ProjectThanatos.Content.Source
         public override void Update()
         {
             framesAlive += 1;
-            if (isOutOfBounds()) Kill(); // CHANGE MsE!!
 
             if(invisFrames>0)
             { invisFrames -= 1; }
+
+            direction += curve;
+
+            speed += acceleration;
+
+            vecDirection = getDirection(direction);
+
+            position += vecDirection * speed;
 
             //if (velocity.LengthSquared() > 0) //Rotating texture to fit direction (DOESN'T WORK!!)
             //{
@@ -87,9 +102,12 @@ namespace ProjectThanatos.Content.Source
             return ProjectThanatos.Viewport.Bounds.Contains(position);
         }
 
-        public void Rotate()
+        private static Vector2 getDirection(float direction) // Gets vector direction from angle
         {
+            float dirXRadians = direction * MathF.PI / 180f;
+            float dirYRadians = direction * MathF.PI / 180f;
 
+            return new Vector2(MathF.Cos(dirXRadians),-MathF.Sin(dirYRadians));
         }
     }
 }

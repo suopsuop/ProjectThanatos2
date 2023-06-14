@@ -10,7 +10,7 @@ namespace ProjectThanatos.Content.Source
 {
     static class EntityMan
     {
-        static List<Entity> entities= new List<Entity>();
+        static List<Entity> entities = new List<Entity>();
         static List<Entity> addedEntities = new List<Entity>();
 
         static bool isUpdating;
@@ -60,6 +60,7 @@ namespace ProjectThanatos.Content.Source
 
             // Split bullets collision each update to multiple movement checks (e.g., if it moves 10 units in a frame, check it at 5 as well)
         }
+
         public static void Draw(SpriteBatch spriteBatch)
         {
             foreach (var entity in entities)

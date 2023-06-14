@@ -83,7 +83,7 @@ namespace ProjectThanatos.Content.Source
         {
 
             //EntityMan.Add(new EnemyBullet(position, 4, new Vector2(0, -1), Curves.GetCurve(Curves.CurveType.LINE), 4000, instance, instance.position));
-            EntityMan.Add(new EnemyBullet(position, 4, new Vector2(0, -1), Curves.GetCurve(Curves.CurveType.SINE_CURVE), 4000, instance, instance.position));
+            EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,1,0,1,false,3,Vector2.One, Player.Instance.position,2,0,1f,3000));
 
         }
 

@@ -12,7 +12,7 @@ namespace ProjectThanatos2.Content.Source
 {
     class PlayerBullet : Bullet
     {
-        public PlayerBullet(Vector2 position, double speed, Vector2 velocity, BulletCurve bulletCurve, int lifeTime) : base(position, speed, velocity, bulletCurve, lifeTime)
+        public PlayerBullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, float direction = 0f) : base(spawnPosition, speed, acceleration, curve, lifeTime)
         {
 
             sprite = Sprites.projectileSpriteSheet;
