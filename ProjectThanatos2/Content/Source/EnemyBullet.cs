@@ -12,49 +12,32 @@ namespace ProjectThanatos2.Content.Source
 {
     class EnemyBullet : Bullet
     {
+        Player playerInstance;
+        Vector2 creationTimePlayerPos;
+        
 
-        public EnemyBullet(BulletType bulletType) : base(bulletType)
+        public EnemyBullet(Player player, Vector2 creationTimePlayerPos, Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float direction = 0f) : base(spawnPosition,speed,acceleration,curve,lifeTime,bulletType, direction)
         {
-
-            switch (bulletType)
-            {
-                case BulletType.pellet:
-                    break;
-
-                case BulletType.laser:
-                    break;
-
-                case BulletType.knife:
-                    break;
-            }
-
+            
             sprite = Sprites.projectileSpriteSheet;
-            position = Player.Instance.position; // ! CHANGE ME
+            //this.position = Player.Instance.position; // ! CHANGE ME
 
+            this.playerInstance = player;
+            this.creationTimePlayerPos = creationTimePlayerPos;
         }
-
-        public int damage;
-
-        private const double PI = Math.PI;
 
         public override void Update()
         {
             base.Update();
 
-            velocity.Normalize();
+            //velocity.Normalize(); // normalises velocity before letting the Curves do their thing
 
-            position += 1 * velocity;
-
-            if (velocity.LengthSquared() > 0) //Rotating texture to fit direction
-            {
-                orientation = velocity.ToAngle();
-            }
-
+            //this.bulletCurve(this); // The delegate to change the bullet's pos
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
         {
-            base.Draw(spriteBatch);
+            base.Draw(spriteBatch, new Rectangle(64,64,16,16)); // HARDCODED << CHANGE ME LATER
         }
 
     }

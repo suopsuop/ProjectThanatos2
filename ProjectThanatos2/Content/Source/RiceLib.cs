@@ -12,5 +12,7 @@ namespace ProjectThanatos.Content.Source
         {
             return newMin + (value - valMin) * (newMax - newMin) / (valMax - valMin);
         }
+
+
     }
 }
