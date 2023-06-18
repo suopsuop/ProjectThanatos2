@@ -17,18 +17,26 @@ namespace ProjectThanatos.Content.Source
         private const int moveSpeed = 8;
         private const int steadyMoveSpeed = 5;
 
-        public int power = 1;
+        public float power = 1;
 
         public bool isFocused = false;
 
         // Defines the three types of bullets that the player can shoot, depending on level
+        float bullet1Offset = 0f;
+        float bullet2Offset = 45f;
+        float bullet3Offset = 20f;
+
+        const float UPWARDS = 90f;
+
+
         PlayerBullet bullet1 = new PlayerBullet(Vector2.Zero,
                 9.5f,
                 .1f,
                 0,
                 1200,
             Bullet.BulletType.KNIFE,
-                1f);
+                1f,
+                UPWARDS);
 
         PlayerBullet bullet2 = new PlayerBullet(
             Vector2.Zero,
@@ -38,7 +46,7 @@ namespace ProjectThanatos.Content.Source
                 1200,
             Bullet.BulletType.GEM,
                 2f,
-                20f);
+                UPWARDS);
 
         PlayerBullet bullet3 = new PlayerBullet(
             Vector2.Zero,
@@ -48,7 +56,7 @@ namespace ProjectThanatos.Content.Source
                 1200,
             Bullet.BulletType.STAR,
                 3f,
-                5f);
+                UPWARDS);
 
         static GameTime gameTime = ProjectThanatos.GameTime;
 
@@ -107,61 +115,48 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.WasBombButtonPressed())
             {
-                useBomb(); //CHANGE ME!!!
+                power += .5f; // TEST TEST TEST
+                changePowerLevel(power); // TEST TEST TEST
+
+                useBomb();
             }
-
-            //bullet1.position = position;
-            //bullet2.position = position;
-            //bullet3.position = position;
-
         }
 
         public void shootBullet()
         {
 
             //EntityMan.Add(new EnemyBullet(position, 4, new Vector2(0, -1), Curves.GetCurve(Curves.CurveType.LINE), 4000, instance, instance.position));
-            EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,1,0,1,false,3,Vector2.One, new Vector2(200,200),2,0,1f,3000,Bullet.BulletType.LASER));
+            //EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,1,0,1,false,3,Vector2.One, new Vector2(200,200),2,0,1f,3000,Bullet.BulletType.LASER));
 
             // Updating each bullet's spawn position
+            bullet1.position = position;
+            bullet2.position = position;
+            bullet3.position = position;
 
+            // Will add more bullet streams based on 
+            EntityMan.Add((PlayerBullet)bullet1.Clone());
 
-
-            //switch (power)
-            //{
-            //    case 1:
-            //        EntityMan.Add(bullet1);
-            //        break;
-            //    case 2:
-            //        EntityMan.Add(bullet1);
-
-            //        // Adds two angled bullet2's of opposite angles
-            //        EntityMan.Add(bullet2);
-            //        bullet2.direction = -bullet2.direction;
-            //        EntityMan.Add(bullet2);
-            //        break;
-            //    case 3:
-            //        EntityMan.Add(bullet1);
-
-            //        // Adds two angled bullet2's of opposite angles
-            //        EntityMan.Add(bullet2);
-            //        bullet2.direction = -bullet2.direction;
-            //        EntityMan.Add(bullet2);
-
-            //        // Same thing for bullet3
-            //        EntityMan.Add(bullet3);
-            //        bullet3.direction = -bullet3.direction;
-            //        EntityMan.Add(bullet3);
-            //        break;
-            //    default:
-            //        Debug.WriteLine("Power not 1-3 !!!");
-            //        break;
-            //}
+            if (power >= 3)
+            {
+                EntityMan.Add((PlayerBullet)bullet2.Clone());
+                bullet2Offset *= -1;
+                bullet2.direction = UPWARDS + bullet2Offset;
+                EntityMan.Add((PlayerBullet)bullet2.Clone());
+            }
+            if (power >= 5)
+            {
+                // Same thing for bullet3
+                EntityMan.Add((PlayerBullet)bullet3.Clone());
+                bullet3Offset *= -1;
+                bullet3.direction = UPWARDS + bullet3Offset;
+                EntityMan.Add((PlayerBullet)bullet3.Clone());
+            }
 
         }
 
         public void useBomb()
         {
-            EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,1,0,1,false,3,
+            EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,50f,0,1,false,3,
                 Vector2.One, new Vector2(200,200),2,0,1f,3000, Bullet.BulletType.CARD));
 
         }
@@ -177,16 +172,16 @@ namespace ProjectThanatos.Content.Source
 
         }
 
-        //public void changePowerLevel(int level)
-        //{
-        //    bullet1.damage *= ((float)level * .25f);
-        //    bullet2.damage *= ((float)level * .25f);
-        //    bullet3.damage *= ((float)level * .25f);
+        public void changePowerLevel(float level)
+        {
+            bullet1.damage *= (level * .25f);
+            bullet2.damage *= (level * .25f);
+            bullet3.damage *= (level * .25f);
 
-        //    bullet1.acceleration *= .01f + level / 0.02f;
-        //    bullet2.acceleration *= .01f + level / 0.02f;
-        //    bullet3.acceleration *= .01f + level / 0.02f;
-        //}
+            bullet1.acceleration *= .01f;
+            bullet2.acceleration *= .01f;
+            bullet3.acceleration *= .01f;
+        }
 
     }
 }

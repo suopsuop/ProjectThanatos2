@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectThanatos.Content.Source;
 using ProjectThanatos2.Content.Source;
+using static ProjectThanatos.Content.Source.RiceLib;
 
 namespace ProjectThanatos2.Content.Source
 {
@@ -35,10 +36,10 @@ namespace ProjectThanatos2.Content.Source
         public float bulletCurve;
         public int bulletLifeTime;
         public Bullet.BulletType bulletType;
-
+        public Bullet.BulletColour bulletColour;
         
 
-        public BulletSpawner(int patternArrays, int bulletsPerArray, float spreadBetweenBulletArray, float spreadWithinBulletArray, float startAngle, float beginSpinSpeed, float spinRate, float spinModifier, float maxSpinRate, bool shouldInvertSpin, int fireRate, Vector2 spawnerSize, Vector2 position, float bulletSpeed, float bulletAcceleration, float bulletCurve, int bulletLifeTime, Bullet.BulletType bulletType, int spawnerLifeTime = 0)
+        public BulletSpawner(int patternArrays, int bulletsPerArray, float spreadBetweenBulletArray, float spreadWithinBulletArray, float startAngle, float beginSpinSpeed, float spinRate, float spinModifier, float maxSpinRate, bool shouldInvertSpin, int fireRate, Vector2 spawnerSize, Vector2 position, float bulletSpeed, float bulletAcceleration, float bulletCurve, int bulletLifeTime, Bullet.BulletType bulletType, Bullet.BulletColour bulletColour = Bullet.BulletColour.GREY, int spawnerLifeTime = 0)
 		{
             sprite = null;
 
@@ -61,6 +62,7 @@ namespace ProjectThanatos2.Content.Source
             this.bulletLifeTime = bulletLifeTime;
             this.spawnerLifeTime = spawnerLifeTime;
             this.bulletType = bulletType;
+            this.bulletColour = bulletColour;
 
             this.shouldDraw = false;
 
@@ -126,16 +128,10 @@ namespace ProjectThanatos2.Content.Source
 
             float direction = startAngle + (bulletAngle * indexI) + (arrayAngle * indexJ) + defaultAngle;
 
-            EntityMan.Add(new EnemyBullet(Player.Instance, Player.Instance.position, spawnPosition, bulletSpeed, bulletAcceleration, bulletCurve, bulletLifeTime, bulletType, direction));
+            EntityMan.Add(new EnemyBullet(Player.Instance, Player.Instance.position, spawnPosition, bulletSpeed, bulletAcceleration, bulletCurve, bulletLifeTime, bulletType, direction, bulletColour));
 
         }
 
-        private Vector2 lengthDirection(float distance, float angle)
-        {
-            return new Vector2(
-                distance * MathF.Cos((angle * MathF.PI) / 180),
-                distance * -MathF.Sin((angle * MathF.PI) / 180));
-        }
     }
 }
 

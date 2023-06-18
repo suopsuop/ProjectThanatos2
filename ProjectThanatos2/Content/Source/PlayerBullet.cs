@@ -10,11 +10,16 @@ using System.Threading.Tasks;
 
 namespace ProjectThanatos2.Content.Source
 {
-    class PlayerBullet : Bullet
+    class PlayerBullet : Bullet, ICloneable
     {
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
         public float damage;
 
-        public PlayerBullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float damage, float direction = 0f) : base(spawnPosition, speed, acceleration, curve, lifeTime, bulletType, direction)
+        public PlayerBullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float damage, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base(spawnPosition, speed, acceleration, curve, lifeTime, bulletType, direction, bulletColour)
         {
 
             sprite = Sprites.projectileSpriteSheet;
@@ -38,9 +43,9 @@ namespace ProjectThanatos2.Content.Source
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
-        {
-                base.Draw(spriteBatch);
-        }
+        //public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
+        //{
+        //        base.Draw(spriteBatch);
+        //}
     }
 }

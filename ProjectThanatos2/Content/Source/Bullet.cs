@@ -13,16 +13,36 @@ namespace ProjectThanatos.Content.Source
 {
     public class Bullet : Entity
     {
+
         public enum BulletType
         {
-            LASER,
-            KNIFE,
-            ORB,
-            BULLET,
-            KUNAI,
-            GEM,
-            CARD,
-            STAR
+            LASER = 0,
+            KNIFE = 1,
+            ORB = 2,
+            BULLET = 3,
+            KUNAI = 4,
+            GEM = 5,
+            CARD = 6,
+            STAR =7
+        };
+
+        public enum BulletColour
+        {
+            GREY = 0,
+            FILLRED = 1,
+            RED = 2,
+            FILLPINK = 3,
+            PINK = 4,
+            FILLBLUE = 5,
+            BLUE = 6,
+            FILLCYAN = 7,
+            CYAN = 8,
+            FILLGREEN = 9,
+            GREEN = 10,
+            FILLYELLOW = 11,
+            YELLOW = 12,
+            GOLD = 13,
+            WHITE = 14
         };
 
         private static Bullet instance;
@@ -41,8 +61,9 @@ namespace ProjectThanatos.Content.Source
         public int framesAlive = 0;
         public int invisFrames = 3;
         public BulletType bulletType;
+        public BulletColour bulletColour;
 
-        public Bullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float direction = 0f) : base()
+        public Bullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base()
         {
 
             this.position = spawnPosition;
@@ -51,6 +72,7 @@ namespace ProjectThanatos.Content.Source
             this.lifeTime = lifeTime;
             this.direction = direction;
             this.bulletType = bulletType;
+            this.bulletColour = bulletColour;
 
             //this.velocity = velocity;
 
@@ -82,22 +104,17 @@ namespace ProjectThanatos.Content.Source
 
             position += vecDirection * speed;
 
-            //if (velocity.LengthSquared() > 0) //Rotating texture to fit direction (DOESN'T WORK!!)
-            //{
-            //    orientation = velocity.ToAngle() - 45f;
-            //}
+            orientation = RiceLib.toRadians(direction - 90f);
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
         {
-            if (invisFrames ==0)
-                base.Draw(spriteBatch, spritePos, scale);
-        }
 
-        //public override void Kill()
-        //{
-        //    base.Kill();
-        //}
+            if (invisFrames ==0)
+                // Draws the correct sprite through what colour and type it has
+                // been passed. I love enums
+                base.Draw(spriteBatch, new Rectangle(16 * ((int)bulletColour), 16 * ((int)bulletType), 16, 16), scale);
+        }
 
         public bool isOutOfBounds()
         {
@@ -113,5 +130,7 @@ namespace ProjectThanatos.Content.Source
 
             return new Vector2(MathF.Cos(dirXRadians),-MathF.Sin(dirYRadians));
         }
+
+
     }
 }
