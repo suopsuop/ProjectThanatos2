@@ -21,6 +21,35 @@ namespace ProjectThanatos.Content.Source
 
         public bool isFocused = false;
 
+        // Defines the three types of bullets that the player can shoot, depending on level
+        PlayerBullet bullet1 = new PlayerBullet(Vector2.Zero,
+                9.5f,
+                .1f,
+                0,
+                1200,
+            Bullet.BulletType.KNIFE,
+                1f);
+
+        PlayerBullet bullet2 = new PlayerBullet(
+            Vector2.Zero,
+                9.5f,
+                .1f,
+                0f,
+                1200,
+            Bullet.BulletType.GEM,
+                2f,
+                20f);
+
+        PlayerBullet bullet3 = new PlayerBullet(
+            Vector2.Zero,
+                10f,
+                .1f,
+                2.5f,
+                1200,
+            Bullet.BulletType.STAR,
+                3f,
+                5f);
+
         static GameTime gameTime = ProjectThanatos.GameTime;
 
 
@@ -64,7 +93,9 @@ namespace ProjectThanatos.Content.Source
             
             velocity += moveSpeed * Input.GetMovementDirection();
             position += velocity;
-            position = Vector2.Clamp(position, spriteSize / 2, ProjectThanatos.ScreenSize - spriteSize/2); // Stops the player exiting bounds
+            position = Vector2.Clamp(position, spriteSize / 2,
+                ProjectThanatos.ScreenSize - spriteSize/2);
+                // Stops the player exiting bounds
 
             velocity = Vector2.Zero;
 
@@ -76,8 +107,12 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.WasBombButtonPressed())
             {
-                shootBullet(); //CHANGE ME!!!
+                useBomb(); //CHANGE ME!!!
             }
+
+            //bullet1.position = position;
+            //bullet2.position = position;
+            //bullet3.position = position;
 
         }
 
@@ -85,21 +120,49 @@ namespace ProjectThanatos.Content.Source
         {
 
             //EntityMan.Add(new EnemyBullet(position, 4, new Vector2(0, -1), Curves.GetCurve(Curves.CurveType.LINE), 4000, instance, instance.position));
-            //EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,1,0,1,false,3,Vector2.One, new Vector2(200,200),2,0,1f,3000));
-            switch(power)
-            {
-                case 1:
-                    break;
-                case 2:
-                    break;
-                default:
-                    break;
-            }
+            EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,1,0,1,false,3,Vector2.One, new Vector2(200,200),2,0,1f,3000,Bullet.BulletType.LASER));
+
+            // Updating each bullet's spawn position
+
+
+
+            //switch (power)
+            //{
+            //    case 1:
+            //        EntityMan.Add(bullet1);
+            //        break;
+            //    case 2:
+            //        EntityMan.Add(bullet1);
+
+            //        // Adds two angled bullet2's of opposite angles
+            //        EntityMan.Add(bullet2);
+            //        bullet2.direction = -bullet2.direction;
+            //        EntityMan.Add(bullet2);
+            //        break;
+            //    case 3:
+            //        EntityMan.Add(bullet1);
+
+            //        // Adds two angled bullet2's of opposite angles
+            //        EntityMan.Add(bullet2);
+            //        bullet2.direction = -bullet2.direction;
+            //        EntityMan.Add(bullet2);
+
+            //        // Same thing for bullet3
+            //        EntityMan.Add(bullet3);
+            //        bullet3.direction = -bullet3.direction;
+            //        EntityMan.Add(bullet3);
+            //        break;
+            //    default:
+            //        Debug.WriteLine("Power not 1-3 !!!");
+            //        break;
+            //}
 
         }
 
         public void useBomb()
         {
+            EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,1,0,1,false,3,
+                Vector2.One, new Vector2(200,200),2,0,1f,3000, Bullet.BulletType.CARD));
 
         }
 
@@ -113,6 +176,17 @@ namespace ProjectThanatos.Content.Source
         {
 
         }
+
+        //public void changePowerLevel(int level)
+        //{
+        //    bullet1.damage *= ((float)level * .25f);
+        //    bullet2.damage *= ((float)level * .25f);
+        //    bullet3.damage *= ((float)level * .25f);
+
+        //    bullet1.acceleration *= .01f + level / 0.02f;
+        //    bullet2.acceleration *= .01f + level / 0.02f;
+        //    bullet3.acceleration *= .01f + level / 0.02f;
+        //}
 
     }
 }

@@ -16,10 +16,7 @@ namespace ProjectThanatos
         public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
         public static Vector2 ScreenSize;
 
-        //public static GameTime GameTime { get; private set; }
         public static GameTime GameTime = new GameTime();
-
-        //public TimerMan TimerMan { get; private set; }
 
         bool isPaused = false;
 
@@ -37,8 +34,6 @@ namespace ProjectThanatos
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
             Instance = this;
 
@@ -55,22 +50,19 @@ namespace ProjectThanatos
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Sprites.loadContent(Content);
-
-            // TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
         {
 
-            // TODO: Add your update logic here
             GameTime= gameTime;
             Input.Update();
 
             if(Input.WasKeyPressed(Keys.Escape))
-            {
                 isPaused = !isPaused;
-            }   
 
+            // Only updates game & timers if not paused but *still* updates
+            // general monogame things. 
             if(!isPaused) 
             { 
                 // ! Update Game Here
@@ -93,7 +85,6 @@ namespace ProjectThanatos
 
             }
 
-            // TODO: Add your drawing code here
             EntityMan.Draw(_spriteBatch);
             base.Draw(gameTime);
         }

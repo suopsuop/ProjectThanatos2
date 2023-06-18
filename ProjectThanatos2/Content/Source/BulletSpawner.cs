@@ -34,10 +34,11 @@ namespace ProjectThanatos2.Content.Source
         public float bulletAcceleration;
         public float bulletCurve;
         public int bulletLifeTime;
+        public Bullet.BulletType bulletType;
 
         
 
-        public BulletSpawner(int patternArrays, int bulletsPerArray, float spreadBetweenBulletArray, float spreadWithinBulletArray, float startAngle, float beginSpinSpeed, float spinRate, float spinModifier, float maxSpinRate, bool shouldInvertSpin, int fireRate, Vector2 spawnerSize, Vector2 position, float bulletSpeed, float bulletAcceleration, float bulletCurve, int bulletLifeTime, int spawnerLifeTime = 0)
+        public BulletSpawner(int patternArrays, int bulletsPerArray, float spreadBetweenBulletArray, float spreadWithinBulletArray, float startAngle, float beginSpinSpeed, float spinRate, float spinModifier, float maxSpinRate, bool shouldInvertSpin, int fireRate, Vector2 spawnerSize, Vector2 position, float bulletSpeed, float bulletAcceleration, float bulletCurve, int bulletLifeTime, Bullet.BulletType bulletType, int spawnerLifeTime = 0)
 		{
             sprite = null;
 
@@ -59,6 +60,7 @@ namespace ProjectThanatos2.Content.Source
             this.bulletCurve = bulletCurve;
             this.bulletLifeTime = bulletLifeTime;
             this.spawnerLifeTime = spawnerLifeTime;
+            this.bulletType = bulletType;
 
             this.shouldDraw = false;
 
@@ -124,7 +126,7 @@ namespace ProjectThanatos2.Content.Source
 
             float direction = startAngle + (bulletAngle * indexI) + (arrayAngle * indexJ) + defaultAngle;
 
-            EntityMan.Add(new EnemyBullet(Player.Instance, Player.Instance.position, spawnPosition, bulletSpeed, bulletAcceleration, bulletCurve, bulletLifeTime, direction));
+            EntityMan.Add(new EnemyBullet(Player.Instance, Player.Instance.position, spawnPosition, bulletSpeed, bulletAcceleration, bulletCurve, bulletLifeTime, bulletType, direction));
 
         }
 

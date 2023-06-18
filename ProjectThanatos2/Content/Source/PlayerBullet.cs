@@ -12,16 +12,17 @@ namespace ProjectThanatos2.Content.Source
 {
     class PlayerBullet : Bullet
     {
-        public PlayerBullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, float direction = 0f) : base(spawnPosition, speed, acceleration, curve, lifeTime)
+        public float damage;
+
+        public PlayerBullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float damage, float direction = 0f) : base(spawnPosition, speed, acceleration, curve, lifeTime, bulletType, direction)
         {
 
             sprite = Sprites.projectileSpriteSheet;
-            position = Player.Instance.position; // ! CHANGE ME
+            //position = Player.Instance.position; // ! CHANGE ME
+
+            this.damage = damage;
 
         }
-
-
-        public int damage;
 
         public override void Update()
         {

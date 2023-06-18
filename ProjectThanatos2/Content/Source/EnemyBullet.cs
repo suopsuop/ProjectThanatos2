@@ -16,7 +16,7 @@ namespace ProjectThanatos2.Content.Source
         Vector2 creationTimePlayerPos;
         
 
-        public EnemyBullet(Player player, Vector2 creationTimePlayerPos, Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, float direction = 0f) : base(spawnPosition,speed,acceleration,curve,lifeTime)
+        public EnemyBullet(Player player, Vector2 creationTimePlayerPos, Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float direction = 0f) : base(spawnPosition,speed,acceleration,curve,lifeTime,bulletType, direction)
         {
             
             sprite = Sprites.projectileSpriteSheet;

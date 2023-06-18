@@ -40,8 +40,9 @@ namespace ProjectThanatos.Content.Source
         public float curve;
         public int framesAlive = 0;
         public int invisFrames = 3;
+        public BulletType bulletType;
 
-        public Bullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, float direction = 0f) : base()
+        public Bullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float direction = 0f) : base()
         {
 
             this.position = spawnPosition;
@@ -49,6 +50,7 @@ namespace ProjectThanatos.Content.Source
             this.acceleration = acceleration;
             this.lifeTime = lifeTime;
             this.direction = direction;
+            this.bulletType = bulletType;
 
             //this.velocity = velocity;
 
@@ -56,7 +58,7 @@ namespace ProjectThanatos.Content.Source
             this.speed = speed;
             if(lifeTime >= 0) // Creates a timer to kill the bullet after its lifetime
             {
-                TimerMan.Create(lifeTime, () => Kill());
+                TimerMan.Create(lifeTime, () => base.Kill());
             }
             this.initialPosition = position;
 
@@ -92,10 +94,10 @@ namespace ProjectThanatos.Content.Source
                 base.Draw(spriteBatch, spritePos, scale);
         }
 
-        public override void Kill()
-        {
-            base.Kill();
-        }
+        //public override void Kill()
+        //{
+        //    base.Kill();
+        //}
 
         public bool isOutOfBounds()
         {
@@ -104,6 +106,8 @@ namespace ProjectThanatos.Content.Source
 
         private static Vector2 getDirection(float direction) // Gets vector direction from angle
         {
+            // Could be a one-liner, might do that but just keeping this
+            // here for now for readability
             float dirXRadians = direction * MathF.PI / 180f;
             float dirYRadians = direction * MathF.PI / 180f;
 
