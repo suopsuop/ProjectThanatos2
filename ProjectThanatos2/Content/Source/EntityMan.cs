@@ -26,6 +26,7 @@ namespace ProjectThanatos.Content.Source
             else
             {
                 addedEntities.Add(entity);
+                
             }
         }
 

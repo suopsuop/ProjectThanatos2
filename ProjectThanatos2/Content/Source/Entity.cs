@@ -19,6 +19,7 @@ namespace ProjectThanatos.Content.Source
         public Vector2 velocity { get; set; }
 
         public bool shouldDraw = true;
+        
 
         public float orientation; // Rotation.
 
@@ -60,7 +61,7 @@ namespace ProjectThanatos.Content.Source
 
                         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp); // These settings cut the sprites out cleaner, apparently?
                         spriteBatch.Draw(sprite, position, spritePos, color, orientation, spriteOrigin, scale, 0, 0);
-                        spriteBatch.End();
+                        spriteBatch.End();  
                     }
 
                 }

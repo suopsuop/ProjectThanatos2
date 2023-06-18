@@ -17,6 +17,8 @@ namespace ProjectThanatos.Content.Source
         private const int moveSpeed = 8;
         private const int steadyMoveSpeed = 5;
 
+        public int power = 1;
+
         public bool isFocused = false;
 
         static GameTime gameTime = ProjectThanatos.GameTime;
@@ -83,7 +85,16 @@ namespace ProjectThanatos.Content.Source
         {
 
             //EntityMan.Add(new EnemyBullet(position, 4, new Vector2(0, -1), Curves.GetCurve(Curves.CurveType.LINE), 4000, instance, instance.position));
-            EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,1,0,1,false,3,Vector2.One, Player.Instance.position,2,0,1f,3000));
+            //EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,1,0,1,false,3,Vector2.One, new Vector2(200,200),2,0,1f,3000));
+            switch(power)
+            {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                default:
+                    break;
+            }
 
         }
 
