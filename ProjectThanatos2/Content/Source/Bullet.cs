@@ -70,6 +70,8 @@ namespace ProjectThanatos.Content.Source
             this.bulletType = bulletType;
             this.bulletColour = bulletColour;
 
+            this.collisionBox = new Rectangle((int)spawnPosition.X - 4, (int)spawnPosition.Y - 4, 8, 8);
+
             //this.velocity = velocity;
 
             //this.bulletCurve = bulletCurve;
@@ -82,18 +84,17 @@ namespace ProjectThanatos.Content.Source
 
             //this.localRotation = localRotation;
 
-        }
-        
+        }        
 
         public override void Update()
         {
             if (isOutOfBounds())
-                base.Kill();
+                Kill();
 
             framesAlive += 1;
 
             if(invisFrames>0)
-            { invisFrames -= 1; }
+                invisFrames -= 1;
 
             direction += curve;
 
@@ -102,6 +103,8 @@ namespace ProjectThanatos.Content.Source
             vecDirection = getDirection(direction);
 
             position += vecDirection * speed;
+
+            collisionBox.Location = position.ToPoint(); // Moves the collision to the player
 
             orientation = RiceLib.ToRadians(direction - 90f); // NOT WORKING!!!
         }

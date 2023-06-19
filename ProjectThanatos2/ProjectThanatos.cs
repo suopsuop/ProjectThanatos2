@@ -22,8 +22,6 @@ namespace ProjectThanatos
 
         public ProjectThanatos()
         {
-            
-            
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 

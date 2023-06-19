@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ProjectThanatos2.Content.Source;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -56,16 +58,34 @@ namespace ProjectThanatos.Content.Source
 
         static void handleCollisions()
         {
-            // Nothing, Yet
-
+            foreach (var entity in entities)
+            {
+                if(entity.GetType() == typeof(EnemyBullet))
+                {
+                    if (entity.collisionBox.Contains(Player.Instance.collisionBox))
+                    {
+                        Player.Instance.Kill();
+                    }
+                }
+                
+                
+            }
 
             // Split bullets collision each update to multiple movement checks (e.g., if it moves 10 units in a frame, check it at 5 as well)
         }
 
         public static void Draw(SpriteBatch spriteBatch)
-        {
+        {            
             foreach (var entity in entities)
                 entity.Draw(spriteBatch);
+
+            // Draws Debug Rectangles
+            foreach (var entity in entities)
+            {
+                spriteBatch.Begin();
+                spriteBatch.DrawRectangle(entity.collisionBox, Color.Red);
+                spriteBatch.End();
+            }
         }
     }
 }

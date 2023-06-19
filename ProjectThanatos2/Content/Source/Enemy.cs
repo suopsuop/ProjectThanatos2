@@ -52,10 +52,12 @@ namespace ProjectThanatos2.Content.Source
 
         public Enemy(Vector2 spawnPosition, EnemyType enemyType, EnemyColour enemyColour, int lifeTime = 5000)
         {
-                TimerMan.Create(lifeTime, () => base.Kill());
 
+            this.position = spawnPosition;
             this.enemyType = enemyType;
             this.enemyColour = enemyColour;
+
+            TimerMan.Create(lifeTime, () => base.Kill());
 
             this.sprite = Sprites.enemySpriteSheet;
             //this.scale = new Random().NextFloat(.8f, 1.1f); // Slightly randomises scale
@@ -67,27 +69,27 @@ namespace ProjectThanatos2.Content.Source
                     this.health = 50f * GameMan.playerPower; 
                     this.defaultSpritePos = new Vector2(0, 0);
                     this.enemyScore = 2500;
-                    this.spriteSize = new Vector2(32, 32);
+                    this.spriteSize = new Vector2(64, 64);
                     break;
                 case EnemyType.SMALLFAIRY:
                     this.health = 25f * GameMan.playerPower;
-                    this.defaultSpritePos = new Vector2(0, 128);
-                    this.defaultSpritePos += new Vector2(0, (int)enemyColour * 16);
+                    this.defaultSpritePos = new Vector2(0, 256);
+                    this.defaultSpritePos += new Vector2(0, (int)enemyColour * 32);
                     this.enemyScore = 1250;
-                    this.spriteSize = new Vector2(16,16);
+                    this.spriteSize = new Vector2(32,32);
 
                     break;
                 case EnemyType.SMALLDARKFAIRY:
                     this.health = 60f * GameMan.playerPower;
                     this.defaultSpritePos = new Vector2(0, 352);
-                    this.defaultSpritePos += new Vector2(0, (int)enemyColour * 16);
+                    this.defaultSpritePos += new Vector2(0, (int)enemyColour * 32);
                     this.enemyScore = 3125;
-                    this.spriteSize = new Vector2(16, 16);
+                    this.spriteSize = new Vector2(32, 32);
                     break;
                 case EnemyType.METEOR:
                     this.health = 10f * GameMan.playerPower;
                     this.defaultSpritePos = new Vector2(64, 64);
-                    this.spriteSize = new Vector2(32,32);
+                    this.spriteSize = new Vector2(64,64);
                     break;
                 default:
                     break;
@@ -117,7 +119,8 @@ namespace ProjectThanatos2.Content.Source
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1, SpriteEffects spriteEffects = SpriteEffects.None)
         {
-            base.Draw(spriteBatch, new Rectangle((int)(spriteAnimationPos.X * spriteSize.X), (int)(spriteAnimationPos.Y * spriteSize.Y), (int)spriteSize.X, (int)spriteSize.Y), scale);
+            // Calculates which sprite to draw based on pre-set parameters. Lovely!
+            base.Draw(spriteBatch, new Rectangle((int)(defaultSpritePos.X + (spriteAnimationPos.X * spriteSize.X)), (int)(defaultSpritePos.Y + (spriteAnimationPos.Y * spriteSize.Y)), (int)spriteSize.X, (int)spriteSize.Y), scale);
         }
 
         public void Attack(BulletPattern bulletPattern, int patternLifeTime)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectThanatos.Content.Source
 {
@@ -28,7 +29,13 @@ namespace ProjectThanatos.Content.Source
 
         public static float PointToVector(Vector2 vector, Vector2 vectorToPointTo)
         {
-            return 1;
+            return -1; // ADD TO ME
+        }
+
+        //For Debugging
+        public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rectangle, Color color)
+        {
+            spriteBatch.Draw(Sprites.Pixel, rectangle, color);
         }
     }
 }

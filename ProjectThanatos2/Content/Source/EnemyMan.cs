@@ -24,6 +24,7 @@ namespace ProjectThanatos2.Content.Source
 
         static EnemyMan()
 		{
+
 		}
 
 		public static void AddEnemy(Vector2 spawnPosition, Enemy.EnemyType enemyType, Enemy.EnemyColour enemyColour, int lifetime = 5000)

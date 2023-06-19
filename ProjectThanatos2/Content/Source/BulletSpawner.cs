@@ -94,7 +94,7 @@ namespace ProjectThanatos2.Content.Source
             }
 
             //PLACEHOLDER
-            this.position = Player.Instance.position;
+            //this.position = Player.Instance.position;
 		}
 
         public override void Update()

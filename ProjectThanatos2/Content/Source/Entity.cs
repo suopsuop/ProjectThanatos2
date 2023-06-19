@@ -24,7 +24,7 @@ namespace ProjectThanatos.Content.Source
         public float orientation; // Rotation.
 
         public float radius { get; set; } // Circular collision detection!
-        public Rectangle collisionBox { get; set; } //Rectangular Collision!
+        public Rectangle collisionBox; //Rectangular Collision!
 
         public bool isExpired = false; // Flag for if entity should be deleted, handled in EntityMan
 
