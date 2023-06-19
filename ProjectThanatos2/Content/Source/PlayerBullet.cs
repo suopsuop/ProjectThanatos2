@@ -33,7 +33,6 @@ namespace ProjectThanatos2.Content.Source
         {
             base.Update();
 
-           
         }
 
         //public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)

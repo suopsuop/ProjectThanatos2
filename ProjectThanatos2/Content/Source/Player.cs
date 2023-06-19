@@ -17,27 +17,29 @@ namespace ProjectThanatos.Content.Source
         private const int moveSpeed = 8;
         private const int steadyMoveSpeed = 4;
 
-        public float power = 1;
-
         public Vector2 spriteAnimationPos = new Vector2(0,0);
 
-        public int frameDelay = 8;
-        public const int defaultFrameDelay = 8;
+        public int frameDelay = 5;
+        public const int defaultFrameDelay = 5;
 
         public bool isFocused = false;
 
+        int framesTilRespawn = 0;
+
+
         // Defines the three types of bullets that the player can shoot, depending on level
         float bullet1Offset = 0f;
-        float bullet2Offset = 45f;
-        float bullet3Offset = 20f;
+        float bullet2Offset = 30f;
+        float bullet3Offset = 15f;
 
         float bullet1SteadyOffset = 0f;
-        float bullet2SteadyOffset = 25f;
-        float bullet3SteadyOffset = 10f;
+        float bullet2SteadyOffset = 12f;
+        float bullet3SteadyOffset = 7f;
 
         const float UPWARDS = 90f;
 
-        PlayerBullet bullet1 = new PlayerBullet(Vector2.Zero,
+        PlayerBullet bullet1 = new PlayerBullet(
+            Vector2.Zero,
                 9.5f,
                 .1f,
                 0,
@@ -76,12 +78,9 @@ namespace ProjectThanatos.Content.Source
                 if (instance == null)
                     instance = new Player();
 
-                return instance; 
+                return instance;
             }
         }
-
-
-        int framesTilRespawn = 0;
 
         public bool isPlayerDead
         {
@@ -94,7 +93,7 @@ namespace ProjectThanatos.Content.Source
         private Player()
         {
             sprite = Sprites.playerSpriteSheet;
-            position = Vector2.Zero;
+            position = ProjectThanatos.ScreenSize / 2;
             collisionBox = new Rectangle((int)this.position.X, (int)this.position.Y, 5, 5);
         }
 
@@ -136,8 +135,8 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.WasBombButtonPressed())
             {
-                power += .5f; // TEST TEST TEST
-                changePowerLevel(power); // TEST TEST TEST
+                GameMan.playerPower += .5f; // TEST TEST TEST
+                changePowerLevelStats(GameMan.playerPower); // TEST TEST TEST
 
                 useBomb();
             }
@@ -147,14 +146,13 @@ namespace ProjectThanatos.Content.Source
             {
                 if (spriteAnimationPos.X <= 0)
                 {
-                    spriteAnimationPos.X += 1;
+                    spriteAnimationPos.X = defaultFrameDelay - 1;
                 }
                 else
                 {
                     spriteAnimationPos.X -= 1;
                 }
             }
-            Debug.WriteLine(Input.GetMovementDirection());
             if (Input.GetMovementDirection().X == 0)
                 spriteAnimationPos.Y = 0;
             else if (Input.GetMovementDirection().X > 0)
@@ -174,7 +172,7 @@ namespace ProjectThanatos.Content.Source
             // Will add more bullet streams based on 
             EntityMan.Add((PlayerBullet)bullet1.Clone());
 
-            if (power >= 3)
+            if (GameMan.playerPower >= 3)
             {
                 EntityMan.Add((PlayerBullet)bullet2.Clone());
                 bullet2Offset *= -1;
@@ -187,7 +185,7 @@ namespace ProjectThanatos.Content.Source
 
                 EntityMan.Add((PlayerBullet)bullet2.Clone());
             }
-            if (power >= 5)
+            if (GameMan.playerPower >= 5)
             {
                 // Same thing for bullet3
 
@@ -207,12 +205,14 @@ namespace ProjectThanatos.Content.Source
 
         public void useBomb()
         {
-            EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,50f,0,1,false,3,
-                Vector2.One, new Vector2(200,200),2,0,1f,3000, Bullet.BulletType.CARD));
+            EntityMan.Add(new BulletSpawner(4,1,90,1,1,.4f,1.5f,0.1f,4,true,7,
+                Vector2.One, new Vector2(200,200),2,0,1f,10000, Bullet.BulletType.CARD, Bullet.BulletColour.RED, 6000));
+
+            EnemyMan.AddEnemy(position, Enemy.EnemyType.SMALLFAIRY, Enemy.EnemyColour.RED); // TEST TEST TEST
 
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
+        public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f, SpriteEffects spriteEffects = SpriteEffects.None)
         {
             if (!isPlayerDead)
                 base.Draw(spriteBatch, new Rectangle((int)spriteAnimationPos.X * 32,(int)spriteAnimationPos.Y * 48,32,48));
@@ -221,17 +221,18 @@ namespace ProjectThanatos.Content.Source
         public override void Kill()
         {
 
+            base.Kill();
         }
 
-        public void changePowerLevel(float level)
+        public void changePowerLevelStats(float level)
         {
-            bullet1.damage *= (level * .25f);
+            bullet1.damage *= level;
             bullet2.damage *= (level * .25f);
             bullet3.damage *= (level * .25f);
 
-            bullet1.acceleration *= .01f;
-            bullet2.acceleration *= .01f;
-            bullet3.acceleration *= .01f;
+            bullet1.acceleration += .01f;
+            bullet2.acceleration += .01f;
+            bullet3.acceleration += .01f;
         }
 
     }

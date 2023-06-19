@@ -28,21 +28,13 @@ namespace ProjectThanatos.Content.Source
 
         public bool isExpired = false; // Flag for if entity should be deleted, handled in EntityMan
 
-        public int zDepth = 0;
+        public int zDepth;
 
-        // Gets sprite size
-
-        public Vector2 spriteSize
-        {
-            get
-            {
-                return sprite == null ? Vector2.Zero : new Vector2(sprite.Width, sprite.Height);
-            }
-        }
+        public Vector2 spriteSize;
 
         public abstract void Update();
 
-        public virtual void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
+        public virtual void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f, SpriteEffects spriteEffects = SpriteEffects.None)
         {
             if (shouldDraw)
             {
@@ -57,11 +49,11 @@ namespace ProjectThanatos.Content.Source
                     else // Draws spritebatch with given rectangle, if there is one
                     {
                         //spriteOrigin = new Vector2(spritePos.Value.X + (spritePos.Value.Width / 2f), spritePos.Value.Y + (spritePos.Value.Height / 2f));
-                        spriteOrigin = new Vector2();
+                        spriteOrigin = new Vector2(spritePos.Value.Width/2, spritePos.Value.Height/2);
 
                         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp); // These settings cut the sprites out cleaner, apparently?
                         spriteBatch.Draw(sprite, position, spritePos, color, orientation, spriteOrigin, scale, 0, 0);
-                        spriteBatch.End();  
+                        spriteBatch.End();
                     }
 
                 }

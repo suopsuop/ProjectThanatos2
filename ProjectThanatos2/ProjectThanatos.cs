@@ -26,10 +26,15 @@ namespace ProjectThanatos
             
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
             IsMouseVisible = false;
+            //Window.AllowUserResizing = true;
 
             _graphics.PreferredBackBufferWidth = 640;
             _graphics.PreferredBackBufferHeight = 480;
+
+            Window.Title = "Project Thanatos";
+            
         }
 
         protected override void Initialize()

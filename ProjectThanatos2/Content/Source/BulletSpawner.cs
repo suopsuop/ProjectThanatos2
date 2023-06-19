@@ -5,12 +5,14 @@ using ProjectThanatos.Content.Source;
 using ProjectThanatos2.Content.Source;
 using static ProjectThanatos.Content.Source.RiceLib;
 
+   ////////////////////////////////////////////////////////////////////
+  // code adapted from:                                             //
+ // https://github.com/ReiwuKleiwu/Bullet-Hell-Pattern-Generator   //
+////////////////////////////////////////////////////////////////////
 namespace ProjectThanatos2.Content.Source
 {
 	public class BulletSpawner : Entity
 	{
-        private int[] bulletArray;
-
         public int patternArrays;
         public int bulletsPerArray;
 
@@ -25,7 +27,7 @@ namespace ProjectThanatos2.Content.Source
         public bool shouldInvertSpin; // True if |spinRate| >= maxSpinRate
         public float defaultAngle = 0f;
 
-        public int fireRate;
+        public readonly int fireRate;
         public int framesTillShoot; // frame tracker for firerate
 
         public Vector2 spawnerSize;
@@ -39,7 +41,26 @@ namespace ProjectThanatos2.Content.Source
         public Bullet.BulletColour bulletColour;
         
 
-        public BulletSpawner(int patternArrays, int bulletsPerArray, float spreadBetweenBulletArray, float spreadWithinBulletArray, float startAngle, float beginSpinSpeed, float spinRate, float spinModifier, float maxSpinRate, bool shouldInvertSpin, int fireRate, Vector2 spawnerSize, Vector2 position, float bulletSpeed, float bulletAcceleration, float bulletCurve, int bulletLifeTime, Bullet.BulletType bulletType, Bullet.BulletColour bulletColour = Bullet.BulletColour.GREY, int spawnerLifeTime = 0)
+        public BulletSpawner(
+            int patternArrays,
+            int bulletsPerArray,
+            float spreadBetweenBulletArray,
+            float spreadWithinBulletArray,
+            float startAngle, float beginSpinSpeed,
+            float spinRate,
+            float spinModifier,
+            float maxSpinRate,
+            bool shouldInvertSpin,
+            int fireRate,
+            Vector2 spawnerSize,
+            Vector2 position,
+            float bulletSpeed,
+            float bulletAcceleration,
+            float bulletCurve,
+            int bulletLifeTime,
+            Bullet.BulletType bulletType,
+            Bullet.BulletColour bulletColour = Bullet.BulletColour.GREY,
+            int spawnerLifeTime = 0)
 		{
             sprite = null;
 
@@ -54,6 +75,7 @@ namespace ProjectThanatos2.Content.Source
             this.maxSpinRate = maxSpinRate;
             this.shouldInvertSpin = shouldInvertSpin;
             this.fireRate = fireRate;
+            this.framesTillShoot = fireRate;
             this.spawnerSize = spawnerSize;
             this.position = position;
             this.bulletSpeed = bulletSpeed;
@@ -77,6 +99,7 @@ namespace ProjectThanatos2.Content.Source
 
         public override void Update()
         {
+            framesTillShoot--;
 
             int bulletLength = bulletsPerArray - 1; // Not sure what this does yet
 
@@ -89,8 +112,10 @@ namespace ProjectThanatos2.Content.Source
             float arrayAngle = (spreadWithinBulletArray / bulletLength); // Spread between each array
             float bulletAngle = (spreadBetweenBulletArray / arrayLength); // Spread between each bullet stream per array
 
-            if (framesTillShoot == 0)
+            if (framesTillShoot <= 0)
             {
+                framesTillShoot = fireRate; // Resets frame counter
+
                 for(int i = 0; i < patternArrays; i++)
                 {
                     for(int j = 0; j < bulletsPerArray; j++)
@@ -117,14 +142,15 @@ namespace ProjectThanatos2.Content.Source
             }
 
 
+
         }
 
         private void spawnBullet(int indexI, int indexJ, float arrayAngle, float bulletAngle)
         {
 
             Vector2 spawnPosition = new Vector2(
-                position.X + lengthDirection(spawnerSize.X, startAngle + (bulletAngle * indexI) + (arrayAngle * indexJ) + startAngle).X,
-                position.Y + lengthDirection(spawnerSize.Y, startAngle + (bulletAngle * indexI) + (arrayAngle * indexJ) + startAngle).Y);
+                position.X + LengthDirection(spawnerSize.X, startAngle + (bulletAngle * indexI) + (arrayAngle * indexJ) + startAngle).X,
+                position.Y + LengthDirection(spawnerSize.Y, startAngle + (bulletAngle * indexI) + (arrayAngle * indexJ) + startAngle).Y);
 
             float direction = startAngle + (bulletAngle * indexI) + (arrayAngle * indexJ) + defaultAngle;
 

@@ -45,7 +45,7 @@ namespace ProjectThanatos.Content.Source
             WHITE = 14
         };
 
-        private static Bullet instance;
+        //private static Bullet instance;
 
         double lifeTime;
         public float speed;
@@ -87,6 +87,9 @@ namespace ProjectThanatos.Content.Source
 
         public override void Update()
         {
+            if (isOutOfBounds())
+                base.Kill();
+
             framesAlive += 1;
 
             if(invisFrames>0)
@@ -100,21 +103,21 @@ namespace ProjectThanatos.Content.Source
 
             position += vecDirection * speed;
 
-            orientation = RiceLib.toRadians(direction - 90f); // NOT WORKING!!!
+            orientation = RiceLib.ToRadians(direction - 90f); // NOT WORKING!!!
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
+        public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f, SpriteEffects spriteEffects = SpriteEffects.None)
         {
 
             if (invisFrames ==0)
                 // Draws the correct sprite through what colour and type it has
-                // been passed. I love enums
+                // been passed. I love enums!
                 base.Draw(spriteBatch, new Rectangle(16 * ((int)bulletColour), 16 * ((int)bulletType), 16, 16), scale - .2f);
         }
 
         public bool isOutOfBounds()
         {
-            return ProjectThanatos.Viewport.Bounds.Contains(position);
+            return !ProjectThanatos.Viewport.Bounds.Contains(position);
         }
 
         private static Vector2 getDirection(float direction) // Gets vector direction from angle
