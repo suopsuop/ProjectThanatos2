@@ -17,7 +17,7 @@ namespace ProjectThanatos.Content.Source
 
         public static void loadContent(ContentManager content)
         {
-            playerSpriteSheet = content.Load<Texture2D>("Sprites/testPlayer");
+            playerSpriteSheet = content.Load<Texture2D>("Sprites/Reimu");
             projectileSpriteSheet = content.Load<Texture2D>("Sprites/BulletsAndItems");
 
             Pixel = new Texture2D(playerSpriteSheet.GraphicsDevice, 1, 1);

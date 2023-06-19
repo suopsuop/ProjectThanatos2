@@ -47,10 +47,6 @@ namespace ProjectThanatos.Content.Source
 
         private static Bullet instance;
 
-        //public delegate void BulletCurve(Bullet bullet);
-
-        //public BulletCurve bulletCurve;
-
         double lifeTime;
         public float speed;
         public readonly Vector2 initialPosition;
@@ -104,7 +100,7 @@ namespace ProjectThanatos.Content.Source
 
             position += vecDirection * speed;
 
-            orientation = RiceLib.toRadians(direction - 90f);
+            orientation = RiceLib.toRadians(direction - 90f); // NOT WORKING!!!
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
@@ -113,7 +109,7 @@ namespace ProjectThanatos.Content.Source
             if (invisFrames ==0)
                 // Draws the correct sprite through what colour and type it has
                 // been passed. I love enums
-                base.Draw(spriteBatch, new Rectangle(16 * ((int)bulletColour), 16 * ((int)bulletType), 16, 16), scale);
+                base.Draw(spriteBatch, new Rectangle(16 * ((int)bulletColour), 16 * ((int)bulletType), 16, 16), scale - .2f);
         }
 
         public bool isOutOfBounds()

@@ -13,6 +13,7 @@ namespace ProjectThanatos.Content.Source
         private static KeyboardState keyboardState, lastKeyboardState;
 
         private static bool isShooting = false;
+        private static bool isShiftDown = false;
 
         public static void Update()
         {
@@ -64,6 +65,19 @@ namespace ProjectThanatos.Content.Source
 
             return isShooting;
 
+        }
+
+        public static bool IsShiftDown()
+        {
+            if(keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift))
+            {
+                isShiftDown = true;
+            }
+            else
+            {
+                isShiftDown = false;
+            }
+            return isShiftDown;
         }
 
         // Checks if a key was just pressed down

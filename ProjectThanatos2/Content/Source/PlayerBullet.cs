@@ -33,14 +33,7 @@ namespace ProjectThanatos2.Content.Source
         {
             base.Update();
 
-            //position += 1 * new Vector2(0,-bulletSpeed);
-
-
-
-            if (velocity.LengthSquared() > 0)
-            {
-                orientation = velocity.ToAngle();
-            }
+           
         }
 
         //public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)

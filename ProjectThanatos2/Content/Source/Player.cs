@@ -15,9 +15,14 @@ namespace ProjectThanatos.Content.Source
         private static Player instance;
 
         private const int moveSpeed = 8;
-        private const int steadyMoveSpeed = 5;
+        private const int steadyMoveSpeed = 4;
 
         public float power = 1;
+
+        public Vector2 spriteAnimationPos = new Vector2(0,0);
+
+        public int frameDelay = 8;
+        public const int defaultFrameDelay = 8;
 
         public bool isFocused = false;
 
@@ -26,8 +31,11 @@ namespace ProjectThanatos.Content.Source
         float bullet2Offset = 45f;
         float bullet3Offset = 20f;
 
-        const float UPWARDS = 90f;
+        float bullet1SteadyOffset = 0f;
+        float bullet2SteadyOffset = 25f;
+        float bullet3SteadyOffset = 10f;
 
+        const float UPWARDS = 90f;
 
         PlayerBullet bullet1 = new PlayerBullet(Vector2.Zero,
                 9.5f,
@@ -83,8 +91,6 @@ namespace ProjectThanatos.Content.Source
             }
         }
 
-        static Random rand = new Random();
-
         private Player()
         {
             sprite = Sprites.playerSpriteSheet;
@@ -96,13 +102,28 @@ namespace ProjectThanatos.Content.Source
         {
             if (isPlayerDead)
             {
+                // ADD TO ME 
                 return;
             }
+
+            if (frameDelay < 0)
+                frameDelay = defaultFrameDelay;
+            else
+                frameDelay--;
+
+            // Changes what speed to multiply the player
+            if (Input.IsShiftDown())
+            {
+                velocity += steadyMoveSpeed * Input.GetMovementDirection();
+            }
+            else
+            {
+                velocity += moveSpeed * Input.GetMovementDirection();
+            }
             
-            velocity += moveSpeed * Input.GetMovementDirection();
             position += velocity;
-            position = Vector2.Clamp(position, spriteSize / 2,
-                ProjectThanatos.ScreenSize - spriteSize/2);
+            position = Vector2.Clamp(position, new Vector2(collisionBox.Width,collisionBox.Height),
+                ProjectThanatos.ScreenSize - new Vector2(collisionBox.Width,collisionBox.Height));
                 // Stops the player exiting bounds
 
             velocity = Vector2.Zero;
@@ -120,13 +141,30 @@ namespace ProjectThanatos.Content.Source
 
                 useBomb();
             }
+
+            // Animation stuff below
+            if (frameDelay == 0)
+            {
+                if (spriteAnimationPos.X <= 0)
+                {
+                    spriteAnimationPos.X += 1;
+                }
+                else
+                {
+                    spriteAnimationPos.X -= 1;
+                }
+            }
+            Debug.WriteLine(Input.GetMovementDirection());
+            if (Input.GetMovementDirection().X == 0)
+                spriteAnimationPos.Y = 0;
+            else if (Input.GetMovementDirection().X > 0)
+                spriteAnimationPos.Y = 2;
+            else
+                spriteAnimationPos.Y = 1;
         }
 
         public void shootBullet()
         {
-
-            //EntityMan.Add(new EnemyBullet(position, 4, new Vector2(0, -1), Curves.GetCurve(Curves.CurveType.LINE), 4000, instance, instance.position));
-            //EntityMan.Add(new BulletSpawner(4,1,90,1,1,.1f,1,0,1,false,3,Vector2.One, new Vector2(200,200),2,0,1f,3000,Bullet.BulletType.LASER));
 
             // Updating each bullet's spawn position
             bullet1.position = position;
@@ -140,15 +178,28 @@ namespace ProjectThanatos.Content.Source
             {
                 EntityMan.Add((PlayerBullet)bullet2.Clone());
                 bullet2Offset *= -1;
-                bullet2.direction = UPWARDS + bullet2Offset;
+                bullet2SteadyOffset *= -1;
+                if(Input.IsShiftDown())
+                    bullet2.direction = UPWARDS + bullet2SteadyOffset;
+                else
+                    bullet2.direction = UPWARDS + bullet2Offset;
+
+
                 EntityMan.Add((PlayerBullet)bullet2.Clone());
             }
             if (power >= 5)
             {
                 // Same thing for bullet3
+
                 EntityMan.Add((PlayerBullet)bullet3.Clone());
                 bullet3Offset *= -1;
-                bullet3.direction = UPWARDS + bullet3Offset;
+                bullet3SteadyOffset *= -1;
+
+                if (Input.IsShiftDown())
+                    bullet2.direction = UPWARDS + bullet3SteadyOffset;
+                else
+                    bullet2.direction = UPWARDS + bullet3Offset;
+
                 EntityMan.Add((PlayerBullet)bullet3.Clone());
             }
 
@@ -164,7 +215,7 @@ namespace ProjectThanatos.Content.Source
         public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
         {
             if (!isPlayerDead)
-                base.Draw(spriteBatch);
+                base.Draw(spriteBatch, new Rectangle((int)spriteAnimationPos.X * 32,(int)spriteAnimationPos.Y * 48,32,48));
         }
 
         public override void Kill()
