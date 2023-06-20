@@ -17,7 +17,7 @@ namespace ProjectThanatos2.Content.Source
             return this.MemberwiseClone();
         }
 
-        public PlayerBullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float damage, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base(spawnPosition, speed, acceleration, curve, lifeTime, bulletType, direction, bulletColour)
+        public PlayerBullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float damage, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base(spawnPosition, speed, acceleration, curve, lifeTime, false, bulletType, direction, bulletColour)
         {
 
             sprite = Sprites.projectileSpriteSheet;

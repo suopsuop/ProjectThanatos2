@@ -46,8 +46,9 @@ namespace ProjectThanatos.Content.Source
         };
 
         //private static Bullet instance;
+        private Random random = new Random();
 
-        double lifeTime;
+        public double lifeTime;
         public float speed;
         public readonly Vector2 initialPosition;
         public float direction;
@@ -55,17 +56,19 @@ namespace ProjectThanatos.Content.Source
         public float acceleration;
         public float curve;
         public int framesAlive = 0;
+        public bool shouldRandomisePosition;
         public int invisFrames = 3;
         public BulletType bulletType;
         public BulletColour bulletColour;
 
-        public Bullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base()
+        public Bullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, bool shouldRandomisePosition, BulletType bulletType, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base()
         {
 
             this.position = spawnPosition;
             this.speed = speed;
             this.acceleration = acceleration;
             this.lifeTime = lifeTime;
+            this.shouldRandomisePosition = shouldRandomisePosition;
             this.direction = direction;
             this.bulletType = bulletType;
             this.bulletColour = bulletColour;
@@ -96,9 +99,19 @@ namespace ProjectThanatos.Content.Source
             if(invisFrames>0)
                 invisFrames -= 1;
 
-            direction += curve;
+            if(shouldRandomisePosition)
+            {
+                direction += curve * random.NextFloat(.9f, 1.1f);
+                speed += acceleration * random.NextFloat(.9f, 1.1f);
+            }
+            else
+            {
+                direction += curve;
+                speed += acceleration;
 
-            speed += acceleration;
+            }
+
+
 
             vecDirection = RiceLib.getVecDirection(direction);
 
@@ -108,7 +121,7 @@ namespace ProjectThanatos.Content.Source
             collisionBox.Location = position.ToPoint() - new Point(collisionBox.Width / 2, collisionBox.Height / 2);
 
 
-            orientation = RiceLib.ToRadians(direction - 90f); // NOT WORKING!!!
+            orientation = RiceLib.ToRadians(direction - 90f);
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f, SpriteEffects spriteEffects = SpriteEffects.None)

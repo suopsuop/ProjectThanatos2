@@ -54,6 +54,8 @@ namespace ProjectThanatos.Content.Source
 
         private bool killedByPlayer = false;
 
+        private float spinDirection = random.NextFloat(-2f,2f);
+
         public Enemy(Vector2 spawnPosition, EnemyType enemyType, EnemyColour enemyColour, int lifeTime = 5000, EnemyMan.SpawnPositionType spawnPositionType = EnemyMan.SpawnPositionType.SCREENTOP)
         {
             instance = this;
@@ -164,6 +166,7 @@ namespace ProjectThanatos.Content.Source
             // Updates collisionBox location
             collisionBox.Location = position.ToPoint() - new Point(collisionBox.Width / 2, collisionBox.Height / 2);
 
+            orientation = RiceLib.ToRadians(position.Y / 4f * spinDirection);
         }
 
         public override void Kill()
