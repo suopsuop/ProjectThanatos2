@@ -41,8 +41,11 @@ namespace ProjectThanatos2.Content.Source
             elapsed += gameTime.ElapsedGameTime.TotalMilliseconds;
             if (elapsed >= interval)
             {
+                if (trigger is not null)
+                {
+                    trigger.Invoke();
+                }
                 Destroy();
-                trigger.Invoke();
             }
         }
 

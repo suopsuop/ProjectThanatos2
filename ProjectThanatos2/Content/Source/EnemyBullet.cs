@@ -20,7 +20,6 @@ namespace ProjectThanatos2.Content.Source
         {
             
             sprite = Sprites.projectileSpriteSheet;
-            //this.position = Player.Instance.position; // ! CHANGE ME
 
             this.playerInstance = player;
             this.creationTimePlayerPos = creationTimePlayerPos;
@@ -29,16 +28,6 @@ namespace ProjectThanatos2.Content.Source
         public override void Update()
         {
             base.Update();
-
-            //velocity.Normalize(); // normalises velocity before letting the Curves do their thing
-
-            //this.bulletCurve(this); // The delegate to change the bullet's pos
         }
-
-        //public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
-        //{
-        //    base.Draw(spriteBatch, new Rectangle(64,64,16,16)); // HARDCODED << CHANGE ME LATER
-        //}
-
     }
 }

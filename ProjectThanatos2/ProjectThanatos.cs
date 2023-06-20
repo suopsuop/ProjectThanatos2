@@ -64,15 +64,19 @@ namespace ProjectThanatos
             if(Input.WasKeyPressed(Keys.Escape))
                 isPaused = !isPaused;
 
-            // Only updates game & timers if not paused but *still* updates
+            // Only updates entities & timers if not paused but *still* updates
             // general monogame things. 
             if(!isPaused) 
             {
-                // ! Update Game Here
-
                 TimerMan.Update();
 
+                EnemyMan.Update();
+
                 EntityMan.Update();
+            }
+            else
+            {
+                // Do pause menu stuff here
             }
 
             base.Update(gameTime);
@@ -86,8 +90,7 @@ namespace ProjectThanatos
             }
             else
             {
-                GraphicsDevice.Clear(Color.LightPink);
-
+                GraphicsDevice.Clear(Color.Black);
             }
 
             EntityMan.Draw(_spriteBatch);

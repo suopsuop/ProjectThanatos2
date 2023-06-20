@@ -17,8 +17,6 @@ namespace ProjectThanatos2.Content.Source
             return this.MemberwiseClone();
         }
 
-        public float damage;
-
         public PlayerBullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float damage, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base(spawnPosition, speed, acceleration, curve, lifeTime, bulletType, direction, bulletColour)
         {
 
@@ -26,6 +24,7 @@ namespace ProjectThanatos2.Content.Source
             //position = Player.Instance.position; // ! CHANGE ME
 
             this.damage = damage;
+            this.collisionBox = new Rectangle((int)spawnPosition.X - 8, (int)spawnPosition.Y - 8, 16, 16);
 
         }
 

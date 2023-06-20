@@ -5,7 +5,13 @@ namespace ProjectThanatos2.Content.Source
 	{
 		public static ulong score { get; private set; }
 		public static float playerPower { get; set; }
-		public static bool shouldDrawDebugRectangles = true;
+
+        public const int maxEnemies = 2;
+		public static int currentEnemies = 0;
+
+
+        // DEBUG
+        public static bool shouldDrawDebugRectangles = false;
 
 
 		static GameMan()
@@ -13,7 +19,7 @@ namespace ProjectThanatos2.Content.Source
 			playerPower = 1;
 		}
 
-		public static void AddScore(ulong scoreToAdd)
+		public static void ChangeScore(ulong scoreToAdd)
 		{
 			score += scoreToAdd;
 		}

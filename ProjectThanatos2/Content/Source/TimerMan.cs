@@ -13,6 +13,7 @@ namespace ProjectThanatos2.Content.Source
         static GameTime gameTime = ProjectThanatos.ProjectThanatos.GameTime;
 
         static List<Timer> toRemove = new List<Timer>();
+        //static List<Timer> toAdd = new List<Timer>();
         static List<Timer> timers = new List<Timer>();
 
         static int ID = 0;
@@ -45,10 +46,17 @@ namespace ProjectThanatos2.Content.Source
             }
             toRemove.Clear();
 
-            foreach (Timer timer in timers.ToList<Timer>())
+            //foreach (Timer timer in toAdd)
+            //{
+            //    timers.Add(timer);
+            //}
+            //toAdd.Clear();
+
+            foreach (Timer timer in timers.ToList())
             {
                 timer.Update();
             }
+
         }
     }
 }

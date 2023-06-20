@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static ProjectThanatos2.Content.Source.Enemy;
+using static ProjectThanatos.Content.Source.Enemy;
 
 namespace ProjectThanatos.Content.Source
 {
@@ -144,22 +144,21 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.WasBombButtonPressed())
             {
-                GameMan.playerPower += .5f; // TEST TEST TEST
-                updatePowerLevelStats(); // TEST TEST TEST
-
+                //GameMan.playerPower += .01f; // TEST TEST TEST
+                //updatePowerLevelStats(); // TEST TEST TEST
                 useBomb();
             }
 
             // Animation stuff below
-            if (frameDelay == 0)
+            if (frameDelay == 0) // Animates every defaultFrameDelay frames
             {
                 if (spriteAnimationPos.X <= 0)
                 {
-                    spriteAnimationPos.X = defaultFrameDelay - 1;
+                    spriteAnimationPos.X++;
                 }
                 else
                 {
-                    spriteAnimationPos.X -= 1;
+                    spriteAnimationPos.X--; ;
                 }
             }
             if (Input.GetMovementDirection().X == 0)
@@ -214,14 +213,8 @@ namespace ProjectThanatos.Content.Source
 
         public void useBomb()
         {
-            //EntityMan.Add(new BulletSpawner(instance,4,1,90,1,1,.4f,1.5f,0.1f,4,true,7,
-            //    Vector2.One,position,2,0,1f,10000, Bullet.BulletType.CARD, Bullet.BulletColour.RED, 6000)); //TEST TEST TEST
-            bombPos = position;
-            TimerMan.Create(1000, () => EnemyMan.AddEnemy(bombPos, Enemy.EnemyType.SMALLFAIRY, Enemy.EnemyColour.RED)); // TEST TEST TEST
-
-            TimerMan.Create(500, () => RiceLib.Attack(instance, bombPos, BulletPattern.NONE, 500));
-
-
+            EntityMan.KillAllEnemyBullets();
+            GameMan.ChangeScore((ulong)(-7500f * GameMan.playerPower));
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f, SpriteEffects spriteEffects = SpriteEffects.None)
@@ -232,11 +225,7 @@ namespace ProjectThanatos.Content.Source
 
         public override void Kill()
         {
-            //EntityMan.Add(new BulletSpawner(8, 1, 360/8, 1, 1, .4f, 1.5f, 0.1f, 4, true, 7,
-            //    Vector2.One, position, 2, 0, 1f, 10000, Bullet.BulletType.CARD, Bullet.BulletColour.GOLD, 6000));
-
             base.Kill();
-            
         }
 
         public void updatePowerLevelStats()

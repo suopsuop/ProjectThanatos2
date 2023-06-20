@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectThanatos2.Content.Source;
-using static ProjectThanatos2.Content.Source.Enemy;
+using static ProjectThanatos.Content.Source.Enemy;
 
 namespace ProjectThanatos.Content.Source
 {
@@ -29,21 +29,34 @@ namespace ProjectThanatos.Content.Source
                 distance * -MathF.Sin((angle * MathF.PI) / 180));
         }
 
-        public static float PointToVector(Vector2 vector, Vector2 vectorToPointTo)
+        public static float PointToVector(Vector2 origin, Vector2 destination)
         {
-            return -1; // ADD TO ME
+            return MathF.Atan2(destination.Y - origin.Y, destination.X - origin.X);
         }
 
-        // BELOW FOR DEBUGGING!!!
+        public static Vector2 getVecDirection(float direction) // Gets vector direction from angle
+        {
+            // Could be a one-liner, might do that but just keeping this
+            // here for now for readability
+            float dirXRadians = direction * MathF.PI / 180f;
+            float dirYRadians = direction * MathF.PI / 180f;
+
+            return new Vector2(MathF.Cos(dirXRadians), -MathF.Sin(dirYRadians));
+        }
+
+        // Returns a random boolean, extension of the Random class
+        public static bool NextBool(this Random random)
+        {
+            if (random.Next(0, 2) == 1)
+                return true;
+            else
+                return false;
+        }
+
+        // BELOW FOR DEBUGGING
         public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rectangle, Color color)
         {
             spriteBatch.Draw(Sprites.Pixel, rectangle, color);
-        }
-
-        public static void Attack(object instance, Vector2 position, BulletPattern bulletPattern, int patternLifeTime)
-        {
-            EntityMan.Add(new BulletSpawner(instance, 8, 1, 360 / 8, 1, 1, .4f, 1.5f, 0.1f, 4, true, 7,
-                Vector2.One, position, 2, 0, 1f, 10000, Bullet.BulletType.CARD, Bullet.BulletColour.GOLD, 6000));
         }
     }
 }

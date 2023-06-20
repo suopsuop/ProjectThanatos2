@@ -3,17 +3,19 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectThanatos.Content.Source;
 using ProjectThanatos2.Content.Source;
+using static ProjectThanatos.Content.Source.Bullet;
 using static ProjectThanatos.Content.Source.RiceLib;
 
    ////////////////////////////////////////////////////////////////////
-  // code adapted from:                                             //
+  // code heavily adapted from:                                     //
  // https://github.com/ReiwuKleiwu/Bullet-Hell-Pattern-Generator   //
 ////////////////////////////////////////////////////////////////////
 namespace ProjectThanatos2.Content.Source
 {
 	public class BulletSpawner : Entity
 	{
-        object parent;
+        Entity parent;
+        private static Random random = new Random();
 
         public int patternArrays;
         public int bulletsPerArray;
@@ -39,24 +41,94 @@ namespace ProjectThanatos2.Content.Source
         public float bulletAcceleration;
         public float bulletCurve;
         public int bulletLifeTime;
-        public Bullet.BulletType bulletType;
+        public Bullet.BulletType bulletType;                            
         public Bullet.BulletColour bulletColour;
+
+        // Creates a random bullet spawner, influenced by player's power
+        public static BulletSpawner MakeRandom(Entity parent)
+        {
+            int patternArrays = random.Next(1,7);
+
+            int bulletsPerArray = random.Next(1, 4);
+
+            float spreadBetweenBulletArray = (int)(360 / patternArrays);
+
+            float spreadWithinBulletArray = random.NextFloat(4,12);
+
+            float startAngle = random.Next(0, 359);
+
+            float spinRate = random.NextFloat(0, 4 * GameMan.playerPower);
+
+            float spinModifier = random.NextFloat(0, 3);
+
+            float maxSpinRate = random.NextFloat(spinModifier, spinModifier + 2);
+
+            bool shouldInvertSpin = random.NextBool();
+
+            int fireRate = random.Next(3, 13);
+
+            Vector2 spawnerSize = random.NextVector2(2, 7);
+
+            float bulletSpeed = random.NextFloat(0.1f,2.3f);
+
+            float bulletAcceleration;
+            if (random.NextBool()) // These are 50/50s
+                bulletAcceleration = random.NextFloat(-.05f, 0.05f);
+            else bulletAcceleration = 0;
+
+            float bulletCurve = random.NextFloat(-4, 4);
+
+            int bulletLifeTime;
+            //if (random.NextBool())
+            //    bulletLifeTime = random.Next(4600, 13000);
+            //else bulletLifeTime = 0;
+            bulletLifeTime = random.Next(4600, 13000);
+
+
+            Bullet.BulletType bulletType = (Bullet.BulletType)random.Next(0, 8);
+
+            Bullet.BulletColour bulletColour = (Bullet.BulletColour)random.Next(0, 15);
+
+            int spawnerLifeTime = random.Next(4000, 14000);
+
+            return new BulletSpawner(
+                parent,
+                patternArrays,
+                bulletsPerArray,
+                spreadBetweenBulletArray,
+                spreadWithinBulletArray,
+                startAngle,
+                spinRate,
+                spinModifier,
+                maxSpinRate,
+                shouldInvertSpin,
+                fireRate,
+                spawnerSize,
+                parent.position,
+                bulletSpeed,
+                bulletAcceleration,
+                bulletCurve,
+                bulletLifeTime,
+                bulletType,
+                bulletColour,
+                spawnerLifeTime);
+        }
 
 
         public BulletSpawner(
-            object parent,
+            Entity parent,
             int patternArrays,
             int bulletsPerArray,
             float spreadBetweenBulletArray,
             float spreadWithinBulletArray,
-            float startAngle, float beginSpinSpeed,
+            float startAngle,
             float spinRate,
             float spinModifier,
             float maxSpinRate,
             bool shouldInvertSpin,
             int fireRate,
             Vector2 spawnerSize,
-            Vector2 position,
+            Vector2 startPosition,
             float bulletSpeed,
             float bulletAcceleration,
             float bulletCurve,
@@ -73,7 +145,6 @@ namespace ProjectThanatos2.Content.Source
             this.spreadBetweenBulletArray = spreadBetweenBulletArray;
             this.spreadWithinBulletArray = spreadWithinBulletArray;
             this.startAngle = startAngle;
-            this.beginSpinSpeed = beginSpinSpeed;
             this.spinRate = spinRate;
             this.spinModifier = spinModifier;
             this.maxSpinRate = maxSpinRate;
@@ -81,7 +152,7 @@ namespace ProjectThanatos2.Content.Source
             this.fireRate = fireRate;
             this.framesTillShoot = fireRate;
             this.spawnerSize = spawnerSize;
-            this.position = position;
+            this.position = startPosition;
             this.bulletSpeed = bulletSpeed;
             this.bulletAcceleration = bulletAcceleration;
             this.bulletCurve = bulletCurve;
@@ -92,7 +163,7 @@ namespace ProjectThanatos2.Content.Source
 
             this.shouldDraw = false;
 
-            if (spawnerLifeTime >= 0) // Creates a timer to kill the bullet after its lifetime
+            if (spawnerLifeTime > 0) // Creates a timer to kill the bullet after its lifetime
             {
                 TimerMan.Create(spawnerLifeTime, () => Kill());
             }
@@ -103,10 +174,12 @@ namespace ProjectThanatos2.Content.Source
 
         public override void Update()
         {
-            if (parent == null)
+            if (!EntityMan.DoesEntityExist(parent))
                 Kill();
 
             framesTillShoot--;
+
+            position = parent.position;
 
             int bulletLength = bulletsPerArray - 1; // Not sure what this does yet
 

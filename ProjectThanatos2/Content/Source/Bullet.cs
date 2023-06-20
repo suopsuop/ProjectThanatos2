@@ -100,7 +100,7 @@ namespace ProjectThanatos.Content.Source
 
             speed += acceleration;
 
-            vecDirection = getDirection(direction);
+            vecDirection = RiceLib.getVecDirection(direction);
 
             position += vecDirection * speed;
 
@@ -120,21 +120,9 @@ namespace ProjectThanatos.Content.Source
                 base.Draw(spriteBatch, new Rectangle(16 * ((int)bulletColour), 16 * ((int)bulletType), 16, 16), scale - .2f);
         }
 
-        public bool isOutOfBounds()
+        private bool isOutOfBounds()
         {
             return !ProjectThanatos.Viewport.Bounds.Contains(position);
         }
-
-        private static Vector2 getDirection(float direction) // Gets vector direction from angle
-        {
-            // Could be a one-liner, might do that but just keeping this
-            // here for now for readability
-            float dirXRadians = direction * MathF.PI / 180f;
-            float dirYRadians = direction * MathF.PI / 180f;
-
-            return new Vector2(MathF.Cos(dirXRadians),-MathF.Sin(dirYRadians));
-        }
-
-
     }
 }

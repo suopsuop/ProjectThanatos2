@@ -2,24 +2,22 @@
 using Microsoft.Xna.Framework;
 using ProjectThanatos.Content.Source;
 using ProjectThanatos2.Content.Source;
-
-
 namespace ProjectThanatos2.Content.Source
 {
 	static class EnemyMan
 	{
 		private static Random random = new Random();
 
-        private static Vector2 screenLeft = new Vector2(-30, 40);
-        private static Vector2 screenRight = new Vector2(30, 40);
+        private static Vector2 screenLeft = new Vector2(-15, 20);
+        private static Vector2 screenRight = new Vector2(15, 20);
 
-
-        enum SpawnPositionType
+        public enum SpawnPositionType
 		{
 			SCREENSIDE = 0,
 			SCREENLEFT = 1,
 			SCREENRIGHT = 2,
-			SCREENTOP = 3
+			SCREENTOP = 3,
+			RANDOM = 4
 		};
 
         static EnemyMan()
@@ -27,68 +25,44 @@ namespace ProjectThanatos2.Content.Source
 
 		}
 
-		public static void AddEnemy(Vector2 spawnPosition, Enemy.EnemyType enemyType, Enemy.EnemyColour enemyColour, int lifetime = 5000)
+		public static void Update()
 		{
-			EntityMan.Add(new Enemy(spawnPosition, enemyType, enemyColour, lifetime));
+			if(GameMan.currentEnemies < GameMan.maxEnemies)
+			{
+				AddEnemyRandom();
+				GameMan.currentEnemies++;
+			}
 		}
 
-		public static void AddEnemyRandom(Enemy.EnemyType enemyType, Enemy.EnemyColour enemyColour = Enemy.EnemyColour.BLUE, int lifeTime = 0)
+		public static void AddEnemy(Vector2 spawnPosition, Enemy.EnemyType enemyType, Enemy.EnemyColour enemyColour, int lifetime = 15000, SpawnPositionType spawnPositionType = SpawnPositionType.SCREENTOP)
+		{
+			// Chooses random enemy type & colour, if necessary
+            if (enemyType == Enemy.EnemyType.RANDOM)
+                enemyType = (Enemy.EnemyType)random.Next(0, 4);
+
+            if (enemyColour == Enemy.EnemyColour.RANDOM)
+                enemyColour = (Enemy.EnemyColour)random.Next(0, 4);
+
+            EntityMan.Add(new Enemy(spawnPosition, enemyType, enemyColour, lifetime));
+		}
+
+		public static void AddEnemyRandom(Enemy.EnemyType enemyType = Enemy.EnemyType.RANDOM, Enemy.EnemyColour enemyColour = Enemy.EnemyColour.RANDOM, int lifeTime = 15000)
 		{
 			SpawnPositionType spawnPositionType;
 
-			if (random.Next() >= 5)
+			if (random.NextBool())
 				spawnPositionType = SpawnPositionType.SCREENTOP;
 			else
 				spawnPositionType = SpawnPositionType.SCREENSIDE;
 
-			if(enemyType == Enemy.EnemyType.RANDOM) // Selects a random type
-			{
-				switch(random.Next(0,4))
-				{
-					case 0:
-						enemyType = Enemy.EnemyType.LARGEFAIRY;
-						break;
-					case 1:
-						enemyType = Enemy.EnemyType.SMALLFAIRY;
-						break;
-					case 2:
-						enemyType = Enemy.EnemyType.SMALLDARKFAIRY;
-						break;
-					case 3:
-						enemyType = Enemy.EnemyType.METEOR;
-						break;
-					default:
-						enemyType = Enemy.EnemyType.SMALLFAIRY;
-						break;
-				}
-			}
+            // Chooses random enemy type & colour, if necessary
+            if (enemyType == Enemy.EnemyType.RANDOM)
+                enemyType = (Enemy.EnemyType)random.Next(0, 4);
 
             if (enemyColour == Enemy.EnemyColour.RANDOM)
-            {
-                switch (random.Next(0, 4))
-                {
-                    case 0:
-                        enemyColour = Enemy.EnemyColour.BLUE;
-                        break;
-                    case 1:
-                        enemyColour = Enemy.EnemyColour.GREEN;
-                        break;
-                    case 2:
-                        enemyColour = Enemy.EnemyColour.RED;
-                        break;
-                    case 3:
-                        enemyColour = Enemy.EnemyColour.YELLOW;
-                        break;
-                    default:
-                        enemyColour = Enemy.EnemyColour.BLUE;
-                        break;
-                }
-            }
+                enemyColour = (Enemy.EnemyColour)random.Next(0, 4);
 
-
-            EntityMan.Add(new Enemy(GenerateSpawnPosition(spawnPositionType),enemyType,enemyColour,lifeTime));
-
-			//EntityMan.Add(new Enemy(enemyType,enemyColour));
+			AddEnemy(GenerateSpawnPosition(spawnPositionType), enemyType, enemyColour, lifeTime);
 			
 		}
 
@@ -111,7 +85,7 @@ namespace ProjectThanatos2.Content.Source
 					spawnPosition = screenRight;
 					break;
 				case SpawnPositionType.SCREENTOP:
-					spawnPosition = new Vector2((random.NextFloat(0, ProjectThanatos.ProjectThanatos.ScreenSize.X)), -30);
+					spawnPosition = new Vector2((random.NextFloat(0, ProjectThanatos.ProjectThanatos.ScreenSize.X)), -20);
 					break;
 				default:
 					spawnPosition = Vector2.Zero;
