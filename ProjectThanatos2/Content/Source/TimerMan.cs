@@ -44,7 +44,8 @@ namespace ProjectThanatos2.Content.Source
                 timers.Remove(timer);
             }
             toRemove.Clear();
-            foreach (Timer timer in timers)
+
+            foreach (Timer timer in timers.ToList<Timer>())
             {
                 timer.Update();
             }

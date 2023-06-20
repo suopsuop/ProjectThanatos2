@@ -67,10 +67,12 @@ namespace ProjectThanatos
             // Only updates game & timers if not paused but *still* updates
             // general monogame things. 
             if(!isPaused) 
-            { 
+            {
                 // ! Update Game Here
-                EntityMan.Update();
+
                 TimerMan.Update();
+
+                EntityMan.Update();
             }
 
             base.Update(gameTime);

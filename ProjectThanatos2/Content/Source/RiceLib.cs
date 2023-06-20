@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ProjectThanatos2.Content.Source;
+using static ProjectThanatos2.Content.Source.Enemy;
 
 namespace ProjectThanatos.Content.Source
 {
@@ -32,10 +34,16 @@ namespace ProjectThanatos.Content.Source
             return -1; // ADD TO ME
         }
 
-        //For Debugging
+        // BELOW FOR DEBUGGING!!!
         public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rectangle, Color color)
         {
             spriteBatch.Draw(Sprites.Pixel, rectangle, color);
+        }
+
+        public static void Attack(object instance, Vector2 position, BulletPattern bulletPattern, int patternLifeTime)
+        {
+            EntityMan.Add(new BulletSpawner(instance, 8, 1, 360 / 8, 1, 1, .4f, 1.5f, 0.1f, 4, true, 7,
+                Vector2.One, position, 2, 0, 1f, 10000, Bullet.BulletType.CARD, Bullet.BulletColour.GOLD, 6000));
         }
     }
 }

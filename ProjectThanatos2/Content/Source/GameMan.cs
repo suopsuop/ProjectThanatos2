@@ -5,6 +5,7 @@ namespace ProjectThanatos2.Content.Source
 	{
 		public static ulong score { get; private set; }
 		public static float playerPower { get; set; }
+		public static bool shouldDrawDebugRectangles = true;
 
 
 		static GameMan()

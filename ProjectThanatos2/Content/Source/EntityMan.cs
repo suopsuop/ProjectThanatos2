@@ -60,31 +60,33 @@ namespace ProjectThanatos.Content.Source
         {
             foreach (var entity in entities)
             {
-                if(entity.GetType() == typeof(EnemyBullet))
+                // Only bother with enemy bullets & enemies
+                if (entity.GetType() == typeof(EnemyBullet) || entity.GetType() == typeof(Enemy)) 
                 {
-                    if (entity.collisionBox.Contains(Player.Instance.collisionBox))
+                    if (entity.collisionBox.Intersects(Player.Instance.collisionBox))
                     {
                         Player.Instance.Kill();
                     }
                 }
-                
-                
             }
 
             // Split bullets collision each update to multiple movement checks (e.g., if it moves 10 units in a frame, check it at 5 as well)
         }
 
         public static void Draw(SpriteBatch spriteBatch)
-        {            
+        {
             foreach (var entity in entities)
                 entity.Draw(spriteBatch);
 
             // Draws Debug Rectangles
-            foreach (var entity in entities)
+            if (GameMan.shouldDrawDebugRectangles)
             {
-                spriteBatch.Begin();
-                spriteBatch.DrawRectangle(entity.collisionBox, Color.Red);
-                spriteBatch.End();
+                foreach (var entity in entities)
+                {
+                    spriteBatch.Begin();
+                    spriteBatch.DrawRectangle(entity.collisionBox, Color.Red);
+                    spriteBatch.End();
+                }
             }
         }
     }

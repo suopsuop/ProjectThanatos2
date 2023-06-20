@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectThanatos2.Content.Source.Enemy;
 
 namespace ProjectThanatos.Content.Source
 {
@@ -34,6 +35,9 @@ namespace ProjectThanatos.Content.Source
         float bullet1SteadyOffset = 0f;
         float bullet2SteadyOffset = 12f;
         float bullet3SteadyOffset = 7f;
+
+        // DEBUG
+        Vector2 bombPos;
 
         const float UPWARDS = 90f;
 
@@ -94,7 +98,7 @@ namespace ProjectThanatos.Content.Source
             sprite = Sprites.playerSpriteSheet;
             position = ProjectThanatos.ScreenSize / 2;
             // The -5 is to centre
-            collisionBox = new Rectangle((int)this.position.X - 5, (int)this.position.Y - 5, 10, 10);
+            collisionBox = new Rectangle((int)this.position.X - 2, (int)this.position.Y - 2, 5, 5);
         }
 
         public override void Update()
@@ -123,24 +127,25 @@ namespace ProjectThanatos.Content.Source
             }
             
             position += velocity;
+
+            // Stops the player exiting bounds
             position = Vector2.Clamp(position, new Vector2(collisionBox.Width,collisionBox.Height),
                 ProjectThanatos.ScreenSize - new Vector2(collisionBox.Width,collisionBox.Height));
-                // Stops the player exiting bounds
 
             velocity = Vector2.Zero;
 
-            collisionBox.Location = position.ToPoint() - new Point(5,5); // Moves the collision to the player
+            // Updates collisionBox Location
+            collisionBox.Location = position.ToPoint() - new Point(collisionBox.Width/2,collisionBox.Height/2);
 
             if (Input.IsShootKeyDown())
             {
-                //TimerMan.Create(500, () => shootBullet());
                 shootBullet();
             }
 
             if(Input.WasBombButtonPressed())
             {
                 GameMan.playerPower += .5f; // TEST TEST TEST
-                changePowerLevelStats(GameMan.playerPower); // TEST TEST TEST
+                updatePowerLevelStats(); // TEST TEST TEST
 
                 useBomb();
             }
@@ -209,10 +214,13 @@ namespace ProjectThanatos.Content.Source
 
         public void useBomb()
         {
-            EntityMan.Add(new BulletSpawner(4,1,90,1,1,.4f,1.5f,0.1f,4,true,7,
-                Vector2.One,position,2,0,1f,10000, Bullet.BulletType.CARD, Bullet.BulletColour.RED, 6000)); //TEST TEST TEST
+            //EntityMan.Add(new BulletSpawner(instance,4,1,90,1,1,.4f,1.5f,0.1f,4,true,7,
+            //    Vector2.One,position,2,0,1f,10000, Bullet.BulletType.CARD, Bullet.BulletColour.RED, 6000)); //TEST TEST TEST
+            bombPos = position;
+            TimerMan.Create(1000, () => EnemyMan.AddEnemy(bombPos, Enemy.EnemyType.SMALLFAIRY, Enemy.EnemyColour.RED)); // TEST TEST TEST
 
-            EnemyMan.AddEnemy(position, Enemy.EnemyType.SMALLFAIRY, Enemy.EnemyColour.RED); // TEST TEST TEST
+            TimerMan.Create(500, () => RiceLib.Attack(instance, bombPos, BulletPattern.NONE, 500));
+
 
         }
 
@@ -231,16 +239,15 @@ namespace ProjectThanatos.Content.Source
             
         }
 
-        public void changePowerLevelStats(float level)
+        public void updatePowerLevelStats()
         {
-            bullet1.damage *= level;
-            bullet2.damage *= level;
-            bullet3.damage *= level;
+            bullet1.damage *= GameMan.playerPower;
+            bullet2.damage *= GameMan.playerPower;
+            bullet3.damage *= GameMan.playerPower;
 
             bullet1.acceleration += .003f;
             bullet2.acceleration += .003f;
             bullet3.acceleration += .003f;
         }
-
     }
 }

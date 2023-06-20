@@ -13,6 +13,8 @@ namespace ProjectThanatos2.Content.Source
 {
 	public class BulletSpawner : Entity
 	{
+        object parent;
+
         public int patternArrays;
         public int bulletsPerArray;
 
@@ -39,9 +41,10 @@ namespace ProjectThanatos2.Content.Source
         public int bulletLifeTime;
         public Bullet.BulletType bulletType;
         public Bullet.BulletColour bulletColour;
-        
+
 
         public BulletSpawner(
+            object parent,
             int patternArrays,
             int bulletsPerArray,
             float spreadBetweenBulletArray,
@@ -64,6 +67,7 @@ namespace ProjectThanatos2.Content.Source
 		{
             sprite = null;
 
+            this.parent = parent;
             this.patternArrays = patternArrays;
             this.bulletsPerArray = bulletsPerArray;
             this.spreadBetweenBulletArray = spreadBetweenBulletArray;
@@ -99,6 +103,9 @@ namespace ProjectThanatos2.Content.Source
 
         public override void Update()
         {
+            if (parent == null)
+                Kill();
+
             framesTillShoot--;
 
             int bulletLength = bulletsPerArray - 1; // Not sure what this does yet
