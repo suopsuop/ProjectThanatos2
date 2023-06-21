@@ -91,7 +91,6 @@ namespace ProjectThanatos.Content.Source
                     }
                 }
             }
-
             // Split bullets collision each update to multiple movement checks (e.g., if it moves 10 units in a frame, check it at 5 as well)
         }
 

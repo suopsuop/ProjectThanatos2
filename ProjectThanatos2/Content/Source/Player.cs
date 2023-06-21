@@ -74,7 +74,7 @@ namespace ProjectThanatos.Content.Source
                 3f,
                 UPWARDS);
 
-        static GameTime gameTime = ProjectThanatos.GameTime;
+        private static GameTime gameTime = ProjectThanatos.GameTime;
 
 
         public static Player Instance 
@@ -183,6 +183,11 @@ namespace ProjectThanatos.Content.Source
             bullet2.position = position;
             bullet3.position = position;
 
+            bullet1.isExpired = false;
+            bullet1.isExpired = false;
+            bullet1.isExpired = false;
+
+
             // Adds bullets that are a clone of bullet1
             EntityMan.Add((PlayerBullet)bullet1.Clone());
 
@@ -197,26 +202,25 @@ namespace ProjectThanatos.Content.Source
                 else
                     bullet2.direction = UPWARDS + bullet2Offset;
 
-
                 EntityMan.Add((PlayerBullet)bullet2.Clone());
+
+                if (GameMan.playerPower >= level3)
+                {
+                    // Same thing for bullet3
+
+                    EntityMan.Add((PlayerBullet)bullet3.Clone());
+                    bullet3Offset *= -1;
+                    bullet3SteadyOffset *= -1;
+
+
+                    if (Input.IsShiftDown())
+                        bullet2.direction = UPWARDS + bullet3SteadyOffset;
+                    else
+                        bullet2.direction = UPWARDS + bullet3Offset;
+
+                    EntityMan.Add((PlayerBullet)bullet3.Clone());
+                }
             }
-            if (GameMan.playerPower >= level3)
-            {
-                // Same thing for bullet3
-
-                EntityMan.Add((PlayerBullet)bullet3.Clone());
-                bullet3Offset *= -1;
-                bullet3SteadyOffset *= -1;
-
-
-                if (Input.IsShiftDown())
-                    bullet2.direction = UPWARDS + bullet3SteadyOffset;
-                else
-                    bullet2.direction = UPWARDS + bullet3Offset;
-
-                EntityMan.Add((PlayerBullet)bullet3.Clone());
-            }
-
         }
 
         public void useBomb()
@@ -257,8 +261,8 @@ namespace ProjectThanatos.Content.Source
                     bullet1.bulletType = Bullet.BulletType.BULLET;
                     bullet2.bulletType = Bullet.BulletType.BULLET;
                     bullet3.bulletType = Bullet.BulletType.BULLET;
-
                     break;
+
                 case <= 1.26f:
                     bullet1.bulletColour = Bullet.BulletColour.GREEN;
                     bullet2.bulletColour = Bullet.BulletColour.FILLGREEN;
@@ -267,8 +271,8 @@ namespace ProjectThanatos.Content.Source
                     bullet1.bulletType = Bullet.BulletType.KNIFE;
                     bullet2.bulletType = Bullet.BulletType.ORB;
                     bullet3.bulletType = Bullet.BulletType.ORB;
-
                     break;
+
                 case <= level2:
                     bullet1.bulletColour = Bullet.BulletColour.RED;
                     bullet2.bulletColour = Bullet.BulletColour.FILLRED;
@@ -278,6 +282,7 @@ namespace ProjectThanatos.Content.Source
                     bullet2.bulletType = Bullet.BulletType.KNIFE;
                     bullet3.bulletType = Bullet.BulletType.KNIFE;
                     break;
+
                 case <= 1.76f:
                     bullet1.bulletColour = Bullet.BulletColour.RED;
                     bullet2.bulletColour = Bullet.BulletColour.FILLRED;
@@ -287,6 +292,7 @@ namespace ProjectThanatos.Content.Source
                     bullet2.bulletType = Bullet.BulletType.KNIFE;
                     bullet3.bulletType = Bullet.BulletType.KNIFE;
                     break;
+
                 case <= 2f:
                     bullet1.bulletColour = Bullet.BulletColour.PINK;
                     bullet2.bulletColour = Bullet.BulletColour.CYAN;
@@ -295,8 +301,8 @@ namespace ProjectThanatos.Content.Source
                     bullet1.bulletType = Bullet.BulletType.GEM;
                     bullet2.bulletType = Bullet.BulletType.KNIFE;
                     bullet3.bulletType = Bullet.BulletType.KNIFE;
-
                     break;
+
                 case <= 2.26f:
                     bullet1.bulletColour = Bullet.BulletColour.BLUE;
                     bullet2.bulletColour = Bullet.BulletColour.YELLOW;
@@ -306,6 +312,7 @@ namespace ProjectThanatos.Content.Source
                     bullet2.bulletType = Bullet.BulletType.ORB;
                     bullet3.bulletType = Bullet.BulletType.GEM;
                     break;
+
                 case <= level3:
                     bullet1.bulletColour = Bullet.BulletColour.GOLD;
                     bullet2.bulletColour = Bullet.BulletColour.GOLD;
@@ -315,9 +322,16 @@ namespace ProjectThanatos.Content.Source
                     bullet2.bulletType = Bullet.BulletType.STAR;
                     bullet3.bulletType = Bullet.BulletType.STAR;
                     break;
-                default:
-                    break;
 
+                default:
+                    bullet1.bulletColour = Bullet.BulletColour.GREY;
+                    bullet2.bulletColour = Bullet.BulletColour.GREY;
+                    bullet3.bulletColour = Bullet.BulletColour.GREY;
+
+                    bullet1.bulletType = Bullet.BulletType.BULLET;
+                    bullet2.bulletType = Bullet.BulletType.BULLET;
+                    bullet3.bulletType = Bullet.BulletType.BULLET;
+                    break;
             }
         }
     }

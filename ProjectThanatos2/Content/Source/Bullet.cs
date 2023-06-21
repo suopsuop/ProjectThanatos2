@@ -72,10 +72,12 @@ namespace ProjectThanatos.Content.Source
 
             this.speed = speed;
 
-            if(lifeTime >= 0) // Creates a timer to kill the bullet after its lifetime
+            // Creates a timer to kill the bullet after its lifetime
+            if (lifeTime >= 0)
             {
-                TimerMan.Create(lifeTime, () => base.Kill());
+                TimerMan.Create(lifeTime, () => Kill());
             }
+
             this.initialPosition = position;
 
             //this.localRotation = localRotation;
@@ -104,7 +106,6 @@ namespace ProjectThanatos.Content.Source
             }
 
 
-
             vecDirection = RiceLib.getVecDirection(direction);
 
             position += vecDirection * speed;
@@ -112,7 +113,7 @@ namespace ProjectThanatos.Content.Source
             // Updates collisionBox Location
             collisionBox.Location = position.ToPoint() - new Point(collisionBox.Width / 2, collisionBox.Height / 2);
 
-
+            // Changes orientation of the sprite
             orientation = RiceLib.ToRadians(direction - 90f);
         }
 

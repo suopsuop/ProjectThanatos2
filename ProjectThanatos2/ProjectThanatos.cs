@@ -21,10 +21,14 @@ namespace ProjectThanatos
         public static GameTime GameTime = new GameTime();
 
         // Variables for Start menu
-        private Button startButton = new Button("Start!", new Vector2(ScreenSize.X/2, 140), Color.White, Color.Green, () => GameMan.StartGame());
-        private Button quitButton = new Button("Quit", new Vector2(ScreenSize.X/2, 180), Color.White, Color.Red, () => GameMan.QuitGame());
+        private Button startButton;
+        private Button quitButton;
+        // Variables for Pause manu
+        private Button resumeButton;
+        private Button quitToTitleButton;
 
         private static List<Button> startMenuButtonList = new List<Button>();
+        private static List<Button> pauseMenuButtonList = new List<Button>();
 
         public ProjectThanatos()
         {
@@ -38,7 +42,7 @@ namespace ProjectThanatos
             _graphics.PreferredBackBufferHeight = 480;
 
             Window.Title = "Project Thanatos";
-            
+
         }
 
         protected override void Initialize()
@@ -48,6 +52,9 @@ namespace ProjectThanatos
 
             ScreenSize.X = _graphics.PreferredBackBufferWidth;
             ScreenSize.Y = _graphics.PreferredBackBufferHeight;
+
+            startButton = new Button("Start!", new Vector2(ScreenSize.X / 2, 140), Color.Black, Color.Green, () => GameMan.StartGame());
+            quitButton = new Button("Quit", new Vector2(ScreenSize.X / 2, 180), Color.Black, Color.Red, () => GameMan.QuitGame());
 
             startMenuButtonList.Add(startButton);
             startMenuButtonList.Add(quitButton);
@@ -115,7 +122,7 @@ namespace ProjectThanatos
         {
             if (GameMan.inStartMenu)
             {
-                GraphicsDevice.Clear(Color.Red);
+                GraphicsDevice.Clear(Color.White);
 
                 UpdateStartMenu(startMenuButtonList);
             }

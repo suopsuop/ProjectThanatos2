@@ -26,7 +26,7 @@ namespace ProjectThanatos2.Content.Source
 				hoveringOn += 1;
 
             // Makes sure user cannot select an index out of range
-            Math.Clamp(hoveringOn, 0, buttonList.Count - 1);
+            hoveringOn = Math.Clamp(hoveringOn, 0, buttonList.Count - 1);
 
             buttonList[hoveringOn].hovering = true;
 
