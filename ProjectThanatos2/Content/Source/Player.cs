@@ -164,7 +164,7 @@ namespace ProjectThanatos.Content.Source
                 }
                 else
                 {
-                    spriteAnimationPos.X--; ;
+                    spriteAnimationPos.X--;
                 }
             }
             if (Input.GetMovementDirection().X == 0)
@@ -173,10 +173,6 @@ namespace ProjectThanatos.Content.Source
                 spriteAnimationPos.Y = 2;
             else
                 spriteAnimationPos.Y = 1;
-
-            // DEBUG
-            if (Input.WasKeyPressed(Microsoft.Xna.Framework.Input.Keys.P))
-                GameMan.shouldDrawDebugRectangles = !GameMan.shouldDrawDebugRectangles;
         }
 
         public void shootBullet()

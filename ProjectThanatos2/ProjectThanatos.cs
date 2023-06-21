@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,7 +11,7 @@ namespace ProjectThanatos
     public class ProjectThanatos : Game
     {
         private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private static SpriteBatch _spriteBatch;
 
         public static ProjectThanatos Instance { get; private set; }
 
@@ -18,6 +19,12 @@ namespace ProjectThanatos
         public static Vector2 ScreenSize;
 
         public static GameTime GameTime = new GameTime();
+
+        // Variables for Start menu
+        private Button startButton = new Button("Start!", new Vector2(ScreenSize.X/2, 140), Color.White, Color.Green, () => GameMan.StartGame());
+        private Button quitButton = new Button("Quit", new Vector2(ScreenSize.X/2, 180), Color.White, Color.Red, () => GameMan.QuitGame());
+
+        private static List<Button> startMenuButtonList = new List<Button>();
 
         public ProjectThanatos()
         {
@@ -42,8 +49,8 @@ namespace ProjectThanatos
             ScreenSize.X = _graphics.PreferredBackBufferWidth;
             ScreenSize.Y = _graphics.PreferredBackBufferHeight;
 
-            EntityMan.Add(Player.Instance);
-            Player.Instance.UpdatePowerLevelStats();
+            startMenuButtonList.Add(startButton);
+            startMenuButtonList.Add(quitButton);
         }
 
         protected override void LoadContent()
@@ -59,64 +66,93 @@ namespace ProjectThanatos
             GameTime= gameTime;
             Input.Update();
 
-            if(Input.WasKeyPressed(Keys.Escape))
+            // DEBUG
+            if (Input.WasKeyPressed(Microsoft.Xna.Framework.Input.Keys.P))
+                GameMan.shouldDrawDebugRectangles = !GameMan.shouldDrawDebugRectangles;
+
+            if (Input.WasKeyPressed(Keys.Escape) && !GameMan.inStartMenu)
                 GameMan.isPaused = !GameMan.isPaused;
 
-            // Only updates entities & timers if not paused but *still* updates
-            // general monogame things. 
-            if(!GameMan.isPaused) 
+
+            if (GameMan.inStartMenu)
             {
-                TimerMan.Update();
-
-                EnemyMan.Update();
-
-                EntityMan.Update();
-
-                // Constant increase of score, just for existing. So kind!
-                if ((int)gameTime.TotalGameTime.TotalMilliseconds % 20 == 0 && !Player.Instance.isDead)
-                {
-                    GameMan.score += 1;
-                }
-
-
-                // DEBUG
-                //if (Input.WasKeyPressed(Keys.R) && Player.Instance.isDead)
-                //{
-                //    EntityMan.Add(Player.Instance);
-                //    Player.Instance.isExpired = false;
-                //}
-                if (Input.WasKeyPressed(Keys.O))
-                {
-                    GameMan.AddPlayerPower();
-                }
+                MenuNavigator.Update(startMenuButtonList);                
             }
             else
             {
-                // Do pause menu stuff here
-            }
+                // Only updates entities & timers if not paused but *still* updates
+                // general monogame things. 
+                if(!GameMan.isPaused) 
+                {
+                    TimerMan.Update();
 
-            base.Update(gameTime);
+                    EnemyMan.Update();
+
+                    EntityMan.Update();
+
+                    // Constant increase of score, just for existing. So kind!
+                    if ((int)gameTime.TotalGameTime.TotalMilliseconds % 20 == 0 && !Player.Instance.isDead)
+                    {
+                        GameMan.score += 1;
+                    }
+
+                    // DEBUG
+                    //if (Input.WasKeyPressed(Keys.O))
+                    //{
+                    //    GameMan.AddPlayerPower();
+                    //}
+                }
+                else
+                {
+                    // Do pause menu stuff here
+                }
+
+            }
+            Draw(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            if (GameMan.isPaused)
+            if (GameMan.inStartMenu)
             {
-                GraphicsDevice.Clear(Color.Aquamarine);
+                GraphicsDevice.Clear(Color.Red);
+
+                UpdateStartMenu(startMenuButtonList);
             }
             else
             {
-                GraphicsDevice.Clear(Color.Black);
+                if (GameMan.isPaused)
+                {
+                    GraphicsDevice.Clear(Color.Aquamarine);
+                }
+                else
+                {
+                    GraphicsDevice.Clear(Color.Black);
+
+                    EntityMan.Draw(_spriteBatch);
+
+                    RiceLib.DrawText(_spriteBatch, "Score: " + GameMan.score, new Vector2(ScreenSize.X / 2, 400), Color.White);
+                    RiceLib.DrawText(_spriteBatch, "Power: " + GameMan.playerPower, new Vector2(ScreenSize.X / 2, 430), Color.White);
+                }
             }
 
-            EntityMan.Draw(_spriteBatch);
-
-            // Draws text over everything else
-            RiceLib.DrawText(_spriteBatch, "Score: " + GameMan.score, new Vector2(ScreenSize.X / 2, 400), Color.White);
-            RiceLib.DrawText(_spriteBatch, "Power: " + GameMan.playerPower, new Vector2(ScreenSize.X / 2, 430), Color.White);
 
 
             base.Draw(gameTime);
+        }
+
+        public static void InitialiseGame()
+        {
+            EntityMan.Add(Player.Instance);
+            Player.Instance.UpdatePowerLevelStats();
+        }
+
+        public static void UpdateStartMenu(List<Button> buttonList)
+        {
+            foreach (Button button in buttonList)
+            {
+                button.Update(_spriteBatch);
+            }
         }
     }
 }

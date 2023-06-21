@@ -56,9 +56,7 @@ namespace ProjectThanatos.Content.Source
             addedEntities.Clear();
 
             // Only adds entities that still wish to exist
-            entities = entities.Where(x => !x.isExpired).ToList();
-
-            
+            entities = entities.Where(x => !x.isExpired).ToList();            
         }
 
         static void handleCollisions()
@@ -76,7 +74,7 @@ namespace ProjectThanatos.Content.Source
                         Player.Instance.Kill();
                     }
                 }
-                // Only go through Playerbullets. This isn't economical,but it works
+                // Only go through Playerbullets
                 if (entity.GetType() == typeof(Enemy))
                 {
                     foreach (var entity2 in entities)

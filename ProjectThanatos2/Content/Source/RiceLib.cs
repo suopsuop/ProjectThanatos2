@@ -44,8 +44,6 @@ namespace ProjectThanatos.Content.Source
             return new Vector2(MathF.Cos(dirXRadians), -MathF.Sin(dirYRadians));
         }
 
-
-
         // Returns a random boolean, extension of the Random class
         public static bool NextBool(this Random random)
         {
@@ -56,11 +54,11 @@ namespace ProjectThanatos.Content.Source
         }
 
         // Draws text
-        public static void DrawText(SpriteBatch spriteBatch, string text, Vector2 position, Color color)
+        public static void DrawText(SpriteBatch spriteBatch, string text, Vector2 position, Color color, float scale = 1f, float rotation = 0f, SpriteEffects spriteEffects = SpriteEffects.None)
         {
             spriteBatch.Begin();
             // MeasureString/2 to centre the text
-            spriteBatch.DrawString(GameMan.font, text, position - (GameMan.font.MeasureString(text) / 2), color);
+            spriteBatch.DrawString(GameMan.font, text, position - (GameMan.font.MeasureString(text) / 2), color, rotation, Vector2.Zero, scale, spriteEffects, 0);
             spriteBatch.End();
         }
 

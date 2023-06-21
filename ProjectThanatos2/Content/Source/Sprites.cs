@@ -16,7 +16,7 @@ namespace ProjectThanatos.Content.Source
         public static Texture2D enemySpriteSheet { get; private set; }
         public static Texture2D Pixel { get; private set; }		// a single white pixel
 
-        public static SpriteFont scoreFont { get; private set; }
+        public static SpriteFont font { get; private set; }
 
         public static void loadContent(ContentManager content)
         {
@@ -27,7 +27,7 @@ namespace ProjectThanatos.Content.Source
             Pixel = new Texture2D(playerSpriteSheet.GraphicsDevice, 1, 1);
             Pixel.SetData(new[] { Color.White });
 
-            scoreFont = content.Load<SpriteFont>("Fonts/ScoreFont");
+            font = content.Load<SpriteFont>("Fonts/ScoreFont");
         }
     }
 }
