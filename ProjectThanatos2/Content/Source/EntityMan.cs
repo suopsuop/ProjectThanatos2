@@ -56,7 +56,9 @@ namespace ProjectThanatos.Content.Source
             addedEntities.Clear();
 
             // Only adds entities that still wish to exist
-            entities = entities.Where(x => !x.isExpired).ToList(); 
+            entities = entities.Where(x => !x.isExpired).ToList();
+
+            
         }
 
         static void handleCollisions()
@@ -122,7 +124,12 @@ namespace ProjectThanatos.Content.Source
             foreach (var entity in entities)
             {
                 if (entity.GetType() == typeof(EnemyBullet))
-                    entity.Kill();
+                {
+                    entity.direction = RiceLib.DirectionAwayFromVector(entity.position, Player.Instance.position);
+                    entity.speed = 1f;
+                    entity.acceleration = 1.75f;
+                    entity.curve = 0f;
+                }
             }
         }
     }

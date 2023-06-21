@@ -27,7 +27,7 @@ namespace ProjectThanatos2.Content.Source
 
 		public static void Update()
 		{
-			if(GameMan.currentEnemies < GameMan.maxEnemies)
+			if(GameMan.currentEnemies < GameMan.maxEnemies && !Player.Instance.isDead)
 			{
 				AddEnemyRandom();
 				GameMan.currentEnemies++;

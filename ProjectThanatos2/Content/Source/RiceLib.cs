@@ -29,9 +29,9 @@ namespace ProjectThanatos.Content.Source
                 distance * -MathF.Sin((angle * MathF.PI) / 180));
         }
 
-        public static float PointToVector(Vector2 origin, Vector2 destination)
+        public static float DirectionAwayFromVector(Vector2 vector1, Vector2 vector2)
         {
-            return MathF.Atan2(destination.Y - origin.Y, destination.X - origin.X);
+            return MathF.Atan2(vector2.Y - vector1.Y, vector1.X - vector2.X) * (180f / MathF.PI);
         }
 
         public static Vector2 getVecDirection(float direction) // Gets vector direction from angle
@@ -44,6 +44,8 @@ namespace ProjectThanatos.Content.Source
             return new Vector2(MathF.Cos(dirXRadians), -MathF.Sin(dirYRadians));
         }
 
+
+
         // Returns a random boolean, extension of the Random class
         public static bool NextBool(this Random random)
         {
@@ -51,6 +53,15 @@ namespace ProjectThanatos.Content.Source
                 return true;
             else
                 return false;
+        }
+
+        // Draws text
+        public static void DrawText(SpriteBatch spriteBatch, string text, Vector2 position, Color color)
+        {
+            spriteBatch.Begin();
+            // MeasureString/2 to centre the text
+            spriteBatch.DrawString(GameMan.font, text, position - (GameMan.font.MeasureString(text) / 2), color);
+            spriteBatch.End();
         }
 
         // BELOW FOR DEBUGGING

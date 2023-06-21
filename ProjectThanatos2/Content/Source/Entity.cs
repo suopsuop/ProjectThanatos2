@@ -26,17 +26,22 @@ namespace ProjectThanatos.Content.Source
 
         public float orientation; // Rotation.
 
+        public float direction;
+        public float speed;
+        public float acceleration;
+        public float curve;
+
         public Rectangle collisionBox; //Rectangular Collision!
 
         // Flag for if entity should be deleted, handled by EntityMan
         public bool isExpired = false; 
 
         // Controls what layer to render sprites in
-        public int zDepth = 0;
+        public readonly int zDepth = 0;
 
         public Vector2 spriteSize;
 
-        private bool killedByPlayer = false;
+        public bool killedByPlayer = false;
         public float damage;
 
         public abstract void Update();

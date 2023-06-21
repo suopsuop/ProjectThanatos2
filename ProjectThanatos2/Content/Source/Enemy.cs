@@ -35,10 +35,8 @@ namespace ProjectThanatos.Content.Source
         public EnemyType enemyType;
         public EnemyColour enemyColour;
 
-        public readonly ulong enemyScore;
+        public readonly long enemyWorth;
         public readonly float enemyPower;
-
-        private float speed;
 
         private Vector2 spriteAnimationPos = new Vector2(0, 0);
         private readonly Vector2 defaultSpritePos;
@@ -51,8 +49,6 @@ namespace ProjectThanatos.Content.Source
 
         private int frameDelay = 8;
         private const int defaultFrameDelay = 8;
-
-        private bool killedByPlayer = false;
 
         private float spinDirection = random.NextFloat(-2f,2f);
 
@@ -75,7 +71,7 @@ namespace ProjectThanatos.Content.Source
                     // Scales health based on player's power
                     this.health = 50 * GameMan.playerPower * 2f; 
                     this.defaultSpritePos = new Vector2(0, 0);
-                    this.enemyScore = 2500;
+                    this.enemyWorth = 2500;
                     this.spriteSize = new Vector2(64, 64);
                     this.collisionBox = new Rectangle((int)spawnPosition.X, (int)spawnPosition.Y, 32,32);
                     this.enemyPower = 1.3f;
@@ -85,7 +81,7 @@ namespace ProjectThanatos.Content.Source
                 case EnemyType.SMALLFAIRY:
                     this.health = 35 * GameMan.playerPower * 2f;
                     this.defaultSpritePos += new Vector2(0, 256 + (int)enemyColour * 32);
-                    this.enemyScore = 1250;
+                    this.enemyWorth = 1250;
                     this.spriteSize = new Vector2(32,32);
                     this.collisionBox = new Rectangle((int)spawnPosition.X, (int)spawnPosition.Y, 16, 16);
                     this.enemyPower = 1f;
@@ -95,7 +91,7 @@ namespace ProjectThanatos.Content.Source
                 case EnemyType.SMALLDARKFAIRY:
                     this.health = 60 * GameMan.playerPower * 2f;
                     this.defaultSpritePos += new Vector2(0, 640 + (int)enemyColour * 32);
-                    this.enemyScore = 3125;
+                    this.enemyWorth = 3125;
                     this.spriteSize = new Vector2(32, 32);
                     this.collisionBox = new Rectangle((int)spawnPosition.X, (int)spawnPosition.Y, 16, 16);
                     this.enemyPower = 1.5f;
@@ -105,6 +101,7 @@ namespace ProjectThanatos.Content.Source
                 case EnemyType.METEOR:
                     this.health = 25 * GameMan.playerPower * 2f;
                     this.defaultSpritePos = new Vector2(128, 128);
+                    this.enemyWorth = 2250;
                     this.spriteSize = new Vector2(64,64);
                     this.collisionBox = new Rectangle((int)spawnPosition.X, (int)spawnPosition.Y, 32, 32);
                     this.enemyPower = .8f;
@@ -130,7 +127,7 @@ namespace ProjectThanatos.Content.Source
                     velocity = RiceLib.getVecDirection(random.NextFloat(225f, 315f));
                         break;
                 }
-            }
+        }
 
         public override void Update()
         {
@@ -150,10 +147,7 @@ namespace ProjectThanatos.Content.Source
 
                     isAttacking = true;
                     TimerMan.Create(bulletSpawner.spawnerLifeTime, () => ResetAttacking());
-                    //Attack();
-                    //isAttacking = true;
                 }
-
             }
 
             if (frameDelay < 0)
@@ -171,8 +165,11 @@ namespace ProjectThanatos.Content.Source
 
         public override void Kill()
         {
-            if(killedByPlayer)
-                GameMan.ChangeScore(enemyScore);
+            if (killedByPlayer)
+            {
+                GameMan.score += enemyWorth;
+                GameMan.AddPlayerPower();
+            }
 
             GameMan.currentEnemies--;
 

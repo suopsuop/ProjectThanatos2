@@ -49,12 +49,8 @@ namespace ProjectThanatos.Content.Source
         private Random random = new Random();
 
         public double lifeTime;
-        public float speed;
         public readonly Vector2 initialPosition;
-        public float direction;
         public Vector2 vecDirection;
-        public float acceleration;
-        public float curve;
         public int framesAlive = 0;
         public bool shouldRandomisePosition;
         public int invisFrames = 3;
@@ -63,7 +59,6 @@ namespace ProjectThanatos.Content.Source
 
         public Bullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, bool shouldRandomisePosition, BulletType bulletType, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base()
         {
-
             this.position = spawnPosition;
             this.speed = speed;
             this.acceleration = acceleration;
@@ -75,10 +70,8 @@ namespace ProjectThanatos.Content.Source
 
             this.collisionBox = new Rectangle((int)spawnPosition.X - 8, (int)spawnPosition.Y - 8, 8, 8);
 
-            //this.velocity = velocity;
-
-            //this.bulletCurve = bulletCurve;
             this.speed = speed;
+
             if(lifeTime >= 0) // Creates a timer to kill the bullet after its lifetime
             {
                 TimerMan.Create(lifeTime, () => base.Kill());
@@ -86,7 +79,6 @@ namespace ProjectThanatos.Content.Source
             this.initialPosition = position;
 
             //this.localRotation = localRotation;
-
         }        
 
         public override void Update()

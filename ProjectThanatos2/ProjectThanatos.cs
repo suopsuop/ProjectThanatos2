@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ProjectThanatos.Content.Source;
@@ -17,8 +18,6 @@ namespace ProjectThanatos
         public static Vector2 ScreenSize;
 
         public static GameTime GameTime = new GameTime();
-
-        bool isPaused = false;
 
         public ProjectThanatos()
         {
@@ -44,8 +43,7 @@ namespace ProjectThanatos
             ScreenSize.Y = _graphics.PreferredBackBufferHeight;
 
             EntityMan.Add(Player.Instance);
-
-
+            Player.Instance.UpdatePowerLevelStats();
         }
 
         protected override void LoadContent()
@@ -62,17 +60,35 @@ namespace ProjectThanatos
             Input.Update();
 
             if(Input.WasKeyPressed(Keys.Escape))
-                isPaused = !isPaused;
+                GameMan.isPaused = !GameMan.isPaused;
 
             // Only updates entities & timers if not paused but *still* updates
             // general monogame things. 
-            if(!isPaused) 
+            if(!GameMan.isPaused) 
             {
                 TimerMan.Update();
 
                 EnemyMan.Update();
 
                 EntityMan.Update();
+
+                // Constant increase of score, just for existing. So kind!
+                if ((int)gameTime.TotalGameTime.TotalMilliseconds % 20 == 0 && !Player.Instance.isDead)
+                {
+                    GameMan.score += 1;
+                }
+
+
+                // DEBUG
+                //if (Input.WasKeyPressed(Keys.R) && Player.Instance.isDead)
+                //{
+                //    EntityMan.Add(Player.Instance);
+                //    Player.Instance.isExpired = false;
+                //}
+                if (Input.WasKeyPressed(Keys.O))
+                {
+                    GameMan.AddPlayerPower();
+                }
             }
             else
             {
@@ -84,7 +100,7 @@ namespace ProjectThanatos
 
         protected override void Draw(GameTime gameTime)
         {
-            if (isPaused)
+            if (GameMan.isPaused)
             {
                 GraphicsDevice.Clear(Color.Aquamarine);
             }
@@ -94,12 +110,13 @@ namespace ProjectThanatos
             }
 
             EntityMan.Draw(_spriteBatch);
+
+            // Draws text over everything else
+            RiceLib.DrawText(_spriteBatch, "Score: " + GameMan.score, new Vector2(ScreenSize.X / 2, 400), Color.White);
+            RiceLib.DrawText(_spriteBatch, "Power: " + GameMan.playerPower, new Vector2(ScreenSize.X / 2, 430), Color.White);
+
+
             base.Draw(gameTime);
-        }
-
-        private void drawText()
-        {
-
         }
     }
 }
