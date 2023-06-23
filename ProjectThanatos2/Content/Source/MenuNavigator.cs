@@ -25,8 +25,15 @@ namespace ProjectThanatos2.Content.Source
 			if (Input.WasKeyPressed(Microsoft.Xna.Framework.Input.Keys.Down))
 				hoveringOn += 1;
 
-            // Makes sure user cannot select an index out of range
-            hoveringOn = Math.Clamp(hoveringOn, 0, buttonList.Count - 1);
+            // Lets the user loop through the different options
+			if(hoveringOn > buttonList.Count -1)
+			{
+				hoveringOn = 0;
+			}
+			else if (hoveringOn < 0)
+			{
+				hoveringOn = buttonList.Count - 1;
+			}
 
             buttonList[hoveringOn].hovering = true;
 

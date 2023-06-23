@@ -22,6 +22,8 @@ namespace ProjectThanatos
 
         // Variables for Start menu
         private Button startButton;
+        private Button soundOnButton;
+        private Button highScoresButton;
         private Button quitButton;
         // Variables for Pause manu
         private Button resumeButton;
@@ -29,6 +31,9 @@ namespace ProjectThanatos
 
         private static List<Button> startMenuButtonList = new List<Button>();
         private static List<Button> pauseMenuButtonList = new List<Button>();
+
+        private Background titleScreenBackground;
+        private Background gameBackground;
 
         public ProjectThanatos()
         {
@@ -42,7 +47,6 @@ namespace ProjectThanatos
             _graphics.PreferredBackBufferHeight = 480;
 
             Window.Title = "Project Thanatos";
-
         }
 
         protected override void Initialize()
@@ -53,11 +57,36 @@ namespace ProjectThanatos
             ScreenSize.X = _graphics.PreferredBackBufferWidth;
             ScreenSize.Y = _graphics.PreferredBackBufferHeight;
 
-            startButton = new Button("Start!", new Vector2(ScreenSize.X / 2, 140), Color.Black, Color.Green, () => GameMan.StartGame());
-            quitButton = new Button("Quit", new Vector2(ScreenSize.X / 2, 180), Color.Black, Color.Red, () => GameMan.QuitGame());
+            startButton = new Button("Start!", Vector2.Zero, Color.Black, Color.Green, () => GameMan.StartGame());
+            soundOnButton = new Button("Sound On", Vector2.Zero, Color.Black, Color.Green, () => GameMan.ToggleSound(), "Sound Off");
+            highScoresButton = new Button("High Score: " + GameMan.highscore, Vector2.Zero, Color.Black, Color.Gold, () => { });
+            quitButton = new Button("Quit", Vector2.Zero, Color.Black, Color.Red, () => GameMan.QuitGame());
+
+            resumeButton = new Button("Resume", new Vector2(ScreenSize.X / 2, 140), Color.Black, Color.Green, () => GameMan.ResumeGame());
+            quitToTitleButton = new Button("Quit to Menu (your progress will be lost.)", new Vector2(ScreenSize.X / 2, 180), Color.Black, Color.Red, () => GameMan.QuitToTitle());
 
             startMenuButtonList.Add(startButton);
+            startMenuButtonList.Add(soundOnButton);
+            startMenuButtonList.Add(highScoresButton);
             startMenuButtonList.Add(quitButton);
+
+            pauseMenuButtonList.Add(resumeButton);
+            pauseMenuButtonList.Add(soundOnButton);
+            pauseMenuButtonList.Add(quitToTitleButton);
+
+            // Dynamically calculates spacing
+            for(int i = 0; i < startMenuButtonList.Count; i++)
+            {
+                startMenuButtonList[i].position = new Vector2(ScreenSize.X / 2, 160 + i * 40);
+            }
+
+            for (int i = 0; i < pauseMenuButtonList.Count; i++)
+            {
+                pauseMenuButtonList[i].position = new Vector2(ScreenSize.X / 2, 160 + i * 40);
+            }
+
+            titleScreenBackground = new Background(Sprites.titleBackground);
+            gameBackground = new Background(Sprites.gameBackground);
         }
 
         protected override void LoadContent()
@@ -77,13 +106,15 @@ namespace ProjectThanatos
             if (Input.WasKeyPressed(Microsoft.Xna.Framework.Input.Keys.P))
                 GameMan.shouldDrawDebugRectangles = !GameMan.shouldDrawDebugRectangles;
 
+            // Toggles escape menu
             if (Input.WasKeyPressed(Keys.Escape) && !GameMan.inStartMenu)
                 GameMan.isPaused = !GameMan.isPaused;
 
-
             if (GameMan.inStartMenu)
             {
-                MenuNavigator.Update(startMenuButtonList);                
+                MenuNavigator.Update(startMenuButtonList);
+                RiceLib.DrawText(_spriteBatch, "Score: " + GameMan.score, new Vector2(ScreenSize.X / 2, 400), Color.White);
+
             }
             else
             {
@@ -104,14 +135,15 @@ namespace ProjectThanatos
                     }
 
                     // DEBUG
-                    //if (Input.WasKeyPressed(Keys.O))
-                    //{
-                    //    GameMan.AddPlayerPower();
-                    //}
+                    if (Input.WasKeyPressed(Keys.O))
+                    {
+                        GameMan.AddPlayerPower();
+                    }
                 }
                 else
                 {
                     // Do pause menu stuff here
+                    MenuNavigator.Update(pauseMenuButtonList);
                 }
 
             }
@@ -124,17 +156,25 @@ namespace ProjectThanatos
             {
                 GraphicsDevice.Clear(Color.White);
 
-                UpdateStartMenu(startMenuButtonList);
+                titleScreenBackground.Draw(_spriteBatch);
+
+                UpdateButtons(startMenuButtonList);
             }
             else
             {
                 if (GameMan.isPaused)
                 {
-                    GraphicsDevice.Clear(Color.Aquamarine);
+                    GraphicsDevice.Clear(Color.White);
+
+                    titleScreenBackground.Draw(_spriteBatch);
+
+                    UpdateButtons(pauseMenuButtonList);
                 }
                 else
                 {
                     GraphicsDevice.Clear(Color.Black);
+
+                    gameBackground.Draw(_spriteBatch);
 
                     EntityMan.Draw(_spriteBatch);
 
@@ -143,18 +183,20 @@ namespace ProjectThanatos
                 }
             }
 
-
-
             base.Draw(gameTime);
         }
 
         public static void InitialiseGame()
         {
+            Player.Instance.isDead = false;
+            Player.Instance.isExpired = false;
+
             EntityMan.Add(Player.Instance);
+            GameMan.ClearScoreAndPoints();
             Player.Instance.UpdatePowerLevelStats();
         }
 
-        public static void UpdateStartMenu(List<Button> buttonList)
+        public static void UpdateButtons(List<Button> buttonList)
         {
             foreach (Button button in buttonList)
             {

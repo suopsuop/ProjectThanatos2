@@ -76,7 +76,6 @@ namespace ProjectThanatos.Content.Source
 
         private static GameTime gameTime = ProjectThanatos.GameTime;
 
-
         public static Player Instance 
         { 
             get 
@@ -103,9 +102,9 @@ namespace ProjectThanatos.Content.Source
         private Player()
         {
             sprite = Sprites.playerSpriteSheet;
-            position = ProjectThanatos.ScreenSize / 2;
             // The -5 is to centre
             collisionBox = new Rectangle((int)this.position.X - 2, (int)this.position.Y - 2, 5, 5);
+
 
         }
 
@@ -184,8 +183,8 @@ namespace ProjectThanatos.Content.Source
             bullet3.position = position;
 
             bullet1.isExpired = false;
-            bullet1.isExpired = false;
-            bullet1.isExpired = false;
+            bullet2.isExpired = false;
+            bullet3.isExpired = false;
 
 
             // Adds bullets that are a clone of bullet1
@@ -242,13 +241,13 @@ namespace ProjectThanatos.Content.Source
 
         public void UpdatePowerLevelStats()
         {
-            bullet1.damage += GameMan.playerPower / 20;
-            bullet2.damage += GameMan.playerPower / 20;
-            bullet3.damage += GameMan.playerPower / 20;
+            bullet1.damage += GameMan.playerPower / 40;
+            bullet2.damage += GameMan.playerPower / 40;
+            bullet3.damage += GameMan.playerPower / 40;
 
-            bullet1.acceleration += .0015f;
-            bullet2.acceleration += .0015f;
-            bullet3.acceleration += .0015f;
+            //bullet1.acceleration += .0015f;
+            //bullet2.acceleration += .0015f;
+            //bullet3.acceleration += .0015f;
 
             // Changing player bullet looks based on power (placebo!)
             switch(GameMan.playerPower)
@@ -285,8 +284,8 @@ namespace ProjectThanatos.Content.Source
 
                 case <= 1.76f:
                     bullet1.bulletColour = Bullet.BulletColour.RED;
-                    bullet2.bulletColour = Bullet.BulletColour.FILLRED;
-                    bullet3.bulletColour = Bullet.BulletColour.FILLRED;
+                    bullet2.bulletColour = Bullet.BulletColour.GREEN;
+                    bullet3.bulletColour = Bullet.BulletColour.GREEN;
 
                     bullet1.bulletType = Bullet.BulletType.GEM;
                     bullet2.bulletType = Bullet.BulletType.KNIFE;
@@ -315,24 +314,32 @@ namespace ProjectThanatos.Content.Source
 
                 case <= level3:
                     bullet1.bulletColour = Bullet.BulletColour.GOLD;
-                    bullet2.bulletColour = Bullet.BulletColour.GOLD;
-                    bullet3.bulletColour = Bullet.BulletColour.GOLD;
+                    bullet2.bulletColour = Bullet.BulletColour.FILLPINK;
+                    bullet3.bulletColour = Bullet.BulletColour.FILLRED;
 
-                    bullet1.bulletType = Bullet.BulletType.CARD;
-                    bullet2.bulletType = Bullet.BulletType.STAR;
-                    bullet3.bulletType = Bullet.BulletType.STAR;
+                    bullet1.bulletType = Bullet.BulletType.BULLET;
+                    bullet2.bulletType = Bullet.BulletType.CARD;
+                    bullet3.bulletType = Bullet.BulletType.ORB;
+
+                    GameMan.maxEnemies = 3;
                     break;
 
                 default:
-                    bullet1.bulletColour = Bullet.BulletColour.GREY;
-                    bullet2.bulletColour = Bullet.BulletColour.GREY;
-                    bullet3.bulletColour = Bullet.BulletColour.GREY;
+                    bullet1.bulletColour = Bullet.BulletColour.GOLD;
+                    bullet2.bulletColour = Bullet.BulletColour.FILLPINK;
+                    bullet3.bulletColour = Bullet.BulletColour.FILLRED;
 
                     bullet1.bulletType = Bullet.BulletType.BULLET;
-                    bullet2.bulletType = Bullet.BulletType.BULLET;
-                    bullet3.bulletType = Bullet.BulletType.BULLET;
+                    bullet2.bulletType = Bullet.BulletType.CARD;
+                    bullet3.bulletType = Bullet.BulletType.ORB;
                     break;
             }
         }
+
+        //public void ResetStats()
+        //{
+        //    isDead = false;
+        //    isExpired = false;
+        //}
     }
 }

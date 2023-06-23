@@ -129,5 +129,11 @@ namespace ProjectThanatos.Content.Source
                 }
             }
         }
+
+        public static void KillAll()
+        {
+            entities.Clear();
+            addedEntities.Clear();
+        }
     }
 }

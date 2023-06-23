@@ -8,37 +8,53 @@ namespace ProjectThanatos2.Content.Source
 	public class Button
 	{
 		private string text;
-		private Vector2 position;
+		private string text2;
+		private string usingText;
+		public Vector2 position;
 		private Color defaultColor;
 		private Color highlightColor;
 		private Action action;
+
 		public bool hovering { get; set; }
 		public bool hasClicked { get; private set; }
 
-		public Button(string text, Vector2 position, Color defaultColor, Color highlightColor, Action action)
+		public Button(string text, Vector2 position, Color defaultColor, Color highlightColor, Action action, string text2 = null)
 		{
-			this.text = text;
+            this.usingText = text;
+            this.text = text;
 			this.position = position;
 			this.defaultColor = defaultColor;
 			this.highlightColor = highlightColor;
 			this.action = action;
+
+			this.text2 = text2;
 		}
 
 		public void Update(SpriteBatch spriteBatch)
 		{
 			if(hovering)
 			{
-				RiceLib.DrawText(spriteBatch, text, position, highlightColor);
+				RiceLib.DrawText(spriteBatch, usingText, position, highlightColor);
             }
 			else
 			{
-				RiceLib.DrawText(spriteBatch, text, position, defaultColor);
+				RiceLib.DrawText(spriteBatch, usingText, position, defaultColor);
 			}
         }
 
 		public void Click()
-		{
-			action.Invoke();
+        {
+            if (text2 is not null)
+            {
+                usingText = text2;
+				text2 = null;
+            }
+			else
+			{
+				text2 = usingText;
+				usingText = text;
+			}
+            action.Invoke();
 		}
 	}
 }
