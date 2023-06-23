@@ -18,6 +18,8 @@ namespace ProjectThanatos2.Content.Source
 		public bool hovering { get; set; }
 		public bool hasClicked { get; private set; }
 
+		
+
 		public Button(string text, Vector2 position, Color defaultColor, Color highlightColor, Action action, string text2 = null)
 		{
             this.usingText = text;
@@ -63,6 +65,6 @@ namespace ProjectThanatos2.Content.Source
 			this.text2 = text;
 			this.usingText = text;
 		}
-	}
+    }
 }
 

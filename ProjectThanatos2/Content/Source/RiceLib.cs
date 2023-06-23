@@ -62,6 +62,17 @@ namespace ProjectThanatos.Content.Source
             spriteBatch.End();
         }
 
+        // Arranges Button
+        public static List<Button> ArrangeButtons(this List<Button> buttonList)
+        {
+            for (int i = 0; i < buttonList.Count; i++)
+            {
+                buttonList[i].position = new Vector2(ProjectThanatos.ScreenSize.X / 2, 160 + i * 40);
+            }
+
+            return buttonList;
+        }
+
         // BELOW FOR DEBUGGING
         public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rectangle, Color color)
         {

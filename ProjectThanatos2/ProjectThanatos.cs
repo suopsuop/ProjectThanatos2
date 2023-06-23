@@ -20,17 +20,54 @@ namespace ProjectThanatos
 
         public static GameTime GameTime = new GameTime();
 
+        public enum GameState
+        {
+            INGAME,
+            PAUSED,
+            GAMEOVERMENU,
+            STARTMENU
+        };
+
+        //public static GameState gameState
+        //{
+        //    get { return gameState; }
+        //    set
+        //    {
+        //        switch (gameState)
+        //        {
+        //            case GameState.STARTMENU:
+        //                startMenuButtonList.ArrangeButtons();
+        //                break;
+        //            case GameState.INGAME:
+        //                break;
+        //            case GameState.PAUSED:
+        //                pauseMenuButtonList.ArrangeButtons();
+        //                break;
+        //            case GameState.GAMEOVERMENU:
+        //                postGameButtonList.ArrangeButtons();
+        //                break;
+        //            default:
+        //                break;
+        //        }
+        //    }
+        //}
+        public static GameState gameState;
+
         // Variables for Start menu
         private Button startButton;
         private Button soundOnButton;
-        private Button highScoresButton;
+        private Button highScoreButton;
         private Button quitButton;
         // Variables for Pause manu
         private Button resumeButton;
         private Button quitToTitleButton;
+        // Variable(s) for Post-Game menu
+        public Button deathScoreButton;
+        private Button youDiedButton;
 
-        private static List<Button> startMenuButtonList = new List<Button>();
-        private static List<Button> pauseMenuButtonList = new List<Button>();
+        public static List<Button> startMenuButtonList = new List<Button>();
+        public static List<Button> pauseMenuButtonList = new List<Button>();
+        public static List<Button> postGameButtonList = new List<Button>();
 
         private Background titleScreenBackground;
         private Background gameBackground;
@@ -62,34 +99,37 @@ namespace ProjectThanatos
 
             startButton = new Button("Start!", Vector2.Zero, Color.Black, Color.Green, () => GameMan.StartGame());
             soundOnButton = new Button("Sound On", Vector2.Zero, Color.Black, Color.Green, () => GameMan.ToggleSound(), "Sound Off");
-            highScoresButton = new Button("High Score: " + GameMan.highscore, Vector2.Zero, Color.Black, Color.Gold, () => { });
+            highScoreButton = new Button("High Score: " + GameMan.highscore, Vector2.Zero, Color.Black, Color.Blue, () => { });
             quitButton = new Button("Quit", Vector2.Zero, Color.Black, Color.Red, () => GameMan.QuitGame());
 
             resumeButton = new Button("Resume", new Vector2(ScreenSize.X / 2, 140), Color.Black, Color.Green, () => GameMan.ResumeGame());
             quitToTitleButton = new Button("Quit to Menu", new Vector2(ScreenSize.X / 2, 180), Color.Black, Color.Red, () => GameMan.QuitToTitle());
 
+            youDiedButton = new Button("You Died!", Vector2.Zero, Color.Black, Color.Blue, () => { });
+            deathScoreButton = new Button("Your Score: " + GameMan.deathScore, Vector2.Zero, Color.Black, Color.Blue, () => { });
+
+
             startMenuButtonList.Add(startButton);
             startMenuButtonList.Add(soundOnButton);
-            startMenuButtonList.Add(highScoresButton);
+            startMenuButtonList.Add(highScoreButton);
             startMenuButtonList.Add(quitButton);
 
             pauseMenuButtonList.Add(resumeButton);
             pauseMenuButtonList.Add(soundOnButton);
             pauseMenuButtonList.Add(quitToTitleButton);
 
-            // Dynamically calculates spacing
-            for(int i = 0; i < startMenuButtonList.Count; i++)
-            {
-                startMenuButtonList[i].position = new Vector2(ScreenSize.X / 2, 160 + i * 40);
-            }
+            postGameButtonList.Add(youDiedButton);
+            postGameButtonList.Add(highScoreButton);
+            postGameButtonList.Add(deathScoreButton);
+            postGameButtonList.Add(quitToTitleButton);
 
-            for (int i = 0; i < pauseMenuButtonList.Count; i++)
-            {
-                pauseMenuButtonList[i].position = new Vector2(ScreenSize.X / 2, 160 + i * 40);
-            }
-
+            // Dynamically calculates spacing!
+            startMenuButtonList.ArrangeButtons();
+       
             titleScreenBackground = new Background(Sprites.titleBackground);
             gameBackground = new Background(Sprites.gameBackground);
+
+            gameState = GameState.STARTMENU;
         }
 
         protected override void LoadContent()
@@ -105,32 +145,37 @@ namespace ProjectThanatos
             GameTime= gameTime;
             Input.Update();
 
-            // DEBUG
+            // DEBUG -- Draws Rectangles over hitboxes
             if (Input.WasKeyPressed(Microsoft.Xna.Framework.Input.Keys.P))
                 GameMan.shouldDrawDebugRectangles = !GameMan.shouldDrawDebugRectangles;
 
+            // Secret key combo!!
+            if (Input.WasKeyPressed(Keys.OemCloseBrackets) && Input.IsShiftDown() && Input.IsShootKeyDown())
+                GameMan.shouldClearBackground = !GameMan.shouldClearBackground;
+
             // Toggles escape menu
-            if (Input.WasKeyPressed(Keys.Escape) && !GameMan.inStartMenu)
-                GameMan.isPaused = !GameMan.isPaused;
-
-            if (GameMan.inStartMenu)
+            if (Input.WasKeyPressed(Keys.Escape))
             {
-                if (GameMan.shouldUpdateHighScore)
-                {
-                    highScoresButton.ChangeText("Highscore: " + GameMan.highscore.ToString());
-                    GameMan.shouldUpdateHighScore = false;
-                }
-
-                MenuNavigator.Update(startMenuButtonList);
-                //RiceLib.DrawText(_spriteBatch, "Score: " + GameMan.score, new Vector2(ScreenSize.X / 2, 400), Color.White);
-
+                if (gameState == GameState.INGAME)
+                    gameState = GameState.PAUSED;
+                else if (gameState == GameState.PAUSED)
+                    gameState = GameState.INGAME;
             }
-            else
+
+            
+            switch (gameState)
             {
-                // Only updates entities & timers if not paused but *still* updates
-                // general monogame things. 
-                if(!GameMan.isPaused)
-                {
+                case GameState.STARTMENU:
+                    if (GameMan.shouldUpdateHighScore)
+                    {
+                        highScoreButton.ChangeText("Highscore: " + GameMan.highscore.ToString());
+                        GameMan.shouldUpdateHighScore = false;
+                    }
+
+                    MenuNavigator.Update(startMenuButtonList);
+                    break;
+
+                case GameState.INGAME:
                     TimerMan.Update();
 
                     EnemyMan.Update();
@@ -142,74 +187,73 @@ namespace ProjectThanatos
                     {
                         GameMan.score += 1;
                     }
+                    break;
 
-                    // DEBUG
-                    //if (Input.WasKeyPressed(Keys.O))
-                    //{
-                    //    GameMan.AddPlayerPower();
-                    //}
-                }
-                else
-                {
-                    // Do pause menu stuff here
+                case GameState.PAUSED:
+                    // Really, REALLY bad code. There is absolutely no reason
+                    // that the buttons should be rearranged every frame. This
+                    // is stupid. But, my head hurts and I think this codebase
+                    // will shoot me if I try to do it a better way. Oh well!
+                    pauseMenuButtonList.ArrangeButtons();
                     MenuNavigator.Update(pauseMenuButtonList);
-                }
+                    break;
 
+                case GameState.GAMEOVERMENU:
+
+                    MenuNavigator.Update(postGameButtonList);
+                    break;
             }
+
             Draw(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            if (GameMan.inStartMenu)
+            switch (gameState)
             {
-                GraphicsDevice.Clear(Color.White);
-
-                titleScreenBackground.Draw(_spriteBatch);
-
-                UpdateButtons(startMenuButtonList);
-            }
-            else
-            {
-                if (GameMan.isPaused)
-                {
-                    GraphicsDevice.Clear(Color.White);
+                case GameState.STARTMENU:
 
                     titleScreenBackground.Draw(_spriteBatch);
 
-                    UpdateButtons(pauseMenuButtonList);
-                }
-                else
-                {
-                    GraphicsDevice.Clear(Color.Black);
+                    GameMan.UpdateButtons(_spriteBatch, startMenuButtonList);
+                    break;
 
-                    gameBackground.Draw(_spriteBatch);
+                case GameState.INGAME:
+
+                    if (GameMan.shouldClearBackground)                        
+                        gameBackground.Draw(_spriteBatch);
+
+                    // Draws score and power text, but under other sprites.
+                    // This is not an error, trying to figure out where bullets
+                    // are under the text is *very* painful. Also, it looks neat!
+                    RiceLib.DrawText(_spriteBatch, "Score: " + GameMan.score, new Vector2(ScreenSize.X / 2, 400), Color.White);
+                    RiceLib.DrawText(_spriteBatch, "Power: " + GameMan.playerPower, new Vector2(ScreenSize.X / 2, 430), Color.White);
 
                     EntityMan.Draw(_spriteBatch);
 
-                    RiceLib.DrawText(_spriteBatch, "Score: " + GameMan.score, new Vector2(ScreenSize.X / 2, 400), Color.White);
-                    RiceLib.DrawText(_spriteBatch, "Power: " + GameMan.playerPower, new Vector2(ScreenSize.X / 2, 430), Color.White);
-                }
+                    break;
+
+                case GameState.PAUSED:
+
+                    titleScreenBackground.Draw(_spriteBatch);
+
+                    GameMan.UpdateButtons(_spriteBatch, pauseMenuButtonList);
+                    break;
+
+                case GameState.GAMEOVERMENU:
+
+                    titleScreenBackground.Draw(_spriteBatch);
+                    GameMan.UpdateButtons(_spriteBatch, postGameButtonList);
+                    break;
+
+                default:
+                    // If something wrong happens, send the player back to the
+                    // menu. Sorry!
+                    gameState = GameState.STARTMENU;
+                    break;
             }
 
             base.Draw(gameTime);
-        }
-
-        //public static void InitialiseGame()
-        //{
-        //    Player.Instance.isDead = false;
-        //    Player.Instance.isExpired = false;
-
-        //    GameMan.ClearScoreAndPoints();
-        //    //Player.Instance.UpdatePowerLevelStats();
-        //}
-
-        public static void UpdateButtons(List<Button> buttonList)
-        {
-            foreach (Button button in buttonList)
-            {
-                button.Update(_spriteBatch);
-            }
-        }
+        }    
     }
 }

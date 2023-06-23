@@ -17,7 +17,7 @@ namespace ProjectThanatos2.Content.Source
 
         static TimerMan() { }
 
-        public static void Add(Timer timer)
+        private static void Add(Timer timer)
         {
             timers.Add(timer);
         }

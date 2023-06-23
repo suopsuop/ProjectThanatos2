@@ -147,7 +147,7 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.WasBombButtonPressed())
             {
-                useBomb();
+                UseBomb();
             }
 
             // Animation stuff below
@@ -218,10 +218,11 @@ namespace ProjectThanatos.Content.Source
             }
         }
 
-        public void useBomb()
+        public void UseBomb()
         {
             EntityMan.KillAllEnemyBullets();
             GameMan.score -= (long)(5000 * GameMan.playerPower);
+
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f, SpriteEffects spriteEffects = SpriteEffects.None)
@@ -239,9 +240,14 @@ namespace ProjectThanatos.Content.Source
                 GameMan.WriteHighscores();
                 GameMan.ReadHighscores();
             }
-            base.Kill();
-            GameMan.inStartMenu = true;
 
+            GameMan.deathScore = GameMan.score;
+            ProjectThanatos.Instance.deathScoreButton.ChangeText("Your Score: " + GameMan.deathScore.ToString());
+
+            base.Kill();
+            // Send player back to the start menu
+            ProjectThanatos.postGameButtonList.ArrangeButtons();
+            ProjectThanatos.gameState = ProjectThanatos.GameState.GAMEOVERMENU;
         }
 
         public void UpdatePowerLevelStats()
@@ -377,7 +383,7 @@ namespace ProjectThanatos.Content.Source
                     UPWARDS);
 
 
-            // Setting player's pos to middle of screen
+            // Reset player's pos
             position = ProjectThanatos.ScreenSize / new Vector2(2f, 1.25f);
         }
     }
