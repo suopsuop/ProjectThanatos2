@@ -30,14 +30,10 @@ namespace ProjectThanatos.Content.Source
 
         public bool isFocused = false;
 
-        int framesTilRespawn = 0;
-
         // Defines the three types of bullets that the player can shoot, depending on level
-        float bullet1Offset = 0f;
         float bullet2Offset = 22f;
         float bullet3Offset = 13f;
 
-        float bullet1SteadyOffset = 0f;
         float bullet2SteadyOffset = 12f;
         float bullet3SteadyOffset = 7f;
 
@@ -236,7 +232,16 @@ namespace ProjectThanatos.Content.Source
 
         public override void Kill()
         {
+            if (GameMan.score > GameMan.highscore)
+            {
+                GameMan.highscore = GameMan.score;
+                GameMan.shouldUpdateHighScore = true;
+                GameMan.WriteHighscores();
+                GameMan.ReadHighscores();
+            }
             base.Kill();
+            GameMan.inStartMenu = true;
+
         }
 
         public void UpdatePowerLevelStats()
@@ -336,10 +341,44 @@ namespace ProjectThanatos.Content.Source
             }
         }
 
-        //public void ResetStats()
-        //{
-        //    isDead = false;
-        //    isExpired = false;
-        //}
+        public void ResetStats()
+        {
+            isDead = false;
+            isExpired = false;
+
+            bullet1 = new PlayerBullet(
+                Vector2.Zero,
+                    9.5f,
+                    .1f,
+                    0,
+                    1200,
+                Bullet.BulletType.KNIFE,
+                    1f,
+                    UPWARDS);
+
+            bullet2 = new PlayerBullet(
+                Vector2.Zero,
+                    9.5f,
+                    .1f,
+                    0f,
+                    1200,
+                Bullet.BulletType.GEM,
+                    2f,
+                    UPWARDS);
+
+            bullet3 = new PlayerBullet(
+                Vector2.Zero,
+                    10f,
+                    .1f,
+                    0f,
+                    1200,
+                Bullet.BulletType.STAR,
+                    3f,
+                    UPWARDS);
+
+
+            // Setting player's pos to middle of screen
+            position = ProjectThanatos.ScreenSize / new Vector2(2f, 1.25f);
+        }
     }
 }

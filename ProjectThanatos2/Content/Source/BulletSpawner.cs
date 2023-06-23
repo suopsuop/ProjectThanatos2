@@ -25,7 +25,6 @@ namespace ProjectThanatos2.Content.Source
         private float spreadWithinBulletArray;
         private float startAngle;
 
-        private float beginSpinSpeed;
         private float spinRate;
         private float spinModifier;
         private float maxSpinRate;

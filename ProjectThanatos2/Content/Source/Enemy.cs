@@ -45,7 +45,6 @@ namespace ProjectThanatos.Content.Source
         private static Enemy instance;
 
         private bool isAttacking = false;
-        private int attackTime;
 
         private int frameDelay = 8;
         private const int defaultFrameDelay = 8;

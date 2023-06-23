@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectThanatos.Content.Source;
@@ -23,6 +24,7 @@ namespace ProjectThanatos2.Content.Source
         public static bool isSoundOn = true;
 
 		public static long highscore;
+		public static bool shouldUpdateHighScore = false;
 
 		private const float defaultPlayerPower = .9f;
 		private const long defaultScore = 0;
@@ -52,28 +54,22 @@ namespace ProjectThanatos2.Content.Source
 			Player.Instance.UpdatePowerLevelStats();
         }
 
-        public static void UpdateGame()
-		{
-
-		}
-
-		public static void UpdatePauseMenu()
-		{
-
-		}
-
 		public static void StartGame()
 		{
 			inStartMenu = false;
 			isPaused = false;
 			inHighScoresMenu = false;
 
+			currentEnemies = 0;
+
 			ClearScoreAndPoints();
 
-			// Setting player's pos to middle of screen
-            Player.Instance.position = ProjectThanatos.ProjectThanatos.ScreenSize / new Vector2(2f,1.25f);
+			EntityMan.KillAll();
+			TimerMan.KillAll();
 
-            ProjectThanatos.ProjectThanatos.InitialiseGame();
+			Player.Instance.ResetStats();
+
+            EntityMan.Add(Player.Instance);
 
 		}
 
@@ -99,10 +95,16 @@ namespace ProjectThanatos2.Content.Source
 			isSoundOn = !isSoundOn;
 		}
 
-		public static long GetHighscores()
+		public static long ReadHighscores()
 		{
-			return 1;
+			return XmlSerialization.ReadFromXmlFile<long>("score.ptgf");
 		}
+
+		public static void WriteHighscores()
+		{
+			XmlSerialization.WriteToXmlFile<long>("score.ptgf", highscore);
+		}
+
 
     }
 }

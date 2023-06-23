@@ -54,6 +54,9 @@ namespace ProjectThanatos
             base.Initialize();
             Instance = this;
 
+            // Reads highscores from file, creates new file if none exist.
+            GameMan.highscore = GameMan.ReadHighscores();
+
             ScreenSize.X = _graphics.PreferredBackBufferWidth;
             ScreenSize.Y = _graphics.PreferredBackBufferHeight;
 
@@ -63,7 +66,7 @@ namespace ProjectThanatos
             quitButton = new Button("Quit", Vector2.Zero, Color.Black, Color.Red, () => GameMan.QuitGame());
 
             resumeButton = new Button("Resume", new Vector2(ScreenSize.X / 2, 140), Color.Black, Color.Green, () => GameMan.ResumeGame());
-            quitToTitleButton = new Button("Quit to Menu (your progress will be lost.)", new Vector2(ScreenSize.X / 2, 180), Color.Black, Color.Red, () => GameMan.QuitToTitle());
+            quitToTitleButton = new Button("Quit to Menu", new Vector2(ScreenSize.X / 2, 180), Color.Black, Color.Red, () => GameMan.QuitToTitle());
 
             startMenuButtonList.Add(startButton);
             startMenuButtonList.Add(soundOnButton);
@@ -112,15 +115,21 @@ namespace ProjectThanatos
 
             if (GameMan.inStartMenu)
             {
+                if (GameMan.shouldUpdateHighScore)
+                {
+                    highScoresButton.ChangeText("Highscore: " + GameMan.highscore.ToString());
+                    GameMan.shouldUpdateHighScore = false;
+                }
+
                 MenuNavigator.Update(startMenuButtonList);
-                RiceLib.DrawText(_spriteBatch, "Score: " + GameMan.score, new Vector2(ScreenSize.X / 2, 400), Color.White);
+                //RiceLib.DrawText(_spriteBatch, "Score: " + GameMan.score, new Vector2(ScreenSize.X / 2, 400), Color.White);
 
             }
             else
             {
                 // Only updates entities & timers if not paused but *still* updates
                 // general monogame things. 
-                if(!GameMan.isPaused) 
+                if(!GameMan.isPaused)
                 {
                     TimerMan.Update();
 
@@ -135,10 +144,10 @@ namespace ProjectThanatos
                     }
 
                     // DEBUG
-                    if (Input.WasKeyPressed(Keys.O))
-                    {
-                        GameMan.AddPlayerPower();
-                    }
+                    //if (Input.WasKeyPressed(Keys.O))
+                    //{
+                    //    GameMan.AddPlayerPower();
+                    //}
                 }
                 else
                 {
@@ -186,15 +195,14 @@ namespace ProjectThanatos
             base.Draw(gameTime);
         }
 
-        public static void InitialiseGame()
-        {
-            Player.Instance.isDead = false;
-            Player.Instance.isExpired = false;
+        //public static void InitialiseGame()
+        //{
+        //    Player.Instance.isDead = false;
+        //    Player.Instance.isExpired = false;
 
-            EntityMan.Add(Player.Instance);
-            GameMan.ClearScoreAndPoints();
-            Player.Instance.UpdatePowerLevelStats();
-        }
+        //    GameMan.ClearScoreAndPoints();
+        //    //Player.Instance.UpdatePowerLevelStats();
+        //}
 
         public static void UpdateButtons(List<Button> buttonList)
         {

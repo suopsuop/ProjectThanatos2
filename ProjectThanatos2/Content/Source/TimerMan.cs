@@ -52,5 +52,11 @@ namespace ProjectThanatos2.Content.Source
             }
 
         }
+
+        public static void KillAll()
+        {
+            timers.Clear();
+            toRemove.Clear();
+        }
     }
 }

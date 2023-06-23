@@ -9,7 +9,7 @@ namespace ProjectThanatos2.Content.Source
 	{
 		private string text;
 		private string text2;
-		private string usingText;
+		public string usingText;
 		public Vector2 position;
 		private Color defaultColor;
 		private Color highlightColor;
@@ -55,6 +55,13 @@ namespace ProjectThanatos2.Content.Source
 				usingText = text;
 			}
             action.Invoke();
+		}
+
+		public void ChangeText(string text)
+		{
+			this.text = text;
+			this.text2 = text;
+			this.usingText = text;
 		}
 	}
 }
