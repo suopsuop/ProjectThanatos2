@@ -16,11 +16,21 @@ namespace ProjectThanatos2.Content.Source
         Vector2 creationTimePlayerPos;
         
 
-        public EnemyBullet(Player player, Vector2 creationTimePlayerPos, Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base(spawnPosition,speed,acceleration,curve,lifeTime,bulletType, direction, bulletColour)
+        public EnemyBullet(
+            Player player,
+            Vector2 creationTimePlayerPos,
+            Vector2 spawnPosition,
+            float speed,
+            float acceleration,
+            float curve,
+            int lifeTime,
+            bool shouldRandomisePosition,
+            BulletType bulletType,
+            float direction = 0f,
+            BulletColour bulletColour = BulletColour.GREY) : base(spawnPosition,speed,acceleration,curve,lifeTime, shouldRandomisePosition,bulletType, direction, bulletColour)
         {
             
             sprite = Sprites.projectileSpriteSheet;
-            //this.position = Player.Instance.position; // ! CHANGE ME
 
             this.playerInstance = player;
             this.creationTimePlayerPos = creationTimePlayerPos;
@@ -29,16 +39,6 @@ namespace ProjectThanatos2.Content.Source
         public override void Update()
         {
             base.Update();
-
-            //velocity.Normalize(); // normalises velocity before letting the Curves do their thing
-
-            //this.bulletCurve(this); // The delegate to change the bullet's pos
         }
-
-        //public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)
-        //{
-        //    base.Draw(spriteBatch, new Rectangle(64,64,16,16)); // HARDCODED << CHANGE ME LATER
-        //}
-
     }
 }

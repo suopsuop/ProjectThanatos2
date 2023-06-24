@@ -15,13 +15,9 @@ namespace ProjectThanatos2.Content.Source
         static List<Timer> toRemove = new List<Timer>();
         static List<Timer> timers = new List<Timer>();
 
-        static int ID = 0;
-
-        //public static TimerMan TimerManInstance { get; private set; }
-
         static TimerMan() { }
 
-        public static void Add(Timer timer)
+        private static void Add(Timer timer)
         {
             timers.Add(timer);
         }
@@ -32,8 +28,7 @@ namespace ProjectThanatos2.Content.Source
 
         public static void Create(float interval, Action trigger)
         {
-            ID += 1;
-            Timer timer = new Timer(ID, interval, trigger) {};
+            Timer timer = new Timer(interval, trigger) {};
             Add(timer);
         }
 
@@ -45,10 +40,23 @@ namespace ProjectThanatos2.Content.Source
             }
             toRemove.Clear();
 
-            foreach (Timer timer in timers.ToList<Timer>())
+            //foreach (Timer timer in toAdd)
+            //{
+            //    timers.Add(timer);
+            //}
+            //toAdd.Clear();
+
+            foreach (Timer timer in timers.ToList())
             {
                 timer.Update();
             }
+
+        }
+
+        public static void KillAll()
+        {
+            timers.Clear();
+            toRemove.Clear();
         }
     }
 }

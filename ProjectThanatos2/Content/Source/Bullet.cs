@@ -46,44 +46,41 @@ namespace ProjectThanatos.Content.Source
         };
 
         //private static Bullet instance;
+        private Random random = new Random();
 
-        double lifeTime;
-        public float speed;
+        public double lifeTime;
         public readonly Vector2 initialPosition;
-        public float direction;
         public Vector2 vecDirection;
-        public float acceleration;
-        public float curve;
         public int framesAlive = 0;
+        public bool shouldRandomisePosition;
         public int invisFrames = 3;
         public BulletType bulletType;
         public BulletColour bulletColour;
 
-        public Bullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base()
+        public Bullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, bool shouldRandomisePosition, BulletType bulletType, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base()
         {
-
             this.position = spawnPosition;
             this.speed = speed;
             this.acceleration = acceleration;
             this.lifeTime = lifeTime;
+            this.shouldRandomisePosition = shouldRandomisePosition;
             this.direction = direction;
             this.bulletType = bulletType;
             this.bulletColour = bulletColour;
 
             this.collisionBox = new Rectangle((int)spawnPosition.X - 8, (int)spawnPosition.Y - 8, 8, 8);
 
-            //this.velocity = velocity;
-
-            //this.bulletCurve = bulletCurve;
             this.speed = speed;
-            if(lifeTime >= 0) // Creates a timer to kill the bullet after its lifetime
+
+            // Creates a timer to kill the bullet after its lifetime
+            if (lifeTime >= 0)
             {
-                TimerMan.Create(lifeTime, () => base.Kill());
+                TimerMan.Create(lifeTime, () => Kill());
             }
+
             this.initialPosition = position;
 
             //this.localRotation = localRotation;
-
         }        
 
         public override void Update()
@@ -96,19 +93,28 @@ namespace ProjectThanatos.Content.Source
             if(invisFrames>0)
                 invisFrames -= 1;
 
-            direction += curve;
+            if(shouldRandomisePosition)
+            {
+                direction += curve * random.NextFloat(.9f, 1.1f);
+                speed += acceleration * random.NextFloat(.9f, 1.1f);
+            }
+            else
+            {
+                direction += curve;
+                speed += acceleration;
 
-            speed += acceleration;
+            }
 
-            vecDirection = getDirection(direction);
+
+            vecDirection = RiceLib.getVecDirection(direction);
 
             position += vecDirection * speed;
 
             // Updates collisionBox Location
             collisionBox.Location = position.ToPoint() - new Point(collisionBox.Width / 2, collisionBox.Height / 2);
 
-
-            orientation = RiceLib.ToRadians(direction - 90f); // NOT WORKING!!!
+            // Changes orientation of the sprite
+            orientation = RiceLib.ToRadians(direction - 90f);
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f, SpriteEffects spriteEffects = SpriteEffects.None)
@@ -120,21 +126,9 @@ namespace ProjectThanatos.Content.Source
                 base.Draw(spriteBatch, new Rectangle(16 * ((int)bulletColour), 16 * ((int)bulletType), 16, 16), scale - .2f);
         }
 
-        public bool isOutOfBounds()
+        private bool isOutOfBounds()
         {
             return !ProjectThanatos.Viewport.Bounds.Contains(position);
         }
-
-        private static Vector2 getDirection(float direction) // Gets vector direction from angle
-        {
-            // Could be a one-liner, might do that but just keeping this
-            // here for now for readability
-            float dirXRadians = direction * MathF.PI / 180f;
-            float dirYRadians = direction * MathF.PI / 180f;
-
-            return new Vector2(MathF.Cos(dirXRadians),-MathF.Sin(dirYRadians));
-        }
-
-
     }
 }

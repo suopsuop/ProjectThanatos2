@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectThanatos2.Content.Source;
-using static ProjectThanatos2.Content.Source.Enemy;
+using static ProjectThanatos.Content.Source.Enemy;
 
 namespace ProjectThanatos.Content.Source
 {
@@ -29,21 +29,54 @@ namespace ProjectThanatos.Content.Source
                 distance * -MathF.Sin((angle * MathF.PI) / 180));
         }
 
-        public static float PointToVector(Vector2 vector, Vector2 vectorToPointTo)
+        public static float DirectionAwayFromVector(Vector2 vector1, Vector2 vector2)
         {
-            return -1; // ADD TO ME
+            return MathF.Atan2(vector2.Y - vector1.Y, vector1.X - vector2.X) * (180f / MathF.PI);
         }
 
-        // BELOW FOR DEBUGGING!!!
+        public static Vector2 getVecDirection(float direction) // Gets vector direction from angle
+        {
+            // Could be a one-liner, might do that but just keeping this
+            // here for now for readability
+            float dirXRadians = direction * MathF.PI / 180f;
+            float dirYRadians = direction * MathF.PI / 180f;
+
+            return new Vector2(MathF.Cos(dirXRadians), -MathF.Sin(dirYRadians));
+        }
+
+        // Returns a random boolean, extension of the Random class
+        public static bool NextBool(this Random random)
+        {
+            if (random.Next(0, 2) == 1)
+                return true;
+            else
+                return false;
+        }
+
+        // Draws text
+        public static void DrawText(SpriteBatch spriteBatch, string text, Vector2 position, Color color, float scale = 1f, float rotation = 0f, SpriteEffects spriteEffects = SpriteEffects.None)
+        {
+            spriteBatch.Begin();
+            // MeasureString/2 to centre the text
+            spriteBatch.DrawString(GameMan.font, text, position - (GameMan.font.MeasureString(text) / 2), color, rotation, Vector2.Zero, scale, spriteEffects, 0);
+            spriteBatch.End();
+        }
+
+        // Arranges Button
+        public static List<Button> ArrangeButtons(this List<Button> buttonList)
+        {
+            for (int i = 0; i < buttonList.Count; i++)
+            {
+                buttonList[i].position = new Vector2(ProjectThanatos.ScreenSize.X / 2, 160 + i * 40);
+            }
+
+            return buttonList;
+        }
+
+        // BELOW FOR DEBUGGING
         public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rectangle, Color color)
         {
             spriteBatch.Draw(Sprites.Pixel, rectangle, color);
-        }
-
-        public static void Attack(object instance, Vector2 position, BulletPattern bulletPattern, int patternLifeTime)
-        {
-            EntityMan.Add(new BulletSpawner(instance, 8, 1, 360 / 8, 1, 1, .4f, 1.5f, 0.1f, 4, true, 7,
-                Vector2.One, position, 2, 0, 1f, 10000, Bullet.BulletType.CARD, Bullet.BulletColour.GOLD, 6000));
         }
     }
 }

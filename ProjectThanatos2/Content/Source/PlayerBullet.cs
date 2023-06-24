@@ -17,22 +17,20 @@ namespace ProjectThanatos2.Content.Source
             return this.MemberwiseClone();
         }
 
-        public float damage;
-
-        public PlayerBullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float damage, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base(spawnPosition, speed, acceleration, curve, lifeTime, bulletType, direction, bulletColour)
+        public PlayerBullet(Vector2 spawnPosition, float speed, float acceleration, float curve, int lifeTime, BulletType bulletType, float damage, float direction = 0f, BulletColour bulletColour = BulletColour.GREY) : base(spawnPosition, speed, acceleration, curve, lifeTime, false, bulletType, direction, bulletColour)
         {
 
             sprite = Sprites.projectileSpriteSheet;
             //position = Player.Instance.position; // ! CHANGE ME
 
             this.damage = damage;
+            this.collisionBox = new Rectangle((int)spawnPosition.X - 8, (int)spawnPosition.Y - 8, 16, 16);
 
         }
 
         public override void Update()
         {
             base.Update();
-
         }
 
         //public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f)

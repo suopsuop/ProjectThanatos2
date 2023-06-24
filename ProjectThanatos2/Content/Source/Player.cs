@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static ProjectThanatos2.Content.Source.Enemy;
+using static ProjectThanatos.Content.Source.Enemy;
 
 namespace ProjectThanatos.Content.Source
 {
@@ -15,8 +15,13 @@ namespace ProjectThanatos.Content.Source
     {
         private static Player instance;
 
+        // Consts, for easier player editing
         private const int moveSpeed = 7;
         private const int steadyMoveSpeed = 3;
+        // level1 is implied
+        private const float level2 = 1.5f;
+        private const float level3 = 2.5f;
+
 
         public Vector2 spriteAnimationPos = new Vector2(0,0);
 
@@ -25,23 +30,17 @@ namespace ProjectThanatos.Content.Source
 
         public bool isFocused = false;
 
-        int framesTilRespawn = 0;
-
         // Defines the three types of bullets that the player can shoot, depending on level
-        float bullet1Offset = 0f;
-        float bullet2Offset = 30f;
-        float bullet3Offset = 15f;
+        float bullet2Offset = 22f;
+        float bullet3Offset = 13f;
 
-        float bullet1SteadyOffset = 0f;
         float bullet2SteadyOffset = 12f;
         float bullet3SteadyOffset = 7f;
 
-        // DEBUG
-        Vector2 bombPos;
-
         const float UPWARDS = 90f;
 
-        PlayerBullet bullet1 = new PlayerBullet(
+        // DEFINING PLAYER BULLETS
+        public PlayerBullet bullet1 = new PlayerBullet(
             Vector2.Zero,
                 9.5f,
                 .1f,
@@ -51,7 +50,7 @@ namespace ProjectThanatos.Content.Source
                 1f,
                 UPWARDS);
 
-        PlayerBullet bullet2 = new PlayerBullet(
+        public PlayerBullet bullet2 = new PlayerBullet(
             Vector2.Zero,
                 9.5f,
                 .1f,
@@ -61,18 +60,17 @@ namespace ProjectThanatos.Content.Source
                 2f,
                 UPWARDS);
 
-        PlayerBullet bullet3 = new PlayerBullet(
+        public PlayerBullet bullet3 = new PlayerBullet(
             Vector2.Zero,
                 10f,
                 .1f,
-                2.5f,
+                0f,
                 1200,
             Bullet.BulletType.STAR,
                 3f,
                 UPWARDS);
 
-        static GameTime gameTime = ProjectThanatos.GameTime;
-
+        private static GameTime gameTime = ProjectThanatos.GameTime;
 
         public static Player Instance 
         { 
@@ -85,27 +83,32 @@ namespace ProjectThanatos.Content.Source
             }
         }
 
-        public bool isPlayerDead
+        public bool isDead
         {
             get
             {
-                return framesTilRespawn > 0;
+                return isExpired;
+            }
+            set
+            {
+                isExpired = isDead;
             }
         }
 
         private Player()
         {
             sprite = Sprites.playerSpriteSheet;
-            position = ProjectThanatos.ScreenSize / 2;
             // The -5 is to centre
             collisionBox = new Rectangle((int)this.position.X - 2, (int)this.position.Y - 2, 5, 5);
+
+
         }
 
         public override void Update()
         {
-            if (isPlayerDead)
+            if (isDead)
             {
-                // ADD TO ME 
+                // ADD TO ME
                 return;
             }
 
@@ -144,22 +147,19 @@ namespace ProjectThanatos.Content.Source
 
             if(Input.WasBombButtonPressed())
             {
-                GameMan.playerPower += .5f; // TEST TEST TEST
-                updatePowerLevelStats(); // TEST TEST TEST
-
-                useBomb();
+                UseBomb();
             }
 
             // Animation stuff below
-            if (frameDelay == 0)
+            if (frameDelay == 0) // Animates every defaultFrameDelay frames
             {
                 if (spriteAnimationPos.X <= 0)
                 {
-                    spriteAnimationPos.X = defaultFrameDelay - 1;
+                    spriteAnimationPos.X++;
                 }
                 else
                 {
-                    spriteAnimationPos.X -= 1;
+                    spriteAnimationPos.X--;
                 }
             }
             if (Input.GetMovementDirection().X == 0)
@@ -178,76 +178,213 @@ namespace ProjectThanatos.Content.Source
             bullet2.position = position;
             bullet3.position = position;
 
-            // Will add more bullet streams based on 
+            bullet1.isExpired = false;
+            bullet2.isExpired = false;
+            bullet3.isExpired = false;
+
+
+            // Adds bullets that are a clone of bullet1
             EntityMan.Add((PlayerBullet)bullet1.Clone());
 
-            if (GameMan.playerPower >= 3)
+            if (GameMan.playerPower >= level2)
             {
                 EntityMan.Add((PlayerBullet)bullet2.Clone());
                 bullet2Offset *= -1;
                 bullet2SteadyOffset *= -1;
+
                 if(Input.IsShiftDown())
                     bullet2.direction = UPWARDS + bullet2SteadyOffset;
                 else
                     bullet2.direction = UPWARDS + bullet2Offset;
 
-
                 EntityMan.Add((PlayerBullet)bullet2.Clone());
+
+                if (GameMan.playerPower >= level3)
+                {
+                    // Same thing for bullet3
+
+                    EntityMan.Add((PlayerBullet)bullet3.Clone());
+                    bullet3Offset *= -1;
+                    bullet3SteadyOffset *= -1;
+
+
+                    if (Input.IsShiftDown())
+                        bullet2.direction = UPWARDS + bullet3SteadyOffset;
+                    else
+                        bullet2.direction = UPWARDS + bullet3Offset;
+
+                    EntityMan.Add((PlayerBullet)bullet3.Clone());
+                }
             }
-            if (GameMan.playerPower >= 5)
-            {
-                // Same thing for bullet3
-
-                EntityMan.Add((PlayerBullet)bullet3.Clone());
-                bullet3Offset *= -1;
-                bullet3SteadyOffset *= -1;
-
-                if (Input.IsShiftDown())
-                    bullet2.direction = UPWARDS + bullet3SteadyOffset;
-                else
-                    bullet2.direction = UPWARDS + bullet3Offset;
-
-                EntityMan.Add((PlayerBullet)bullet3.Clone());
-            }
-
         }
 
-        public void useBomb()
+        public void UseBomb()
         {
-            //EntityMan.Add(new BulletSpawner(instance,4,1,90,1,1,.4f,1.5f,0.1f,4,true,7,
-            //    Vector2.One,position,2,0,1f,10000, Bullet.BulletType.CARD, Bullet.BulletColour.RED, 6000)); //TEST TEST TEST
-            bombPos = position;
-            TimerMan.Create(1000, () => EnemyMan.AddEnemy(bombPos, Enemy.EnemyType.SMALLFAIRY, Enemy.EnemyColour.RED)); // TEST TEST TEST
-
-            TimerMan.Create(500, () => RiceLib.Attack(instance, bombPos, BulletPattern.NONE, 500));
-
+            EntityMan.KillAllEnemyBullets();
+            GameMan.score -= (long)(5000 * GameMan.playerPower);
 
         }
 
         public override void Draw(SpriteBatch spriteBatch, Rectangle? spritePos = null, float scale = 1f, SpriteEffects spriteEffects = SpriteEffects.None)
         {
-            if (!isPlayerDead)
+            if (!isDead)
                 base.Draw(spriteBatch, new Rectangle((int)spriteAnimationPos.X * 32,(int)spriteAnimationPos.Y * 48,32,48));
         }
 
         public override void Kill()
         {
-            //EntityMan.Add(new BulletSpawner(8, 1, 360/8, 1, 1, .4f, 1.5f, 0.1f, 4, true, 7,
-            //    Vector2.One, position, 2, 0, 1f, 10000, Bullet.BulletType.CARD, Bullet.BulletColour.GOLD, 6000));
+            if (GameMan.score > GameMan.highscore)
+            {
+                GameMan.highscore = GameMan.score;
+                GameMan.shouldUpdateHighScore = true;
+                GameMan.WriteHighscores();
+                GameMan.ReadHighscores();
+            }
+
+            GameMan.deathScore = GameMan.score;
+            ProjectThanatos.Instance.deathScoreButton.ChangeText("Your Score: " + GameMan.deathScore.ToString());
 
             base.Kill();
-            
+            // Send player back to the start menu
+            ProjectThanatos.postGameButtonList.ArrangeButtons();
+            ProjectThanatos.gameState = ProjectThanatos.GameState.GAMEOVERMENU;
         }
 
-        public void updatePowerLevelStats()
+        public void UpdatePowerLevelStats()
         {
-            bullet1.damage *= GameMan.playerPower;
-            bullet2.damage *= GameMan.playerPower;
-            bullet3.damage *= GameMan.playerPower;
+            bullet1.damage += GameMan.playerPower / 40;
+            bullet2.damage += GameMan.playerPower / 40;
+            bullet3.damage += GameMan.playerPower / 40;
 
-            bullet1.acceleration += .003f;
-            bullet2.acceleration += .003f;
-            bullet3.acceleration += .003f;
+            //bullet1.acceleration += .0015f;
+            //bullet2.acceleration += .0015f;
+            //bullet3.acceleration += .0015f;
+
+            // Changing player bullet looks based on power (placebo!)
+            switch(GameMan.playerPower)
+            {
+                case < 1f:
+                    bullet1.bulletColour = Bullet.BulletColour.GREY;
+                    bullet2.bulletColour = Bullet.BulletColour.GREY;
+                    bullet3.bulletColour = Bullet.BulletColour.GREY;
+
+                    bullet1.bulletType = Bullet.BulletType.BULLET;
+                    bullet2.bulletType = Bullet.BulletType.BULLET;
+                    bullet3.bulletType = Bullet.BulletType.BULLET;
+                    break;
+
+                case <= 1.26f:
+                    bullet1.bulletColour = Bullet.BulletColour.GREEN;
+                    bullet2.bulletColour = Bullet.BulletColour.FILLGREEN;
+                    bullet3.bulletColour = Bullet.BulletColour.FILLGREEN;
+
+                    bullet1.bulletType = Bullet.BulletType.KNIFE;
+                    bullet2.bulletType = Bullet.BulletType.ORB;
+                    bullet3.bulletType = Bullet.BulletType.ORB;
+                    break;
+
+                case <= level2:
+                    bullet1.bulletColour = Bullet.BulletColour.RED;
+                    bullet2.bulletColour = Bullet.BulletColour.FILLRED;
+                    bullet3.bulletColour = Bullet.BulletColour.FILLRED;
+
+                    bullet1.bulletType = Bullet.BulletType.GEM;
+                    bullet2.bulletType = Bullet.BulletType.KNIFE;
+                    bullet3.bulletType = Bullet.BulletType.KNIFE;
+                    break;
+
+                case <= 1.76f:
+                    bullet1.bulletColour = Bullet.BulletColour.RED;
+                    bullet2.bulletColour = Bullet.BulletColour.GREEN;
+                    bullet3.bulletColour = Bullet.BulletColour.GREEN;
+
+                    bullet1.bulletType = Bullet.BulletType.GEM;
+                    bullet2.bulletType = Bullet.BulletType.KNIFE;
+                    bullet3.bulletType = Bullet.BulletType.KNIFE;
+                    break;
+
+                case <= 2f:
+                    bullet1.bulletColour = Bullet.BulletColour.PINK;
+                    bullet2.bulletColour = Bullet.BulletColour.CYAN;
+                    bullet3.bulletColour = Bullet.BulletColour.FILLCYAN;
+
+                    bullet1.bulletType = Bullet.BulletType.GEM;
+                    bullet2.bulletType = Bullet.BulletType.KNIFE;
+                    bullet3.bulletType = Bullet.BulletType.KNIFE;
+                    break;
+
+                case <= 2.26f:
+                    bullet1.bulletColour = Bullet.BulletColour.BLUE;
+                    bullet2.bulletColour = Bullet.BulletColour.YELLOW;
+                    bullet3.bulletColour = Bullet.BulletColour.WHITE;
+
+                    bullet1.bulletType = Bullet.BulletType.KUNAI;
+                    bullet2.bulletType = Bullet.BulletType.ORB;
+                    bullet3.bulletType = Bullet.BulletType.GEM;
+                    break;
+
+                case <= level3:
+                    bullet1.bulletColour = Bullet.BulletColour.GOLD;
+                    bullet2.bulletColour = Bullet.BulletColour.FILLPINK;
+                    bullet3.bulletColour = Bullet.BulletColour.FILLRED;
+
+                    bullet1.bulletType = Bullet.BulletType.BULLET;
+                    bullet2.bulletType = Bullet.BulletType.CARD;
+                    bullet3.bulletType = Bullet.BulletType.ORB;
+
+                    GameMan.maxEnemies = 3;
+                    break;
+
+                default:
+                    bullet1.bulletColour = Bullet.BulletColour.GOLD;
+                    bullet2.bulletColour = Bullet.BulletColour.FILLPINK;
+                    bullet3.bulletColour = Bullet.BulletColour.FILLRED;
+
+                    bullet1.bulletType = Bullet.BulletType.BULLET;
+                    bullet2.bulletType = Bullet.BulletType.CARD;
+                    bullet3.bulletType = Bullet.BulletType.ORB;
+                    break;
+            }
+        }
+
+        public void ResetStats()
+        {
+            isDead = false;
+            isExpired = false;
+
+            bullet1 = new PlayerBullet(
+                Vector2.Zero,
+                    9.5f,
+                    .1f,
+                    0,
+                    1200,
+                Bullet.BulletType.KNIFE,
+                    1f,
+                    UPWARDS);
+
+            bullet2 = new PlayerBullet(
+                Vector2.Zero,
+                    9.5f,
+                    .1f,
+                    0f,
+                    1200,
+                Bullet.BulletType.GEM,
+                    2f,
+                    UPWARDS);
+
+            bullet3 = new PlayerBullet(
+                Vector2.Zero,
+                    10f,
+                    .1f,
+                    0f,
+                    1200,
+                Bullet.BulletType.STAR,
+                    3f,
+                    UPWARDS);
+
+
+            // Reset player's pos
+            position = ProjectThanatos.ScreenSize / new Vector2(2f, 1.25f);
         }
     }
 }

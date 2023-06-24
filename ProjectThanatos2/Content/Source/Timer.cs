@@ -11,38 +11,28 @@ namespace ProjectThanatos2.Content.Source
 {
     internal class Timer : Entity
     {
-        public Action trigger;
+        public Action trigger; // Whatever function is being held to call
         public double interval;
         double elapsed = 0;
-        public readonly int ID;
-
-
 
         GameTime gameTime = ProjectThanatos.ProjectThanatos.GameTime;
 
-        public Timer(int ID, float interval, Action trigger)
+        public Timer(float interval, Action trigger)
         {
-            this.ID = ID;
             this.interval = interval;
             this.trigger = trigger;
         }
-
-        //public void Wait(double delayTime, Action action)
-        //{
-        //    if (timerTime <= gameTime.TotalGameTime.TotalMilliseconds)
-        //    {
-        //        timerTime = gameTime.TotalGameTime.TotalMilliseconds + delayTime;
-        //        action.Invoke();
-        //    }
-        //}
 
         public override void Update()
         {
             elapsed += gameTime.ElapsedGameTime.TotalMilliseconds;
             if (elapsed >= interval)
             {
+                if (trigger is not null)
+                {
+                    trigger.Invoke();
+                }
                 Destroy();
-                trigger.Invoke();
             }
         }
 

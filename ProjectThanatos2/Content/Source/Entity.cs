@@ -13,24 +13,36 @@ namespace ProjectThanatos.Content.Source
         protected Texture2D sprite = null;
         public Rectangle spritePos;
         public Vector2 spriteOrigin;
-        protected Color color = Color.White; // Changes tint of sprite, also allows for transparency.
+
+        public float health;
+
+        // Changes tint of sprite, also allows for transparency.
+        public Color color = Color.White;
 
         public Vector2 position { get; set; }
         public Vector2 velocity { get; set; }
 
         public bool shouldDraw = true;
-        
 
         public float orientation; // Rotation.
 
-        public float radius { get; set; } // Circular collision detection!
+        public float direction;
+        public float speed;
+        public float acceleration;
+        public float curve;
+
         public Rectangle collisionBox; //Rectangular Collision!
 
-        public bool isExpired = false; // Flag for if entity should be deleted, handled in EntityMan
+        // Flag for if entity should be deleted, handled by EntityMan
+        public bool isExpired = false; 
 
-        public int zDepth;
+        // Controls what layer to render sprites in
+        public readonly int zDepth = 0;
 
         public Vector2 spriteSize;
+
+        public bool killedByPlayer = false;
+        public float damage;
 
         public abstract void Update();
 
@@ -43,19 +55,18 @@ namespace ProjectThanatos.Content.Source
                     if (spritePos == null)
                     {
                         spriteBatch.Begin();
-                        spriteBatch.Draw(sprite, position, null, color, orientation, spriteSize / 2f, scale, 0, 0);
+                        spriteBatch.Draw(sprite, position, null, color, orientation, spriteSize / 2f, scale, spriteEffects, zDepth);
                         spriteBatch.End();
                     }
                     else // Draws spritebatch with given rectangle, if there is one
                     {
-                        //spriteOrigin = new Vector2(spritePos.Value.X + (spritePos.Value.Width / 2f), spritePos.Value.Y + (spritePos.Value.Height / 2f));
                         spriteOrigin = new Vector2(spritePos.Value.Width/2, spritePos.Value.Height/2);
 
-                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp); // These settings cut the sprites out cleaner, apparently?
-                        spriteBatch.Draw(sprite, position, spritePos, color, orientation, spriteOrigin, scale, 0, 0);
+                        // These settings cut pixel sprites out cleaner, apparently?
+                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp); 
+                        spriteBatch.Draw(sprite, position, spritePos, color, orientation, spriteOrigin, scale, spriteEffects, zDepth);
                         spriteBatch.End();
                     }
-
                 }
             }
 
@@ -63,7 +74,15 @@ namespace ProjectThanatos.Content.Source
 
         public virtual void Kill()
         {
-            isExpired = true; // A flag to tell EntityMan that this should be deleted
+            // Flag to tell EntityMan that this should be deleted
+            isExpired = true; 
+        }
+
+        public void Hurt(float damage)
+        {
+            health -= damage;
+            if (health <= 0)
+                killedByPlayer = true;
         }
     }
 }
