@@ -245,9 +245,14 @@ namespace ProjectThanatos.Content.Source
             ProjectThanatos.Instance.deathScoreButton.ChangeText("Your Score: " + GameMan.deathScore.ToString());
 
             base.Kill();
-            // Send player back to the start menu
+
             ProjectThanatos.postGameButtonList.ArrangeButtons();
-            ProjectThanatos.gameState = ProjectThanatos.GameState.GAMEOVERMENU;
+
+            // Timer so that the game over screen doesn't immediately flash up
+            TimerMan.Create(2200, () =>
+            {
+                ProjectThanatos.gameState = ProjectThanatos.GameState.GAMEOVERMENU;
+            });
         }
 
         public void UpdatePowerLevelStats()

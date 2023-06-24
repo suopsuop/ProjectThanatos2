@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using ProjectThanatos.Content.Source;
 using ProjectThanatos2.Content.Source;
 
@@ -18,6 +19,8 @@ namespace ProjectThanatos
         public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
         public static Vector2 ScreenSize;
 
+        public static Song backgroundMusic;
+
         public static GameTime GameTime = new GameTime();
 
         public enum GameState
@@ -25,32 +28,10 @@ namespace ProjectThanatos
             INGAME,
             PAUSED,
             GAMEOVERMENU,
-            STARTMENU
+            STARTMENU,
+            SPLASHMENU
         };
 
-        //public static GameState gameState
-        //{
-        //    get { return gameState; }
-        //    set
-        //    {
-        //        switch (gameState)
-        //        {
-        //            case GameState.STARTMENU:
-        //                startMenuButtonList.ArrangeButtons();
-        //                break;
-        //            case GameState.INGAME:
-        //                break;
-        //            case GameState.PAUSED:
-        //                pauseMenuButtonList.ArrangeButtons();
-        //                break;
-        //            case GameState.GAMEOVERMENU:
-        //                postGameButtonList.ArrangeButtons();
-        //                break;
-        //            default:
-        //                break;
-        //        }
-        //    }
-        //}
         public static GameState gameState;
 
         // Variables for Start menu
@@ -61,16 +42,20 @@ namespace ProjectThanatos
         // Variables for Pause manu
         private Button resumeButton;
         private Button quitToTitleButton;
-        // Variable(s) for Post-Game menu
+        // Variables for Post-Game menu
         public Button deathScoreButton;
         private Button youDiedButton;
+        // Variable for Splash Screen;
+        private Button splashButton;
 
         public static List<Button> startMenuButtonList = new List<Button>();
         public static List<Button> pauseMenuButtonList = new List<Button>();
         public static List<Button> postGameButtonList = new List<Button>();
+        public static List<Button> splashButtonList = new List<Button>();
 
         private Background titleScreenBackground;
         private Background gameBackground;
+        private Background splashBackground;
 
         public ProjectThanatos()
         {
@@ -91,6 +76,8 @@ namespace ProjectThanatos
             base.Initialize();
             Instance = this;
 
+            backgroundMusic = Sprites.backgroundMusic;
+
             // Reads highscores from file, creates new file if none exist.
             GameMan.highscore = GameMan.ReadHighscores();
 
@@ -108,6 +95,7 @@ namespace ProjectThanatos
             youDiedButton = new Button("You Died!", Vector2.Zero, Color.Black, Color.Blue, () => { });
             deathScoreButton = new Button("Your Score: " + GameMan.deathScore, Vector2.Zero, Color.Black, Color.Blue, () => { });
 
+            splashButton = new Button("Press Z to Start", new Vector2(ScreenSize.X/2, 400), Color.White, Color.White, () => { gameState = GameState.STARTMENU; });
 
             startMenuButtonList.Add(startButton);
             startMenuButtonList.Add(soundOnButton);
@@ -123,13 +111,19 @@ namespace ProjectThanatos
             postGameButtonList.Add(deathScoreButton);
             postGameButtonList.Add(quitToTitleButton);
 
+            splashButtonList.Add(splashButton);
+
             // Dynamically calculates spacing!
             startMenuButtonList.ArrangeButtons();
-       
+
             titleScreenBackground = new Background(Sprites.titleBackground);
             gameBackground = new Background(Sprites.gameBackground);
+            splashBackground = new Background(Sprites.splashBackground);
 
-            gameState = GameState.STARTMENU;
+            gameState = GameState.SPLASHMENU;
+
+            MediaPlayer.Play(backgroundMusic);
+            MediaPlayer.IsRepeating = true;
         }
 
         protected override void LoadContent()
@@ -141,6 +135,18 @@ namespace ProjectThanatos
 
         protected override void Update(GameTime gameTime)
         {
+
+            // Turns sound on and off
+            if (GameMan.shouldUpdateSound)
+            {
+                if (GameMan.isSoundOn)
+                    MediaPlayer.Resume();
+                else
+                    MediaPlayer.Pause();
+
+                GameMan.shouldUpdateSound = false;
+            }
+
 
             GameTime= gameTime;
             Input.Update();
@@ -157,7 +163,11 @@ namespace ProjectThanatos
             if (Input.WasKeyPressed(Keys.Escape))
             {
                 if (gameState == GameState.INGAME)
+                {
+                    pauseMenuButtonList.ArrangeButtons();
                     gameState = GameState.PAUSED;
+                }
+
                 else if (gameState == GameState.PAUSED)
                     gameState = GameState.INGAME;
             }
@@ -190,17 +200,15 @@ namespace ProjectThanatos
                     break;
 
                 case GameState.PAUSED:
-                    // Really, REALLY bad code. There is absolutely no reason
-                    // that the buttons should be rearranged every frame. This
-                    // is stupid. But, my head hurts and I think this codebase
-                    // will shoot me if I try to do it a better way. Oh well!
-                    pauseMenuButtonList.ArrangeButtons();
                     MenuNavigator.Update(pauseMenuButtonList);
                     break;
 
                 case GameState.GAMEOVERMENU:
-
                     MenuNavigator.Update(postGameButtonList);
+                    break;
+
+                case GameState.SPLASHMENU:
+                    MenuNavigator.Update(splashButtonList);
                     break;
             }
 
@@ -244,6 +252,11 @@ namespace ProjectThanatos
 
                     titleScreenBackground.Draw(_spriteBatch);
                     GameMan.UpdateButtons(_spriteBatch, postGameButtonList);
+                    break;
+
+                case GameState.SPLASHMENU:
+                    splashBackground.Draw(_spriteBatch);
+                    GameMan.UpdateButtons(_spriteBatch, splashButtonList);
                     break;
 
                 default:
