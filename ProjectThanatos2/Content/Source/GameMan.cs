@@ -22,6 +22,7 @@ namespace ProjectThanatos2.Content.Source
 		public static SpriteFont font = Sprites.font;
 
 		public static bool isSoundOn = true;
+		public static bool shouldUpdateSound = false;
 
 		public static long highscore;
 		public static bool shouldUpdateHighScore = false;
@@ -101,6 +102,7 @@ namespace ProjectThanatos2.Content.Source
 		public static void ToggleSound()
 		{
 			isSoundOn = !isSoundOn;
+			shouldUpdateSound = true;
 		}
 
 		public static long ReadHighscores()
