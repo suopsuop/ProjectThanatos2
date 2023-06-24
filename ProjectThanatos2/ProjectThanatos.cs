@@ -146,11 +146,11 @@ namespace ProjectThanatos
             Input.Update();
 
             // DEBUG -- Draws Rectangles over hitboxes
-            if (Input.WasKeyPressed(Microsoft.Xna.Framework.Input.Keys.P))
+            if (Input.WasKeyPressed(Microsoft.Xna.Framework.Input.Keys.P) && Input.IsShiftDown() && Input.IsShootKeyDown())
                 GameMan.shouldDrawDebugRectangles = !GameMan.shouldDrawDebugRectangles;
 
             // Secret key combo!!
-            if (Input.WasKeyPressed(Keys.OemCloseBrackets) && Input.IsShiftDown() && Input.IsShootKeyDown())
+            if (Input.WasKeyPressed(Keys.OemOpenBrackets) && Input.IsShiftDown() && Input.IsShootKeyDown())
                 GameMan.shouldClearBackground = !GameMan.shouldClearBackground;
 
             // Toggles escape menu
